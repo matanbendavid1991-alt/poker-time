@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>העיגול - Poker OS Pro</title>
+    <title>העיגול - Poker OS Premium</title>
     <style>
         :root { --gold: #ffcc00; --danger: #ff3b30; }
         body {
@@ -24,27 +24,37 @@
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
 
+        /* כותרת ניהול */
         .admin-header {
             position: absolute; top: 15px; width: 90%; left: 5%;
             display: flex; justify-content: space-between; align-items: flex-start; z-index: 30;
         }
         
+        /* לוגו מרכזי - מוגדל */
         .logo-container {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 1; text-align: center;
         }
         .app-logo {
-            width: 250px; height: 250px;
+            width: 320px; height: 320px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat;
             background-position: center;
         }
 
-        .game-clock { font-size: 2vw; font-family: monospace; color: rgba(255, 255, 255, 0.3); }
+        /* שעון כללי - בולט יותר */
+        .game-clock { 
+            font-size: 2.2vw; 
+            font-family: monospace; 
+            color: rgba(255, 255, 255, 0.7); /* העלאת אופסיטי מ-0.3 ל-0.7 */
+            font-weight: bold;
+        }
+
         .blind-info { 
             display: flex; align-items: center; gap: 8px; 
             background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px;
         }
 
+        /* טיימרים */
         .timer {
             position: absolute; display: flex; justify-content: center; align-items: center;
             font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10;
@@ -57,14 +67,13 @@
         .warning .time-val { color: var(--danger); transform: scale(1.15); }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        /* --- מיקומי טיימרים מעודכנים --- */
+        /* מיקומי טיימרים */
         .top { top: 7vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
-        .bottom { bottom: 12vh; left: 50%; transform: translateX(-50%); }
-        
-        /* הקטנו את הערך מ-4vw ל-1vw כדי להצמיד לקצוות ולהרחיק מהמרכז */
+        .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); } /* הורדה למטה */
         .left { left: 1vw; top: 50%; transform: translateY(-50%) rotate(90deg); }
         .right { right: 1vw; top: 50%; transform: translateY(-50%) rotate(-90deg); }
 
+        /* שולחן פוקר */
         .poker-table {
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
             width: 75vw; height: 42vh; border: 12px solid #222; border-radius: 160px;
@@ -94,6 +103,7 @@
         .dot { width: 10px; height: 10px; background: #333; border-radius: 50%; transition: 0.3s; }
         .dot.active { background: var(--gold); width: 30px; border-radius: 10px; }
 
+        /* כפתורי שליטה */
         .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
         .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; }
 
@@ -122,10 +132,15 @@
             <div class="game-clock" id="gameClock">00:00:00</div>
         </div>
         <div class="logo-container"><div class="app-logo"></div></div>
+        
         <div class="timer top"><span class="time-val">30</span></div>
         <div class="timer left"><span class="time-val">30</span></div>
         <div class="timer right"><span class="time-val">30</span></div>
         <div class="timer bottom"><span class="time-val">30</span></div>
+
+        <div class="controls" style="bottom: 20px; left: 20px;">
+            <button class="btn" onclick="addTime(event)" style="border-color: var(--gold); color: var(--gold); font-size: 0.8em; padding: 10px 18px;">TIME BANK</button>
+        </div>
     </div>
 
     <div class="page" id="tablePage">
@@ -135,7 +150,6 @@
             <h2 id="potDisplay">0</h2>
         </div>
         <div class="controls">
-            <button class="btn" onclick="addTime(event)" style="border-color: var(--gold); color: var(--gold);">+30 SEC</button>
             <button class="btn" onclick="nextLevel(event)">NEXT LEVEL</button>
         </div>
     </div>
