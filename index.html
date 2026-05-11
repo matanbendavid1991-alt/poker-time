@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>העיגול - Poker OS Premium</title>
+    <title>העיגול - Poker OS Pro</title>
     <style>
         :root { --gold: #ffcc00; --danger: #ff3b30; }
         body {
@@ -26,24 +26,22 @@
 
         /* מסך 1: טיימרים ולוגו */
         .admin-header {
-            position: absolute; top: 10px; width: 90%; left: 5%;
+            position: absolute; top: 15px; width: 90%; left: 5%;
             display: flex; justify-content: space-between; align-items: flex-start; z-index: 30;
         }
         
-        /* לוגו מרכזי */
         .logo-container {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 1; text-align: center;
         }
         .app-logo {
-            width: 220px; height: 220px;
+            width: 350px; height: 350px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat;
             background-position: center;
-            filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.4));
+            /* הילה הוסרה לפי בקשתך */
         }
 
         .game-clock { font-size: 2vw; font-family: monospace; color: rgba(255, 255, 255, 0.3); }
-
         .blind-info { 
             display: flex; align-items: center; gap: 8px; 
             background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px;
@@ -52,22 +50,22 @@
         /* טיימרים */
         .timer {
             position: absolute; display: flex; justify-content: center; align-items: center;
-            font-weight: 900; transition: all 0.3s ease; pointer-events: none; z-index: 10;
+            font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10;
         }
-        .time-val { font-size: 18vw; display: inline-block; width: 1.2em; text-align: center; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .time-val { font-size: 18vw; display: inline-block; width: 1.2em; text-align: center; transition: transform 0.2s ease; }
 
-        /* מצבי טיימר */
-        .ready-active { opacity: 1; }
-        .paused-dim { opacity: 0.3; } /* שקיפות במצב עצירה */
+        /* מצבי אופסיטי */
+        .ready-active { opacity: 1 !important; }
+        .paused-dim { opacity: 0.3 !important; } 
         
-        .warning .time-val { color: var(--danger); transform: scale(1.15); text-shadow: 0 0 30px rgba(255, 59, 48, 0.4); }
+        .warning .time-val { color: var(--danger); transform: scale(1.15); }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        /* מיקומים מעודכנים */
-        .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
+        /* מיקומים מרווחים מהקצה */
+        .top { top: 7vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
         .bottom { bottom: 12vh; left: 50%; transform: translateX(-50%); }
-        .left { left: 1vw; top: 50%; transform: translateY(-50%) rotate(90deg); } /* קרוב יותר לקצה */
-        .right { right: 1vw; top: 50%; transform: translateY(-50%) rotate(-90deg); } /* קרוב יותר לקצה */
+        .left { left: 4vw; top: 50%; transform: translateY(-50%) rotate(90deg); }
+        .right { right: 4vw; top: 50%; transform: translateY(-50%) rotate(-90deg); }
 
         /* מסך 2: שולחן */
         .poker-table {
@@ -80,7 +78,6 @@
             position: absolute; width: 80px; height: 80px; background: #151515;
             border: 2px solid #333; border-radius: 50%; display: flex; flex-direction: column;
             justify-content: center; align-items: center; font-size: 12px; transform: translate(-50%, -50%);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .chip-icon {
@@ -91,7 +88,7 @@
         }
 
         .total-pot-container { text-align: center; margin-top: 78vh; }
-        .total-pot-container h2 { font-size: 7vw; color: var(--gold); margin: 0; line-height: 1; }
+        .total-pot-container h2 { font-size: 7vw; color: var(--gold); margin: 0; }
 
         .page-dots {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
@@ -101,9 +98,9 @@
         .dot.active { background: var(--gold); width: 30px; border-radius: 10px; }
 
         .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
-        .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; cursor: pointer; }
+        .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; }
 
-        @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); opacity: 0.6; } }
+        @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
         #rebuyModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 25px; border: 2px solid var(--gold); z-index: 10000; text-align: center; width: 280px; }
     </style>
 </head>
@@ -111,13 +108,13 @@
 
 <div id="setupScreen">
     <div class="setup-card">
-        <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom: 10px;">העיגול</h1>
-        <p>כמות שחקנים</p>
+        <h1 style="color:var(--gold); font-size: 2.5em;">העיגול</h1>
+        <p>שחקנים</p>
         <input type="number" id="playerCount" value="8">
-        <p>כניסה (₪)</p>
+        <p>כניסה</p>
         <input type="number" id="initialBuyin" value="50">
         <br><br>
-        <button class="btn" style="color:var(--gold); width:100%; font-size: 1.2em; border-color: var(--gold);" onclick="startGame()">צאו לדרך</button>
+        <button class="btn" style="color:var(--gold); width:100%;" onclick="startGame()">צאו לדרך</button>
     </div>
 </div>
 
@@ -127,11 +124,7 @@
             <div id="blindDisplay" class="blind-info"></div>
             <div class="game-clock" id="gameClock">00:00:00</div>
         </div>
-
-        <div class="logo-container">
-            <div class="app-logo"></div>
-        </div>
-
+        <div class="logo-container"><div class="app-logo"></div></div>
         <div class="timer top"><span class="time-val">30</span></div>
         <div class="timer left"><span class="time-val">30</span></div>
         <div class="timer right"><span class="time-val">30</span></div>
@@ -141,7 +134,7 @@
     <div class="page" id="tablePage">
         <div class="poker-table" id="seatsContainer"></div>
         <div class="total-pot-container">
-            <p style="color:#666; margin:0; font-weight: bold; letter-spacing: 2px;">TOTAL BANK</p>
+            <p style="color:#666; margin:0; font-weight: bold;">TOTAL BANK</p>
             <h2 id="potDisplay">0</h2>
         </div>
         <div class="controls">
@@ -157,11 +150,11 @@
 </div>
 
 <div id="rebuyModal">
-    <h2 id="rebuyTitle" style="color:var(--gold); margin-top: 0;">שחקן</h2>
+    <h2 id="rebuyTitle" style="color:var(--gold);">שחקן</h2>
     <input type="number" id="rebuyAmount" value="50" style="width:80%; padding:15px; margin-bottom:15px; background:#333; color:white; border:none; text-align:center; font-size: 1.5em; border-radius: 10px;">
-    <button class="btn" style="width:100%; color:var(--gold); border-color: var(--gold); margin-bottom: 10px;" id="confirmBtn">הוסף לקופה</button>
-    <button class="btn" style="width:100%; color:var(--danger); border-color: var(--danger); margin-bottom: 10px;" id="removeBtn">הוצא מהמשחק</button>
-    <button class="btn" style="width:100%; background:#333; border: none;" onclick="closeRebuy()">ביטול</button>
+    <button class="btn" style="width:100%; color:var(--gold);" id="confirmBtn">עדכן</button>
+    <button class="btn" style="width:100%; color:var(--danger); margin-top:10px" id="removeBtn">הסר</button>
+    <button class="btn" style="width:100%; margin-top:10px" onclick="closeRebuy()">ביטול</button>
 </div>
 
 <script>
@@ -246,7 +239,7 @@
             const seat = document.createElement('div');
             seat.className = 'player-seat';
             seat.style.left = x+'%'; seat.style.top = y+'%';
-            seat.innerHTML = `<span style="opacity:0.6">#${p.id}</span><span style="color:var(--gold);font-weight:bold;font-size:16px;">${p.in}</span>`;
+            seat.innerHTML = `<span style="opacity:0.6">#${p.id}</span><span style="color:var(--gold);font-weight:bold;">${p.in}</span>`;
             seat.onclick = (e) => { e.stopPropagation(); openRebuy(i); };
             container.appendChild(seat);
         });
@@ -263,18 +256,17 @@
         document.querySelectorAll('.timer').forEach(el => {
             const valEl = el.querySelector('.time-val');
             valEl.innerText = timeLeft;
-            
-            // הסרת כל המצבים הקודמים
             el.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
             
-            // החלת מצב שקיפות/פעילות
-            if (isActionRunning) {
+            // לוגיקת אופסיטי מעודכנת:
+            // אם השעון רץ או אם הוא על 30 (מצב התחלתי) -> 100% שקיפות
+            if (isActionRunning || timeLeft === 30) {
                 el.classList.add('ready-active');
             } else {
+                // רק אם עצרנו באמצע הריצה -> להוריד אופסיטי
                 el.classList.add('paused-dim');
             }
 
-            // החלת אפקטים של זמן נגמר
             if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
             if (timeLeft === 0) el.classList.add('zero-blink');
         });
