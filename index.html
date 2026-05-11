@@ -46,6 +46,7 @@
         .app-logo { width: 320px; height: 320px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
         /* טיימרים */
+/* טיימרים - גודל מלא ומרכוז מושלם */
 .timer { 
     position: absolute; 
     display: flex; 
@@ -55,32 +56,38 @@
     transition: opacity 0.3s ease; 
     pointer-events: none; 
     z-index: 10;
-    width: 20vw; /* הגדרת רוחב קבוע עוזרת למרכז בצורה מושלמת */
+    /* הגדלנו את הרוחב כדי שהפונט הגדול לא יקטן */
+    width: 40vw; 
+}
+
+.time-val { 
+    font-size: 18vw; /* הגודל המקורי שאהבנו */
+    display: inline-block; 
+    text-align: center; 
+    line-height: 1;
 }
 
 .top { 
     top: 7vh; 
     left: 50%; 
-    /* הסוד הוא להשתמש ב-50%- כדי למרכז את האלמנט על הציר */
+    /* המרכוז עובד לפי מרכז התיבה הרחבה */
     transform: translateX(-50%) rotate(180deg); 
-    transform-origin: center center;
 }
 
 .bottom { 
     bottom: 6vh; 
     left: 50%; 
     transform: translateX(-50%); 
-    transform-origin: center center;
 }
 
 .left { 
-    left: -2vw; 
+    left: -12vw; /* הזזנו מעט החוצה בגלל שהתיבה גדלה */
     top: 50%; 
     transform: translateY(-50%) rotate(90deg); 
 }
 
 .right { 
-    right: -2vw; 
+    right: -12vw; /* הזזנו מעט החוצה בגלל שהתיבה גדלה */
     top: 50%; 
     transform: translateY(-50%) rotate(-90deg); 
 }
