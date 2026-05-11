@@ -7,7 +7,7 @@
     <title>העיגול - Poker OS Premium</title>
     <style>
         :root { --gold: #ffcc00; --danger: #ff3b30; }
-        * { box-sizing: border-box; } /* מונע מהאלמנטים לנפח את המסך */
+        * { box-sizing: border-box; }
         
         body {
             margin: 0; background-color: black; color: white;
@@ -15,11 +15,11 @@
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
         
+        /* מסך פתיחה */
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
         .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 350px; max-height: 90vh; overflow-y: auto; }
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
         .setup-card .num-input { width: 80px; font-size: 1.8em; }
-        
         #playerNamesContainer { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
         .player-name-row { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         .player-name-row label { color: var(--gold); font-weight: bold; width: 30px; }
@@ -31,66 +31,30 @@
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
 
-        /* כותרת ושעון כללי - מיושר למרכז */
-        .admin-header { 
-            position: absolute; top: 15px; width: 100%; 
-            padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
-        }
-        .game-clock { 
-            position: absolute; left: 50%; transform: translateX(-50%);
-            font-size: 2.2vw; font-family: monospace; color: rgba(255, 255, 255, 0.7); font-weight: bold; 
-        }
+        .admin-header { position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; }
+        .game-clock { position: absolute; left: 50%; transform: translateX(-50%); font-size: 2.2vw; font-family: monospace; color: rgba(255, 255, 255, 0.7); font-weight: bold; }
         .blind-info { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px; }
         
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
         .app-logo { width: 320px; height: 320px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
-        /* טיימרים */
-/* טיימרים - גודל מלא ומרכוז מושלם */
-.timer { 
-    position: absolute; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    font-weight: 900; 
-    transition: opacity 0.3s ease; 
-    pointer-events: none; 
-    z-index: 10;
-    /* הגדלנו את הרוחב כדי שהפונט הגדול לא יקטן */
-    width: 40vw; 
-}
+        /* טיימרים - תיקון מרכוז ו-Swipe */
+        .timer { 
+            position: absolute; display: flex; justify-content: center; align-items: center; 
+            font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10;
+        }
+        .time-val { font-size: 18vw; line-height: 1; }
 
-.time-val { 
-    font-size: 18vw; /* הגודל המקורי שאהבנו */
-    display: inline-block; 
-    text-align: center; 
-    line-height: 1;
-}
+        /* מיקומים מדויקים בלי "לנפח" את המסך */
+        .top { top: 7vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
+        .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
+        .left { left: 5vw; top: 50%; transform: translate(-50%, -50%) rotate(90deg); }
+        .right { right: 5vw; top: 50%; transform: translate(50%, -50%) rotate(-90deg); }
 
-.top { 
-    top: 7vh; 
-    left: 50%; 
-    /* המרכוז עובד לפי מרכז התיבה הרחבה */
-    transform: translateX(-50%) rotate(180deg); 
-}
-
-.bottom { 
-    bottom: 6vh; 
-    left: 50%; 
-    transform: translateX(-50%); 
-}
-
-.left { 
-    left: -12vw; /* הזזנו מעט החוצה בגלל שהתיבה גדלה */
-    top: 50%; 
-    transform: translateY(-50%) rotate(90deg); 
-}
-
-.right { 
-    right: -12vw; /* הזזנו מעט החוצה בגלל שהתיבה גדלה */
-    top: 50%; 
-    transform: translateY(-50%) rotate(-90deg); 
-}
+        .ready-active { opacity: 1 !important; }
+        .paused-dim { opacity: 0.3 !important; } 
+        .warning .time-val { color: var(--danger); }
+        .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
         /* שולחן */
         .poker-table { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 75vw; height: 42vh; border: 12px solid #222; border-radius: 160px; background: radial-gradient(circle, #246b24 0%, #113811 100%); box-shadow: inset 0 0 60px #000; }
@@ -109,7 +73,7 @@
 
         #rebuyModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 320px; }
         .modal-input { width: 90%; padding: 18px; margin-bottom: 15px; background: #333; color: white; border: none; text-align: center; font-size: 1.6em; border-radius: 15px; font-weight: bold; }
-        
+
         @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
     </style>
 </head>
@@ -226,6 +190,7 @@
     document.body.addEventListener('pointerdown', e => {
         if(currentPage === 1) return;
         if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen')) return;
+        
         if(!gameClockId) startClock();
         const now = Date.now();
         if(now - lastTap < 300) { 
@@ -285,8 +250,11 @@
             const valEl = el.querySelector('.time-val');
             valEl.innerText = timeLeft;
             el.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
+            
+            // תיקון: עמעום נכון כשהשעון לא רץ
             if (isActionRunning || timeLeft === 30) el.classList.add('ready-active');
             else el.classList.add('paused-dim');
+            
             if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
             if (timeLeft === 0) el.classList.add('zero-blink');
         });
