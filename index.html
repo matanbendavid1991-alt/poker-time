@@ -13,7 +13,6 @@
             height: 100vh; overflow: hidden; user-select: none;
         }
         
-        /* מסך פתיחה משופר */
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
         .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 350px; max-height: 90vh; overflow-y: auto; }
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
@@ -23,23 +22,16 @@
         .player-name-row { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         .player-name-row label { color: var(--gold); font-weight: bold; width: 30px; }
 
-        .slider-wrapper {
-            display: flex; width: 200vw; height: 100vh;
-            transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
-            display: none;
-        }
+        .slider-wrapper { display: flex; width: 200vw; height: 100vh; transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1); display: none; }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
 
-        /* כותרת ושעון */
         .admin-header { position: absolute; top: 15px; width: 90%; left: 5%; display: flex; justify-content: space-between; align-items: flex-start; z-index: 30; }
         .game-clock { font-size: 2.2vw; font-family: monospace; color: rgba(255, 255, 255, 0.7); font-weight: bold; }
         .blind-info { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px; }
         
-        /* לוגו */
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
         .app-logo { width: 320px; height: 320px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
-        /* טיימרים */
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
         .time-val { font-size: 18vw; display: inline-block; width: 1.2em; text-align: center; transition: transform 0.2s ease; }
         .ready-active { opacity: 1 !important; }
@@ -47,12 +39,11 @@
         .warning .time-val { color: var(--danger); transform: scale(1.15); }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        .top { top: 7vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
+        .top { top: 7vh; left: 50%; transform: translateX(-50) rotate(180deg); }
         .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
         .left { left: 1vw; top: 50%; transform: translateY(-50%) rotate(90deg); }
         .right { right: 1vw; top: 50%; transform: translateY(-50%) rotate(-90deg); }
 
-        /* שולחן */
         .poker-table { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 75vw; height: 42vh; border: 12px solid #222; border-radius: 160px; background: radial-gradient(circle, #246b24 0%, #113811 100%); box-shadow: inset 0 0 60px #000; }
         .player-seat { position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white; }
@@ -84,8 +75,7 @@
             <div><p>כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
         </div>
         <hr style="border:0; border-top:1px solid #333;">
-        <div id="playerNamesContainer">
-            </div>
+        <div id="playerNamesContainer"></div>
         <br>
         <button class="btn" style="color:var(--gold); width:100%; font-size: 1.4em;" onclick="startGame()">צאו לדרך</button>
     </div>
@@ -144,11 +134,13 @@
             container.appendChild(div);
         }
     }
-    // הפעלה ראשונית
     generateNameFields();
 
+    // פונקציית סאונד משופרת ש"מעירה" את האודיו
     function playSound(f, d) {
-        if(!audioCtx) return;
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
         const o = audioCtx.createOscillator(), g = audioCtx.createGain();
         o.connect(g); g.connect(audioCtx.destination);
         o.frequency.value = f; g.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -156,22 +148,25 @@
     }
 
     function startGame() {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // אתחול האודיו כבר בלחיצה הראשונה
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
         const c = +document.getElementById('playerCount').value;
         const b = +document.getElementById('initialBuyin').value;
         const nameInputs = document.querySelectorAll('.setup-player-name');
-        
         players = []; totalPot = 0;
-        for(let i=0; i<c; i++) { 
-            players.push({id:i+1, name: nameInputs[i].value || '', in:b}); 
-            totalPot += b; 
-        }
+        for(let i=0; i<c; i++) { players.push({id:i+1, name: nameInputs[i].value || '', in:b}); totalPot += b; }
         document.getElementById('setupScreen').style.display = 'none';
         document.getElementById('slider').style.display = 'flex';
         render(); updateUI();
     }
 
-    document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    document.addEventListener('touchstart', e => {
+        // ניסיון "להעיר" את האודיו בכל מגע במסך
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        startX = e.touches[0].clientX;
+    });
+
     document.addEventListener('touchend', e => {
         if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal')) return;
         const diff = startX - e.changedTouches[0].clientX;
@@ -184,9 +179,7 @@
     });
 
     document.body.addEventListener('pointerdown', e => {
-        // מניעת הפעלת שעון אם אנחנו בעמוד השולחן (currentPage === 1)
         if(currentPage === 1) return;
-
         if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen')) return;
         
         if(!gameClockId) startClock();
@@ -200,9 +193,13 @@
                 isActionRunning = true;
                 timerId = setInterval(() => {
                     if(timeLeft > 0) {
-                        timeLeft--; if(timeLeft <= 5) playSound(440, 0.1);
+                        timeLeft--; 
+                        // צפצוף ב-5 שניות האחרונות
+                        if(timeLeft <= 5 && timeLeft > 0) playSound(440, 0.1);
+                        // צפצוף בסיום (0)
+                        if(timeLeft === 0) playSound(880, 0.5);
                     } else {
-                        playSound(880, 0.5); clearInterval(timerId); isActionRunning = false;
+                        clearInterval(timerId); isActionRunning = false;
                     }
                     updateUI();
                 }, 1000);
@@ -255,22 +252,9 @@
 
     function addTime(e) { e.stopPropagation(); timeLeft += 30; updateUI(); }
     function nextLevel(e) { e.stopPropagation(); if(currentLevelIdx < levels.length-1) currentLevelIdx++; render(); }
-    
-    let selIdx = null;
-    function openRebuy(i) { 
-        selIdx = i; 
-        document.getElementById('rebuyTitle').innerText = `שחקן ${players[i].id}`; 
-        document.getElementById('playerNameInput').value = players[i].name;
-        document.getElementById('rebuyAmount').value = 50; 
-        document.getElementById('rebuyModal').style.display = 'block'; 
-    }
+    function openRebuy(i) { selIdx = i; document.getElementById('rebuyTitle').innerText = `שחקן ${players[i].id}`; document.getElementById('playerNameInput').value = players[i].name; document.getElementById('rebuyAmount').value = 50; document.getElementById('rebuyModal').style.display = 'block'; }
     function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
-    document.getElementById('confirmBtn').onclick = () => { 
-        players[selIdx].name = document.getElementById('playerNameInput').value;
-        const addAmount = +document.getElementById('rebuyAmount').value;
-        if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; }
-        render(); closeRebuy(); updateUI(); 
-    };
+    document.getElementById('confirmBtn').onclick = () => { players[selIdx].name = document.getElementById('playerNameInput').value; const addAmount = +document.getElementById('rebuyAmount').value; if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; } render(); closeRebuy(); updateUI(); };
     document.getElementById('removeBtn').onclick = () => { players.splice(selIdx, 1); render(); closeRebuy(); updateUI(); };
 </script>
 </body>
