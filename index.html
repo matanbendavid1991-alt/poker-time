@@ -216,9 +216,9 @@
                         timeLeft--; 
                         
                         // לוגיקת צלילים חדשה
-                        if(timeLeft === 10) playSound(523, 0.1, 'square'); // צליל ב-10 שניות
+                        if(timeLeft === 10) playSound(523, 0.1, 'sine'); // צליל ב-10 שניות
                         if(timeLeft <= 5 && timeLeft > 0) playSound(659, 0.05, 'sine'); // טיק כל שנייה מ-5 ומטה
-                        if(timeLeft === 0) playSound(330, 0.7, 'sawtooth'); // סיום
+                        if(timeLeft === 0) playSound(330, 0.7, 'triangle'); // סיום
                         
                     } else {
                         clearInterval(timerId); isActionRunning = false;
