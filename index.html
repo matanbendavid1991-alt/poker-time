@@ -23,10 +23,13 @@
         .player-name-row { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         .player-name-row label { color: var(--gold); font-weight: bold; width: 30px; }
 
+        /* מעטפת הסליידר - חזרה למבנה חלק */
         .slider-wrapper { 
-            display: flex; width: 200vw; height: 100vh; 
-            transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1); 
-            display: none; 
+            display: flex; 
+            width: 200vw; 
+            height: 100vh; 
+            transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); 
+            display: none; /* יופיע רק אחרי ה-Start */
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
 
@@ -52,21 +55,12 @@
         .ready-active { opacity: 1 !important; }
         .paused-dim { opacity: 0.3 !important; } 
 
-        .warning .time-val { 
-            color: var(--danger); 
-            animation: pulse-warning 1s infinite;
-        }
-        
-        @keyframes pulse-warning {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-
+        .warning .time-val { color: var(--danger); animation: pulse-warning 1s infinite; }
+        @keyframes pulse-warning { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
         .poker-table { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 75vw; height: 42vh; border: 12px solid #222; border-radius: 160px; background: radial-gradient(circle, #246b24 0%, #113811 100%); box-shadow: inset 0 0 60px #000; }
-        .player-seat { position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .player-seat { position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 50; }
         .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white; }
 
         .total-pot-container { text-align: center; margin-top: 78vh; }
@@ -91,9 +85,9 @@
     <div class="setup-card">
         <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom:10px;">העיגול</h1>
         <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
-            <div><p style="font-size: 0.9em; margin: 5px 0;">שחקנים</p><input type="number" id="playerCount" class="num-input" value="8" oninput="generateNameFields()"></div>
-            <div><p style="font-size: 0.9em; margin: 5px 0;">כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
-            <div><p style="font-size: 0.9em; margin: 5px 0;">זמן (ש')</p><input type="number" id="roundTimeInput" class="num-input" value="30"></div>
+            <div><p style="font-size: 0.8em; margin: 5px 0;">שחקנים</p><input type="number" id="playerCount" class="num-input" value="8" oninput="generateNameFields()"></div>
+            <div><p style="font-size: 0.8em; margin: 5px 0;">כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
+            <div><p style="font-size: 0.8em; margin: 5px 0;">זמן (ש')</p><input type="number" id="roundTimeInput" class="num-input" value="30"></div>
         </div>
         <hr style="border:0; border-top:1px solid #333;">
         <div id="playerNamesContainer"></div>
@@ -140,7 +134,8 @@
 <script>
     let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
     let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
-    let startX = 0, lastTap = 0, audioCtx = null;
+    let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1;
+    
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
 
@@ -162,8 +157,7 @@
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-            o.type = type;
-            o.connect(g); g.connect(audioCtx.destination);
+            o.type = type; o.connect(g); g.connect(audioCtx.destination);
             o.frequency.value = f; g.gain.setValueAtTime(0.1, audioCtx.currentTime);
             o.start(); o.stop(audioCtx.currentTime + d);
         } catch(e) {}
@@ -173,18 +167,19 @@
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const c = +document.getElementById('playerCount').value;
         const b = +document.getElementById('initialBuyin').value;
-        // עדכון זמן ברירת המחדל לפי מה שהוזן
         defaultRoundTime = +document.getElementById('roundTimeInput').value || 30;
         timeLeft = defaultRoundTime;
         
         const nameInputs = document.querySelectorAll('.setup-player-name');
         players = []; totalPot = 0;
         for(let i=0; i<c; i++) { players.push({id:i+1, name: nameInputs[i].value || '', in:b}); totalPot += b; }
+        
         document.getElementById('setupScreen').style.display = 'none';
         document.getElementById('slider').style.display = 'flex';
         render(); updateUI();
     }
 
+    // ניהול סלייד (החלקה) בין עמודים
     document.addEventListener('touchstart', e => {
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         startX = e.touches[0].clientX;
@@ -201,17 +196,25 @@
         }
     });
 
+    // ניהול טיימר - מוגבל לעמוד 0 בלבד
     document.body.addEventListener('pointerdown', e => {
+        // אם אנחנו בעמוד השולחן (1), אל תעשה כלום לגבי הטיימר
         if(currentPage === 1) return;
-        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen')) return;
+        
+        // מניעת הפעלה בלחיצה על כפתורים או מסך פתיחה
+        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen')) return;
         
         if(!gameClockId) startClock();
         const now = Date.now();
+        
         if(now - lastTap < 300) { 
+            // לחיצה כפולה - איפוס
             clearInterval(timerId); isActionRunning = false; timeLeft = defaultRoundTime; 
         } else {
-            if(isActionRunning) { clearInterval(timerId); isActionRunning = false; }
-            else {
+            // לחיצה בודדת - Start/Pause
+            if(isActionRunning) { 
+                clearInterval(timerId); isActionRunning = false; 
+            } else {
                 if(timeLeft === 0) timeLeft = defaultRoundTime;
                 isActionRunning = true;
                 timerId = setInterval(() => {
