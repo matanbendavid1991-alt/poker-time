@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>העיגול - Poker OS Slider</title>
+    <title>העיגול - Poker OS Premium</title>
     <style>
         :root { --gold: #ffcc00; --danger: #ff3b30; }
         body {
@@ -12,92 +12,126 @@
             font-family: -apple-system, system-ui, sans-serif;
             height: 100vh; overflow: hidden; user-select: none;
         }
-         
+        
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; }
         .setup-card { background: #1a1a1a; padding: 40px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 300px; }
         .setup-card input { background: #333; border: none; color: white; padding: 15px; border-radius: 10px; width: 80px; text-align: center; font-size: 1.5em; margin: 10px; }
         
-        /* מערכת הסליידר */
         .slider-wrapper {
             display: flex; width: 200vw; height: 100vh;
             transition: transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
-            display: none; /* יופעל אחרי הסטאפ */
+            display: none;
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
 
-        /* מסך 1: טיימרים */
-        .admin-panel {
-            position: absolute; top: 20px; width: 90%; left: 5%;
-            display: flex; justify-content: space-between; align-items: center; z-index: 30;
+        /* מסך 1: טיימרים ולוגו */
+        .admin-header {
+            position: absolute; top: 10px; width: 90%; left: 5%;
+            display: flex; justify-content: space-between; align-items: flex-start; z-index: 30;
+        }
+        
+        /* לוגו מרכזי */
+        .logo-container {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 1; text-align: center;
         }
         .app-logo {
-            width: 120px; height: 120px;
+            width: 220px; height: 220px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat;
-            filter: drop-shadow(0 0 10px rgba(255, 204, 0, 0.2));
+            background-position: center;
+            filter: drop-shadow(0 0 20px rgba(255, 204, 0, 0.4));
         }
+
+        .game-clock { font-size: 2vw; font-family: monospace; color: rgba(255, 255, 255, 0.3); }
+
+        .blind-info { 
+            display: flex; align-items: center; gap: 8px; 
+            background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px;
+        }
+
+        /* טיימרים */
         .timer {
-            position: absolute; width: 30vw; display: flex; justify-content: center; align-items: center;
-            font-weight: 900; transition: all 0.2s ease; pointer-events: none;
+            position: absolute; display: flex; justify-content: center; align-items: center;
+            font-weight: 900; transition: all 0.3s ease; pointer-events: none; z-index: 10;
         }
-        .time-val { font-size: 16vw; display: inline-block; width: 1.2em; text-align: center; }
-        .warning .time-val { color: var(--danger); transform: scale(1.2); }
-        .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
+        .time-val { font-size: 18vw; display: inline-block; width: 1.2em; text-align: center; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        /* מצבי טיימר */
+        .ready-active { opacity: 1; }
+        .paused-dim { opacity: 0.3; } /* שקיפות במצב עצירה */
         
-        /* מיקומי טיימרים */
+        .warning .time-val { color: var(--danger); transform: scale(1.15); text-shadow: 0 0 30px rgba(255, 59, 48, 0.4); }
+        .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
+
+        /* מיקומים מעודכנים */
         .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
         .bottom { bottom: 12vh; left: 50%; transform: translateX(-50%); }
-        .left { left: 2vw; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .right { right: 2vw; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+        .left { left: 1vw; top: 50%; transform: translateY(-50%) rotate(90deg); } /* קרוב יותר לקצה */
+        .right { right: 1vw; top: 50%; transform: translateY(-50%) rotate(-90deg); } /* קרוב יותר לקצה */
 
         /* מסך 2: שולחן */
         .poker-table {
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
-            width: 70vw; height: 40vh; border: 10px solid #222; border-radius: 150px;
+            width: 75vw; height: 42vh; border: 12px solid #222; border-radius: 160px;
             background: radial-gradient(circle, #246b24 0%, #113811 100%);
-            box-shadow: inset 0 0 50px #000;
+            box-shadow: inset 0 0 60px #000;
         }
         .player-seat {
-            position: absolute; width: 75px; height: 75px; background: #151515;
+            position: absolute; width: 80px; height: 80px; background: #151515;
             border: 2px solid #333; border-radius: 50%; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; font-size: 11px; transform: translate(-50%, -50%);
+            justify-content: center; align-items: center; font-size: 12px; transform: translate(-50%, -50%);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .total-pot-container { text-align: center; margin-top: 75vh; }
-        .total-pot-container h2 { font-size: 6vw; color: var(--gold); margin: 0; }
+        .chip-icon {
+            display: inline-flex; justify-content: center; align-items: center;
+            width: 3.5vw; height: 3.5vw; border-radius: 50%;
+            border: 2px dashed rgba(255,255,255,0.3);
+            font-weight: bold; font-size: 1.6vw; color: white;
+        }
 
-        /* כפתורים ואינדיקטורים */
+        .total-pot-container { text-align: center; margin-top: 78vh; }
+        .total-pot-container h2 { font-size: 7vw; color: var(--gold); margin: 0; line-height: 1; }
+
         .page-dots {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px; z-index: 100;
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 12px; z-index: 100;
         }
-        .dot { width: 10px; height: 10px; background: #444; border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: var(--gold); width: 25px; border-radius: 5px; }
+        .dot { width: 10px; height: 10px; background: #333; border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: var(--gold); width: 30px; border-radius: 10px; }
 
-        .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 10px; z-index: 40; }
-        .btn { background: #222; border: 1px solid #444; color: white; padding: 12px 20px; border-radius: 12px; font-weight: bold; }
+        .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
+        .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; cursor: pointer; }
 
-        @keyframes pulseZero { 0%, 100% { transform: scale(1.2); } 50% { transform: scale(1.4); } }
-        #rebuyModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 25px; border: 2px solid var(--gold); z-index: 10000; text-align: center; }
+        @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); opacity: 0.6; } }
+        #rebuyModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 25px; border: 2px solid var(--gold); z-index: 10000; text-align: center; width: 280px; }
     </style>
 </head>
 <body>
 
 <div id="setupScreen">
     <div class="setup-card">
-        <h1 style="color:var(--gold)">העיגול</h1>
-        <input type="number" id="playerCount" value="8"><p>שחקנים</p>
-        <input type="number" id="initialBuyin" value="50"><p>כניסה</p>
-        <button class="btn" style="color:var(--gold); width:100%" onclick="startGame()">צאו לדרך</button>
+        <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom: 10px;">העיגול</h1>
+        <p>כמות שחקנים</p>
+        <input type="number" id="playerCount" value="8">
+        <p>כניסה (₪)</p>
+        <input type="number" id="initialBuyin" value="50">
+        <br><br>
+        <button class="btn" style="color:var(--gold); width:100%; font-size: 1.2em; border-color: var(--gold);" onclick="startGame()">צאו לדרך</button>
     </div>
 </div>
 
 <div class="slider-wrapper" id="slider">
     <div class="page" id="timerPage">
-        <div class="admin-panel">
-            <div class="app-logo"></div>
-            <div id="blindDisplay" style="display:flex; align-items:center;"></div>
+        <div class="admin-header">
+            <div id="blindDisplay" class="blind-info"></div>
             <div class="game-clock" id="gameClock">00:00:00</div>
         </div>
+
+        <div class="logo-container">
+            <div class="app-logo"></div>
+        </div>
+
         <div class="timer top"><span class="time-val">30</span></div>
         <div class="timer left"><span class="time-val">30</span></div>
         <div class="timer right"><span class="time-val">30</span></div>
@@ -107,12 +141,12 @@
     <div class="page" id="tablePage">
         <div class="poker-table" id="seatsContainer"></div>
         <div class="total-pot-container">
-            <p style="color:#888; margin:0;">TOTAL BANK</p>
+            <p style="color:#666; margin:0; font-weight: bold; letter-spacing: 2px;">TOTAL BANK</p>
             <h2 id="potDisplay">0</h2>
         </div>
         <div class="controls">
-            <button class="btn" onclick="addTime(event)">Time Bank</button>
-            <button class="btn" onclick="nextLevel(event)">Next Level</button>
+            <button class="btn" onclick="addTime(event)" style="border-color: var(--gold); color: var(--gold);">+30 SEC</button>
+            <button class="btn" onclick="nextLevel(event)">NEXT LEVEL</button>
         </div>
     </div>
 </div>
@@ -123,11 +157,11 @@
 </div>
 
 <div id="rebuyModal">
-    <h2 id="rebuyTitle" style="color:var(--gold)">שחקן</h2>
-    <input type="number" id="rebuyAmount" value="50" style="width:80%; padding:10px; margin-bottom:10px; background:#333; color:white; border:none; text-align:center;">
-    <button class="btn" style="width:100%; color:var(--gold)" id="confirmBtn">עדכן</button>
-    <button class="btn" style="width:100%; color:red; margin-top:5px" id="removeBtn">הסר</button>
-    <button class="btn" style="width:100%; margin-top:5px" onclick="closeRebuy()">סגור</button>
+    <h2 id="rebuyTitle" style="color:var(--gold); margin-top: 0;">שחקן</h2>
+    <input type="number" id="rebuyAmount" value="50" style="width:80%; padding:15px; margin-bottom:15px; background:#333; color:white; border:none; text-align:center; font-size: 1.5em; border-radius: 10px;">
+    <button class="btn" style="width:100%; color:var(--gold); border-color: var(--gold); margin-bottom: 10px;" id="confirmBtn">הוסף לקופה</button>
+    <button class="btn" style="width:100%; color:var(--danger); border-color: var(--danger); margin-bottom: 10px;" id="removeBtn">הוצא מהמשחק</button>
+    <button class="btn" style="width:100%; background:#333; border: none;" onclick="closeRebuy()">ביטול</button>
 </div>
 
 <script>
@@ -135,6 +169,7 @@
     let timeLeft = 30, isActionRunning = false, timerId = null, gameClockId = null;
     let startX = 0, lastTap = 0, audioCtx = null;
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
+    const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
 
     function playSound(f, d) {
         if(!audioCtx) return;
@@ -148,17 +183,18 @@
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const c = +document.getElementById('playerCount').value;
         const b = +document.getElementById('initialBuyin').value;
-        for(let i=0; i<c; i++) players.push({id:i+1, in:b}), totalPot += b;
+        players = []; totalPot = 0;
+        for(let i=0; i<c; i++) { players.push({id:i+1, in:b}); totalPot += b; }
         document.getElementById('setupScreen').style.display = 'none';
         document.getElementById('slider').style.display = 'flex';
         render(); updateUI();
     }
 
-    // ניהול סלייד (Swipe)
     document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
     document.addEventListener('touchend', e => {
+        if(e.target.closest('.btn') || e.target.closest('.player-seat')) return;
         const diff = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) {
+        if (Math.abs(diff) > 60) {
             currentPage = diff > 0 ? 1 : 0;
             document.getElementById('slider').style.transform = `translateX(-${currentPage * 100}vw)`;
             document.getElementById('dot0').classList.toggle('active', currentPage === 0);
@@ -166,15 +202,16 @@
         }
     });
 
-    // לחיצה כפולה לאיפוס, לחיצה אחת להתחלה/עצירה
     document.body.addEventListener('pointerdown', e => {
-        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#setupScreen')) return;
+        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen')) return;
         if(!gameClockId) startClock();
         const now = Date.now();
-        if(now - lastTap < 300) { clearInterval(timerId); isActionRunning = false; timeLeft = 30; } 
-        else {
+        if(now - lastTap < 300) { 
+            clearInterval(timerId); isActionRunning = false; timeLeft = 30; 
+        } else {
             if(isActionRunning) { clearInterval(timerId); isActionRunning = false; }
             else {
+                if(timeLeft === 0) timeLeft = 30;
                 isActionRunning = true;
                 timerId = setInterval(() => {
                     if(timeLeft > 0) {
@@ -205,23 +242,41 @@
         container.innerHTML = '';
         players.forEach((p, i) => {
             const angle = (i / players.length) * Math.PI * 2 + Math.PI/2;
-            const x = 50 + 45 * Math.cos(angle), y = 50 + 45 * Math.sin(angle);
+            const x = 50 + 46 * Math.cos(angle), y = 50 + 46 * Math.sin(angle);
             const seat = document.createElement('div');
             seat.className = 'player-seat';
             seat.style.left = x+'%'; seat.style.top = y+'%';
-            seat.innerHTML = `<span>${p.id}</span><span style="color:var(--gold);font-weight:bold">${p.in}</span>`;
+            seat.innerHTML = `<span style="opacity:0.6">#${p.id}</span><span style="color:var(--gold);font-weight:bold;font-size:16px;">${p.in}</span>`;
             seat.onclick = (e) => { e.stopPropagation(); openRebuy(i); };
             container.appendChild(seat);
         });
         const lvl = levels[currentLevelIdx];
-        document.getElementById('blindDisplay').innerHTML = `<div class="chip-icon" style="background:#555">${lvl.s}</div><span style="margin:0 5px">/</span><div class="chip-icon" style="background:#111">${lvl.b}</div>`;
+        document.getElementById('blindDisplay').innerHTML = `
+            <div class="chip-icon" style="background:${chipColors[lvl.s]||'#444'}">${lvl.s}</div>
+            <span style="color:#555; font-weight:bold">/</span>
+            <div class="chip-icon" style="background:${chipColors[lvl.b]||'#222'}">${lvl.b}</div>
+        `;
     }
 
     function updateUI() {
         document.getElementById('potDisplay').innerText = totalPot;
         document.querySelectorAll('.timer').forEach(el => {
-            el.querySelector('.time-val').innerText = timeLeft;
-            el.className = `timer ${el.classList[1]} ${isActionRunning || timeLeft===30 ? 'ready-active' : 'paused-dim'} ${timeLeft<=10 && timeLeft>0 ? 'warning' : ''} ${timeLeft===0 ? 'zero-blink' : ''}`;
+            const valEl = el.querySelector('.time-val');
+            valEl.innerText = timeLeft;
+            
+            // הסרת כל המצבים הקודמים
+            el.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
+            
+            // החלת מצב שקיפות/פעילות
+            if (isActionRunning) {
+                el.classList.add('ready-active');
+            } else {
+                el.classList.add('paused-dim');
+            }
+
+            // החלת אפקטים של זמן נגמר
+            if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
+            if (timeLeft === 0) el.classList.add('zero-blink');
         });
     }
 
@@ -231,10 +286,8 @@
     let selIdx = null;
     function openRebuy(i) { selIdx = i; document.getElementById('rebuyTitle').innerText = `שחקן ${players[i].id}`; document.getElementById('rebuyModal').style.display = 'block'; }
     function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
-    document.getElementById('confirmBtn').onclick = () => { const v = +document.getElementById('rebuyAmount').value; players[selIdx].in += v; totalPot += v; render(); closeRebuy(); updateUI(); };
+    document.getElementById('confirmBtn').onclick = () => { const v = +document.getElementById('rebuyAmount').value; if(v){players[selIdx].in += v; totalPot += v; render(); closeRebuy(); updateUI();} };
     document.getElementById('removeBtn').onclick = () => { players.splice(selIdx, 1); render(); closeRebuy(); updateUI(); };
 </script>
 </body>
 </html>
-
-
