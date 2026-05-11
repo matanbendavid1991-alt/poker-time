@@ -24,7 +24,6 @@
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
 
-        /* מסך 1: טיימרים ולוגו */
         .admin-header {
             position: absolute; top: 15px; width: 90%; left: 5%;
             display: flex; justify-content: space-between; align-items: flex-start; z-index: 30;
@@ -35,10 +34,9 @@
             z-index: 1; text-align: center;
         }
         .app-logo {
-            width: 350px; height: 350px;
+            width: 250px; height: 250px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat;
             background-position: center;
-            /* הילה הוסרה לפי בקשתך */
         }
 
         .game-clock { font-size: 2vw; font-family: monospace; color: rgba(255, 255, 255, 0.3); }
@@ -47,27 +45,26 @@
             background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px;
         }
 
-        /* טיימרים */
         .timer {
             position: absolute; display: flex; justify-content: center; align-items: center;
             font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10;
         }
         .time-val { font-size: 18vw; display: inline-block; width: 1.2em; text-align: center; transition: transform 0.2s ease; }
 
-        /* מצבי אופסיטי */
         .ready-active { opacity: 1 !important; }
         .paused-dim { opacity: 0.3 !important; } 
         
         .warning .time-val { color: var(--danger); transform: scale(1.15); }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        /* מיקומים מרווחים מהקצה */
+        /* --- מיקומי טיימרים מעודכנים --- */
         .top { top: 7vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
         .bottom { bottom: 12vh; left: 50%; transform: translateX(-50%); }
-        .left { left: 4vw; top: 50%; transform: translateY(-50%) rotate(90deg); }
-        .right { right: 4vw; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+        
+        /* הקטנו את הערך מ-4vw ל-1vw כדי להצמיד לקצוות ולהרחיק מהמרכז */
+        .left { left: 1vw; top: 50%; transform: translateY(-50%) rotate(90deg); }
+        .right { right: 1vw; top: 50%; transform: translateY(-50%) rotate(-90deg); }
 
-        /* מסך 2: שולחן */
         .poker-table {
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
             width: 75vw; height: 42vh; border: 12px solid #222; border-radius: 160px;
@@ -258,12 +255,9 @@
             valEl.innerText = timeLeft;
             el.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
             
-            // לוגיקת אופסיטי מעודכנת:
-            // אם השעון רץ או אם הוא על 30 (מצב התחלתי) -> 100% שקיפות
             if (isActionRunning || timeLeft === 30) {
                 el.classList.add('ready-active');
             } else {
-                // רק אם עצרנו באמצע הריצה -> להוריד אופסיטי
                 el.classList.add('paused-dim');
             }
 
