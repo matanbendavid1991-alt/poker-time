@@ -16,7 +16,7 @@
         }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
-        .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 350px; max-height: 90vh; overflow-y: auto; }
+        .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 380px; max-height: 90vh; overflow-y: auto; }
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
         .setup-card .num-input { width: 80px; font-size: 1.8em; }
         #playerNamesContainer { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
@@ -32,7 +32,6 @@
 
         .admin-header { position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; }
         
-        /* הזזת השעון הכללי לימין באותו גובה */
         .game-clock { 
             font-size: 2.2vw; font-family: monospace; color: rgba(255, 255, 255, 0.7); font-weight: bold; 
             background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px;
@@ -53,7 +52,6 @@
         .ready-active { opacity: 1 !important; }
         .paused-dim { opacity: 0.3 !important; } 
 
-        /* אפקט הלחץ ב-10 שניות אחרונות */
         .warning .time-val { 
             color: var(--danger); 
             animation: pulse-warning 1s infinite;
@@ -92,9 +90,10 @@
 <div id="setupScreen">
     <div class="setup-card">
         <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom:10px;">העיגול</h1>
-        <div style="display:flex; justify-content: space-around; align-items:center; margin-bottom:20px;">
-            <div><p>שחקנים</p><input type="number" id="playerCount" class="num-input" value="8" oninput="generateNameFields()"></div>
-            <div><p>כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
+        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
+            <div><p style="font-size: 0.9em; margin: 5px 0;">שחקנים</p><input type="number" id="playerCount" class="num-input" value="8" oninput="generateNameFields()"></div>
+            <div><p style="font-size: 0.9em; margin: 5px 0;">כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
+            <div><p style="font-size: 0.9em; margin: 5px 0;">זמן (ש')</p><input type="number" id="roundTimeInput" class="num-input" value="30"></div>
         </div>
         <hr style="border:0; border-top:1px solid #333;">
         <div id="playerNamesContainer"></div>
@@ -140,7 +139,7 @@
 
 <script>
     let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
-    let timeLeft = 30, isActionRunning = false, timerId = null, gameClockId = null;
+    let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
     let startX = 0, lastTap = 0, audioCtx = null;
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
@@ -174,6 +173,10 @@
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const c = +document.getElementById('playerCount').value;
         const b = +document.getElementById('initialBuyin').value;
+        // עדכון זמן ברירת המחדל לפי מה שהוזן
+        defaultRoundTime = +document.getElementById('roundTimeInput').value || 30;
+        timeLeft = defaultRoundTime;
+        
         const nameInputs = document.querySelectorAll('.setup-player-name');
         players = []; totalPot = 0;
         for(let i=0; i<c; i++) { players.push({id:i+1, name: nameInputs[i].value || '', in:b}); totalPot += b; }
@@ -205,21 +208,18 @@
         if(!gameClockId) startClock();
         const now = Date.now();
         if(now - lastTap < 300) { 
-            clearInterval(timerId); isActionRunning = false; timeLeft = 30; 
+            clearInterval(timerId); isActionRunning = false; timeLeft = defaultRoundTime; 
         } else {
             if(isActionRunning) { clearInterval(timerId); isActionRunning = false; }
             else {
-                if(timeLeft === 0) timeLeft = 30;
+                if(timeLeft === 0) timeLeft = defaultRoundTime;
                 isActionRunning = true;
                 timerId = setInterval(() => {
                     if(timeLeft > 0) {
                         timeLeft--; 
-                        
-                        // לוגיקת צלילים חדשה
-                        if(timeLeft === 10) playSound(523, 0.1, 'sine'); // צליל ב-10 שניות
-                        if(timeLeft <= 5 && timeLeft > 0) playSound(659, 0.05, 'sine'); // טיק כל שנייה מ-5 ומטה
-                        if(timeLeft === 0) playSound(330, 0.7, 'triangle'); // סיום
-                        
+                        if(timeLeft === 10) playSound(523, 0.1, 'sine');
+                        if(timeLeft <= 5 && timeLeft > 0) playSound(659, 0.05, 'sine');
+                        if(timeLeft === 0) playSound(330, 0.7, 'triangle');
                     } else {
                         clearInterval(timerId); isActionRunning = false;
                     }
@@ -266,7 +266,7 @@
             valEl.innerText = timeLeft;
             el.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
             
-            if (isActionRunning || timeLeft === 30) el.classList.add('ready-active');
+            if (isActionRunning || timeLeft === defaultRoundTime) el.classList.add('ready-active');
             else el.classList.add('paused-dim');
             
             if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
@@ -274,7 +274,7 @@
         });
     }
 
-    function addTime(e) { e.stopPropagation(); timeLeft += 30; updateUI(); }
+    function addTime(e) { e.stopPropagation(); timeLeft += defaultRoundTime; updateUI(); }
     function nextLevel(e) { e.stopPropagation(); if(currentLevelIdx < levels.length-1) currentLevelIdx++; render(); }
     function openRebuy(i) { selIdx = i; document.getElementById('rebuyTitle').innerText = `שחקן ${players[i].id}`; document.getElementById('playerNameInput').value = players[i].name; document.getElementById('rebuyAmount').value = 50; document.getElementById('rebuyModal').style.display = 'block'; }
     function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
