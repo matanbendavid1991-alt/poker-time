@@ -20,7 +20,6 @@
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
         .setup-card .num-input { width: 80px; font-size: 1.8em; }
         
-        /* עיצוב גריד החברים החדש */
         .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; max-height: 35vh; overflow-y: auto; padding: 10px; }
         .friend-circle { 
             aspect-ratio: 1; background: #262626; border: 2px solid #444; border-radius: 50%; 
@@ -86,7 +85,6 @@
         .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
         .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; }
 
-        /* מודאלים מותאמים */
         #rebuyModal, #endGameModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 360px; max-height: 85vh; overflow-y: auto; }
         .modal-input { width: 90%; padding: 18px; margin-bottom: 15px; background: #333; color: white; border: none; text-align: center; font-size: 1.6em; border-radius: 15px; font-weight: bold; }
         
@@ -164,13 +162,16 @@
         <span style="color:#aaa;">סכום שחולק: </span><span id="endGameDistributed" style="font-weight:bold; color:white;">0</span>
     </div>
     <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none;">הסכום שחולק אינו תואם לקופה!</div>
-    <button class="btn" style="width:100%; color:var(--success); border-color:var(--success); margin-bottom: 10px;" onclick="submitGameHistory()">הפק דוח וסיים</button>
-    <button class="btn" style="width:100%;" onclick="closeEndGame()">חזור למשחק</button>
+    <button class="btn" id="finishAndSendBtn" style="width:100%; color:var(--success); border-color:var(--success); margin-bottom: 10px;" onclick="submitGameHistory()">הפק דוח וסיים</button>
+    <button class="btn" id="cancelEndGameBtn" style="width:100%;" onclick="closeEndGame()">חזור למשחק</button>
 </div>
 
 <script>
-    // ** שנה כאן לשמות האמיתיים של החברים שלך **
-    const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "תום", "בן", "טל"];
+    // ** כתובת ה-Web App שקיבלת מגוגל שיטס **
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
+
+    // ** שמות קבועים לבחירה **
+    const fixedFriends = ["מתן", "ירדן", "אבי", "משה", "יוסי", "דני", "עומר", "ליאור", "רון", "ניר", "גל", "עידן"];
     let selectedFriends = [];
 
     let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
@@ -180,7 +181,6 @@
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
 
-    // בניית גריד השחקנים
     function buildFriendsGrid() {
         const grid = document.getElementById('friendsGrid');
         grid.innerHTML = '';
@@ -237,7 +237,7 @@
                 in: b, 
                 joinTime: startTimeStr, 
                 leaveTime: 'עדין במשחק',
-                removed: false // דגל שעוזר לנו להסתיר אותו מהשולחן אבל לשמור לדוח
+                removed: false
             }); 
             totalPot += b; 
         });
@@ -308,8 +308,6 @@
     function render() {
         const container = document.getElementById('seatsContainer');
         container.innerHTML = '';
-        
-        // מציג רק שחקנים שלא הוסרו מהשולחן
         const activePlayers = players.filter(p => !p.removed);
         
         activePlayers.forEach((p, i) => {
@@ -321,7 +319,6 @@
             const displayName = p.name ? p.name : `#${p.id}`;
             seat.innerHTML = `<span style="opacity:0.8; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px;">${displayName}</span><span style="color:var(--gold); font-weight:bold; font-size:1.2em;">${p.in}</span>`;
             
-            // מציאת האינדקס האמיתי במערך המקורי כדי שהעדכון יעבוד נכון
             const origIdx = players.indexOf(p);
             seat.onclick = (e) => { e.stopPropagation(); openRebuy(origIdx); };
             container.appendChild(seat);
@@ -368,7 +365,7 @@
     document.getElementById('removeBtn').onclick = () => { 
         const now = new Date();
         players[selIdx].leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-        players[selIdx].removed = true; // במקום למחוק, אנחנו מסמנים אותו כהוסר
+        players[selIdx].removed = true;
         render(); closeRebuy(); updateUI(); 
     };
 
@@ -379,7 +376,6 @@
         const container = document.getElementById('endGamePlayersContainer');
         container.innerHTML = '';
         
-        // מציג את כל השחקנים, כולל אלו שהוסרו באמצע
         players.forEach((p, i) => {
             const div = document.createElement('div');
             div.className = 'end-game-row';
@@ -409,6 +405,7 @@
         }
     }
 
+    // הפונקציה המעודכנת ששולחת את המידע ישירות לגוגל שיטס
     function submitGameHistory() {
         const inputs = document.querySelectorAll('.end-game-out-input');
         let totalOut = 0;
@@ -419,26 +416,52 @@
             return;
         }
 
+        // שינוי מצב כפתורים למניעת לחיצה כפולה והצגת טעינה
+        const sendBtn = document.getElementById('finishAndSendBtn');
+        const cancelBtn = document.getElementById('cancelEndGameBtn');
+        sendBtn.disabled = true;
+        sendBtn.innerText = 'שולח נתונים לגוגל...';
+        cancelBtn.style.display = 'none';
+
         const now = new Date();
         const dateStr = now.toLocaleDateString('he-IL');
         const endTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         
-        let summaryText = `פלט סיכום למשחק - העיגול\nתאריך: ${dateStr}\n`;
-        summaryText += `-----------------------------------\n`;
-        
-        players.forEach((p, i) => {
+        // בניית מערך הנתונים המסודר שיישלח לגוגל
+        const payload = players.map((p, i) => {
             const outVal = +inputs[i].value || 0;
             const netProfit = outVal - p.in;
             const finalLeaveTime = p.leaveTime === 'עדין במשחק' ? endTimeStr : p.leaveTime;
             
-            summaryText += `שם: ${p.name}\n`;
-            summaryText += `כניסה: ${p.joinTime} | יציאה: ${finalLeaveTime}\n`;
-            summaryText += `השקעה: ${p.in} | משיכה: ${outVal} | נטו: ${netProfit >= 0 ? '+' : ''}${netProfit}\n`;
-            summaryText += `-----------------------------------\n`;
+            return {
+                date: dateStr,
+                name: p.name,
+                joinTime: p.joinTime,
+                leaveTime: finalLeaveTime,
+                buyIn: p.in,
+                cashOut: outVal,
+                net: netProfit
+            };
         });
-        
-        alert(summaryText);
-        location.reload();
+
+        // שליחת המידע ישירות ל-Google Web App
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // מאפשר שליחה חלקה ללא חסימות דפדפן
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            alert('המשחק הסתיים בהצלחה! הנתונים נשמרו בגיליון.');
+            location.reload(); // רענון האפליקציה למשחק חדש
+        })
+        .catch(err => {
+            alert('שגיאה בשליחת הנתונים: ' + err);
+            sendBtn.disabled = false;
+            sendBtn.innerText = 'הפק דוח וסיים';
+            cancelBtn.style.display = 'block';
+        });
     }
 </script>
 </body>
