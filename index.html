@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>העיגול - Poker OS Premium</title>
     <style>
-        :root { --gold: #ffcc00; --danger: #ff3b30; }
+        :root { --gold: #ffcc00; --danger: #ff3b30; --success: #34c759; }
         * { box-sizing: border-box; }
         
         body {
@@ -16,20 +16,33 @@
         }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
-        .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 380px; max-height: 90vh; overflow-y: auto; }
+        .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; }
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
         .setup-card .num-input { width: 80px; font-size: 1.8em; }
-        #playerNamesContainer { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
-        .player-name-row { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
-        .player-name-row label { color: var(--gold); font-weight: bold; width: 30px; }
+        
+        /* עיצוב גריד החברים החדש */
+        .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; max-height: 35vh; overflow-y: auto; padding: 10px; }
+        .friend-circle { 
+            aspect-ratio: 1; background: #262626; border: 2px solid #444; border-radius: 50%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            font-weight: bold; font-size: 1.1em; color: #ccc; cursor: pointer; position: relative;
+            transition: all 0.2s ease;
+        }
+        .friend-circle.selected { 
+            border-color: var(--gold); background: #332a00; color: white; 
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+        .friend-circle .v-badge { 
+            position: absolute; top: -2px; right: -2px; background: var(--gold); color: black; 
+            width: 22px; height: 22px; border-radius: 50%; font-size: 0.8em; 
+            display: flex; justify-content: center; align-items: center; display: none;
+        }
+        .friend-circle.selected .v-badge { display: flex; }
 
-        /* מעטפת הסליידר - חזרה למבנה חלק */
         .slider-wrapper { 
-            display: flex; 
-            width: 200vw; 
-            height: 100vh; 
+            display: flex; width: 200vw; height: 100vh; 
             transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); 
-            display: none; /* יופיע רק אחרי ה-Start */
+            display: none; 
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
 
@@ -73,8 +86,13 @@
         .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
         .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; }
 
-        #rebuyModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 320px; }
+        /* מודאלים מותאמים */
+        #rebuyModal, #endGameModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 360px; max-height: 85vh; overflow-y: auto; }
         .modal-input { width: 90%; padding: 18px; margin-bottom: 15px; background: #333; color: white; border: none; text-align: center; font-size: 1.6em; border-radius: 15px; font-weight: bold; }
+        
+        .end-game-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 12px; }
+        .end-game-row span { font-weight: bold; font-size: 1.1em; color: var(--gold); }
+        .end-game-row input { width: 100px; background: #444; border: none; color: white; padding: 8px; text-align: center; border-radius: 8px; font-size: 1.1em; }
 
         @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
     </style>
@@ -84,13 +102,16 @@
 <div id="setupScreen">
     <div class="setup-card">
         <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom:10px;">העיגול</h1>
-        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;">
-            <div><p style="font-size: 0.8em; margin: 5px 0;">שחקנים</p><input type="number" id="playerCount" class="num-input" value="8" oninput="generateNameFields()"></div>
+        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:10px;">
             <div><p style="font-size: 0.8em; margin: 5px 0;">כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
             <div><p style="font-size: 0.8em; margin: 5px 0;">זמן (ש')</p><input type="number" id="roundTimeInput" class="num-input" value="30"></div>
+            <div><p style="font-size: 0.8em; margin: 5px 0;">נבחרו</p><div id="activeCountDisplay" style="font-size: 1.8em; font-weight: bold; color: var(--gold); margin-top:10px;">0</div></div>
         </div>
-        <hr style="border:0; border-top:1px solid #333;">
-        <div id="playerNamesContainer"></div>
+        <hr style="border:0; border-top:1px solid #333; margin-bottom: 10px;">
+        <p style="color:#aaa; font-size:0.9em; margin: 0 0 10px 0;">בחר שחקנים לערב זה:</p>
+        
+        <div class="friends-grid" id="friendsGrid"></div>
+        
         <br>
         <button class="btn" style="color:var(--gold); width:100%; font-size: 1.4em;" onclick="startGame()">צאו לדרך</button>
     </div>
@@ -116,7 +137,10 @@
             <p style="color:#666; margin:0; font-weight: bold;">TOTAL BANK</p>
             <h2 id="potDisplay">0</h2>
         </div>
-        <div class="controls"><button class="btn" onclick="nextLevel(event)">NEXT LEVEL</button></div>
+        <div class="controls">
+            <button class="btn" onclick="nextLevel(event)">NEXT LEVEL</button>
+            <button class="btn" onclick="openEndGame(event)" style="border-color: var(--danger); color: var(--danger);">FINISH GAME</button>
+        </div>
     </div>
 </div>
 
@@ -131,26 +155,55 @@
     <button class="btn" style="width:100%;" onclick="closeRebuy()">ביטול</button>
 </div>
 
+<div id="endGameModal">
+    <h2 style="color:var(--gold); margin-bottom: 10px;">סיכום וחלוקת כספים</h2>
+    <p style="color:#aaa; font-size:0.9em; margin-bottom:20px;">הזן כמה כסף/צ'יפים כל שחקן קיבל בסיום</p>
+    <div id="endGamePlayersContainer"></div>
+    <div style="margin: 20px 0; padding: 10px; background:#222; border-radius:10px;">
+        <span style="color:#aaa;">קופה כוללת: </span><span id="endGameTotalBank" style="font-weight:bold; color:var(--gold);">0</span><br>
+        <span style="color:#aaa;">סכום שחולק: </span><span id="endGameDistributed" style="font-weight:bold; color:white;">0</span>
+    </div>
+    <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none;">הסכום שחולק אינו תואם לקופה!</div>
+    <button class="btn" style="width:100%; color:var(--success); border-color:var(--success); margin-bottom: 10px;" onclick="submitGameHistory()">הפק דוח וסיים</button>
+    <button class="btn" style="width:100%;" onclick="closeEndGame()">חזור למשחק</button>
+</div>
+
 <script>
+    // ** שנה כאן לשמות האמיתיים של החברים שלך **
+    const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "תום", "בן", "טל"];
+    let selectedFriends = [];
+
     let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
     let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
-    let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1;
+    let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
     
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
 
-    function generateNameFields() {
-        const count = +document.getElementById('playerCount').value;
-        const container = document.getElementById('playerNamesContainer');
-        container.innerHTML = '';
-        for(let i = 1; i <= count; i++) {
-            const div = document.createElement('div');
-            div.className = 'player-name-row';
-            div.innerHTML = `<label>${i}</label><input type="text" class="setup-player-name" placeholder="שם שחקן ${i}">`;
-            container.appendChild(div);
-        }
+    // בניית גריד השחקנים
+    function buildFriendsGrid() {
+        const grid = document.getElementById('friendsGrid');
+        grid.innerHTML = '';
+        fixedFriends.forEach(name => {
+            const el = document.createElement('div');
+            el.className = 'friend-circle';
+            el.innerHTML = `<span>${name}</span><div class="v-badge">&#10003;</div>`;
+            el.onclick = () => toggleFriend(name, el);
+            grid.appendChild(el);
+        });
     }
-    generateNameFields();
+
+    function toggleFriend(name, el) {
+        if(selectedFriends.includes(name)) {
+            selectedFriends = selectedFriends.filter(f => f !== name);
+            el.classList.remove('selected');
+        } else {
+            selectedFriends.push(name);
+            el.classList.add('selected');
+        }
+        document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
+    }
+    buildFriendsGrid();
 
     function playSound(f, d, type = 'sine') {
         try {
@@ -164,29 +217,43 @@
     }
 
     function startGame() {
+        if(selectedFriends.length === 0) {
+            alert("חובה לבחור שחקן אחד לפחות!");
+            return;
+        }
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const c = +document.getElementById('playerCount').value;
         const b = +document.getElementById('initialBuyin').value;
         defaultRoundTime = +document.getElementById('roundTimeInput').value || 30;
         timeLeft = defaultRoundTime;
         
-        const nameInputs = document.querySelectorAll('.setup-player-name');
+        const now = new Date();
+        startTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        
         players = []; totalPot = 0;
-        for(let i=0; i<c; i++) { players.push({id:i+1, name: nameInputs[i].value || '', in:b}); totalPot += b; }
+        selectedFriends.forEach((name, i) => { 
+            players.push({
+                id: i+1, 
+                name: name, 
+                in: b, 
+                joinTime: startTimeStr, 
+                leaveTime: 'עדין במשחק',
+                removed: false // דגל שעוזר לנו להסתיר אותו מהשולחן אבל לשמור לדוח
+            }); 
+            totalPot += b; 
+        });
         
         document.getElementById('setupScreen').style.display = 'none';
         document.getElementById('slider').style.display = 'flex';
         render(); updateUI();
     }
 
-    // ניהול סלייד (החלקה) בין עמודים
     document.addEventListener('touchstart', e => {
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         startX = e.touches[0].clientX;
     }, {passive: true});
 
     document.addEventListener('touchend', e => {
-        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal')) return;
+        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#endGameModal')) return;
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 60) {
             currentPage = diff > 0 ? 1 : 0;
@@ -196,22 +263,16 @@
         }
     });
 
-    // ניהול טיימר - מוגבל לעמוד 0 בלבד
     document.body.addEventListener('pointerdown', e => {
-        // אם אנחנו בעמוד השולחן (1), אל תעשה כלום לגבי הטיימר
         if(currentPage === 1) return;
-        
-        // מניעת הפעלה בלחיצה על כפתורים או מסך פתיחה
-        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen')) return;
+        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal')) return;
         
         if(!gameClockId) startClock();
         const now = Date.now();
         
         if(now - lastTap < 300) { 
-            // לחיצה כפולה - איפוס
             clearInterval(timerId); isActionRunning = false; timeLeft = defaultRoundTime; 
         } else {
-            // לחיצה בודדת - Start/Pause
             if(isActionRunning) { 
                 clearInterval(timerId); isActionRunning = false; 
             } else {
@@ -247,17 +308,25 @@
     function render() {
         const container = document.getElementById('seatsContainer');
         container.innerHTML = '';
-        players.forEach((p, i) => {
-            const angle = (i / players.length) * Math.PI * 2 + Math.PI/2;
+        
+        // מציג רק שחקנים שלא הוסרו מהשולחן
+        const activePlayers = players.filter(p => !p.removed);
+        
+        activePlayers.forEach((p, i) => {
+            const angle = (i / activePlayers.length) * Math.PI * 2 + Math.PI/2;
             const x = 50 + 46 * Math.cos(angle), y = 50 + 46 * Math.sin(angle);
             const seat = document.createElement('div');
             seat.className = 'player-seat';
             seat.style.left = x+'%'; seat.style.top = y+'%';
             const displayName = p.name ? p.name : `#${p.id}`;
             seat.innerHTML = `<span style="opacity:0.8; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px;">${displayName}</span><span style="color:var(--gold); font-weight:bold; font-size:1.2em;">${p.in}</span>`;
-            seat.onclick = (e) => { e.stopPropagation(); openRebuy(i); };
+            
+            // מציאת האינדקס האמיתי במערך המקורי כדי שהעדכון יעבוד נכון
+            const origIdx = players.indexOf(p);
+            seat.onclick = (e) => { e.stopPropagation(); openRebuy(origIdx); };
             container.appendChild(seat);
         });
+        
         const lvl = levels[currentLevelIdx];
         document.getElementById('blindDisplay').innerHTML = `<div class="chip-icon" style="background:${chipColors[lvl.s]||'#444'}">${lvl.s}</div><span style="color:#555; font-weight:bold">/</span><div class="chip-icon" style="background:${chipColors[lvl.b]||'#222'}">${lvl.b}</div>`;
     }
@@ -279,10 +348,98 @@
 
     function addTime(e) { e.stopPropagation(); timeLeft += defaultRoundTime; updateUI(); }
     function nextLevel(e) { e.stopPropagation(); if(currentLevelIdx < levels.length-1) currentLevelIdx++; render(); }
-    function openRebuy(i) { selIdx = i; document.getElementById('rebuyTitle').innerText = `שחקן ${players[i].id}`; document.getElementById('playerNameInput').value = players[i].name; document.getElementById('rebuyAmount').value = 50; document.getElementById('rebuyModal').style.display = 'block'; }
+    
+    function openRebuy(i) { 
+        selIdx = i; 
+        document.getElementById('rebuyTitle').innerText = players[i].name; 
+        document.getElementById('playerNameInput').value = players[i].name; 
+        document.getElementById('rebuyAmount').value = 50; 
+        document.getElementById('rebuyModal').style.display = 'block'; 
+    }
     function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
-    document.getElementById('confirmBtn').onclick = () => { players[selIdx].name = document.getElementById('playerNameInput').value; const addAmount = +document.getElementById('rebuyAmount').value; if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; } render(); closeRebuy(); updateUI(); };
-    document.getElementById('removeBtn').onclick = () => { players.splice(selIdx, 1); render(); closeRebuy(); updateUI(); };
+    
+    document.getElementById('confirmBtn').onclick = () => { 
+        players[selIdx].name = document.getElementById('playerNameInput').value; 
+        const addAmount = +document.getElementById('rebuyAmount').value; 
+        if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; } 
+        render(); closeRebuy(); updateUI(); 
+    };
+    
+    document.getElementById('removeBtn').onclick = () => { 
+        const now = new Date();
+        players[selIdx].leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        players[selIdx].removed = true; // במקום למחוק, אנחנו מסמנים אותו כהוסר
+        render(); closeRebuy(); updateUI(); 
+    };
+
+    function openEndGame(e) {
+        e.stopPropagation();
+        clearInterval(timerId); isActionRunning = false; updateUI();
+        document.getElementById('endGameTotalBank').innerText = totalPot;
+        const container = document.getElementById('endGamePlayersContainer');
+        container.innerHTML = '';
+        
+        // מציג את כל השחקנים, כולל אלו שהוסרו באמצע
+        players.forEach((p, i) => {
+            const div = document.createElement('div');
+            div.className = 'end-game-row';
+            div.innerHTML = `
+                <span>${p.name} (השקיע: ${p.in})</span>
+                <input type="number" class="end-game-out-input" data-idx="${i}" value="0" oninput="calculateDistribution()">
+            `;
+            container.appendChild(div);
+        });
+        calculateDistribution();
+        document.getElementById('endGameModal').style.display = 'block';
+    }
+
+    function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
+
+    function calculateDistribution() {
+        const inputs = document.querySelectorAll('.end-game-out-input');
+        let totalOut = 0;
+        inputs.forEach(input => { totalOut += +input.value || 0; });
+        document.getElementById('endGameDistributed').innerText = totalOut;
+        
+        if(totalOut === totalPot) {
+            document.getElementById('endGameDistributed').style.color = 'var(--success)';
+            document.getElementById('validationMessage').style.display = 'none';
+        } else {
+            document.getElementById('endGameDistributed').style.color = 'var(--danger)';
+        }
+    }
+
+    function submitGameHistory() {
+        const inputs = document.querySelectorAll('.end-game-out-input');
+        let totalOut = 0;
+        inputs.forEach(input => { totalOut += +input.value || 0; });
+        
+        if(totalOut !== totalPot) {
+            document.getElementById('validationMessage').style.display = 'block';
+            return;
+        }
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('he-IL');
+        const endTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        
+        let summaryText = `פלט סיכום למשחק - העיגול\nתאריך: ${dateStr}\n`;
+        summaryText += `-----------------------------------\n`;
+        
+        players.forEach((p, i) => {
+            const outVal = +inputs[i].value || 0;
+            const netProfit = outVal - p.in;
+            const finalLeaveTime = p.leaveTime === 'עדין במשחק' ? endTimeStr : p.leaveTime;
+            
+            summaryText += `שם: ${p.name}\n`;
+            summaryText += `כניסה: ${p.joinTime} | יציאה: ${finalLeaveTime}\n`;
+            summaryText += `השקעה: ${p.in} | משיכה: ${outVal} | נטו: ${netProfit >= 0 ? '+' : ''}${netProfit}\n`;
+            summaryText += `-----------------------------------\n`;
+        });
+        
+        alert(summaryText);
+        location.reload();
+    }
 </script>
 </body>
 </html>
