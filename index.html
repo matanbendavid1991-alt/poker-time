@@ -15,23 +15,36 @@
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
 
-        /* --- מסך וידאו פתיחה קולנועי (Splash Screen) --- */
+        /* --- מסך פתיחה יוקרתי (Splash Screen) עם לוגו נושם --- */
         #splashScreen {
             position: fixed;
             inset: 0;
-            background: black;
+            background: radial-gradient(circle, #111111 0%, #000000 100%);
             z-index: 100000; /* מעל הכל */
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease-in-out; /* אנימציית היעלמות חלקה */
-            pointer-events: none; /* מונע חסימת לחיצות בשניות המעבר */
-            overflow: hidden;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* אפקט היעלמות חלק ומיוחד */
+            pointer-events: none;
         }
-        #splashVideo {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* שומר על פרופורציות הוידאו המקוריות על רקע שחור חלק */
+        
+        #splashLogo {
+            width: 340px;
+            height: 340px;
+            background-image: url('logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* הילה מוזהבת יוקרתית מסביב ללוגו העגול */
+            filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.45));
+            /* אפקט כניסה דרמטי של הלוגו */
+            animation: logoEntrance 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes logoEntrance {
+            0% { transform: scale(0.85); opacity: 0; filter: drop-shadow(0 0 0px rgba(255, 204, 0, 0)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 204, 0, 0.65)); }
+            100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.45)); }
         }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
@@ -120,6 +133,7 @@
             .poker-table { width: 90vw; height: 55vh; border-width: 6px; }
             .player-seat { width: 60px; height: 60px; font-size: 11px; }
             .player-seat span:last-child { font-size: 1em !important; }
+            #splashLogo { width: 240px; height: 240px; filter: drop-shadow(0 0 15px rgba(255, 204, 0, 0.4)); }
             .app-logo { width: 200px; height: 200px; }
             .time-val { font-size: 25vw; }
             .game-clock { font-size: 4vw; }
@@ -134,7 +148,7 @@
 <body>
 
 <div id="splashScreen">
-    <video id="splashVideo" autoplay muted playsinline src="intro.mp4"></video>
+    <div id="splashLogo"></div>
 </div>
 
 <div id="setupScreen">
@@ -207,44 +221,23 @@
 </div>
 
 <script>
-    // --- מנגנון ניהול וידאו הפתיחה וחיתוך תוכנתי ---
+    // --- מנגנון ניהול מסך פתיחה יוקרתי (Splash Screen) ---
     const splash = document.getElementById('splashScreen');
-    const video = document.getElementById('splashVideo');
 
     function deactivateSplash() {
         if (splash && splash.style.display !== 'none') {
-            splash.style.opacity = '0'; // התפוגגות חלקה
+            splash.style.opacity = '0'; // התפוגגות חלקה ומיוחדת ב-CSS
             setTimeout(() => {
-                splash.style.display = 'none'; // הסרה מוחלטת
-                // פינוי הוידאו מהזיכרון כדי שלא יכביד על המכשיר ברקע
-                if (video) {
-                    video.pause();
-                    video.src = "";
-                    video.load();
-                }
-            }, 500);
+                splash.style.display = 'none'; // הסרה מוחלטת מהמסך
+            }, 800); // נותן לאנימציה 0.8 שניות לסיים את ה-Fade Out
         }
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         } catch(e){}
     }
 
-    if (video) {
-        // ניסיון ניגון אוטומטי
-        video.play().catch(() => {
-            // הגנה: אם הדפדפן חסם ניגון אוטומטי מכל סיבה, נעלים אחרי 2 שניות בכל זאת
-            setTimeout(deactivateSplash, 5000);
-        });
-
-        // טריק החיתוך התוכנתי: מציג את הוידאו למשך 2.5 שניות בדיוק ואז מעלים (חוסך 2.5 שניות של המתנה מיותרת)
-        setTimeout(deactivateSplash, 5000);
-
-        // הגנה נוספת: אם הוידאו מסתיים לפני 2.5 שניות, מעלים מיד
-        video.onended = deactivateSplash;
-    } else {
-        // הגנה כללית אם קובץ הוידאו חסר
-        setTimeout(deactivateSplash, 2000);
-    }
+    // הצגת הלוגו למשך 3 שניות בדיוק ואז מעבר חלק למסך הראשי
+    setTimeout(deactivateSplash, 3000);
 
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
     const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
