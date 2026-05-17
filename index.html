@@ -237,7 +237,7 @@
         });
 
         // טריק החיתוך התוכנתי: מציג את הוידאו למשך 2.5 שניות בדיוק ואז מעלים (חוסך 2.5 שניות של המתנה מיותרת)
-        setTimeout(deactivateSplash, 2500);
+        setTimeout(deactivateSplash, 5000);
 
         // הגנה נוספת: אם הוידאו מסתיים לפני 2.5 שניות, מעלים מיד
         video.onended = deactivateSplash;
