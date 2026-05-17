@@ -5,14 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>פווקר 2025 העיגול - Poker OS Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #ffcc00; --danger: #ff3b30; --success: #34c759; }
+        :root { --gold: #ffcc00; --danger: #ff3b30; --success: #34c759; --royal-blue: #1a3a6c; --dark-blue: #0d1b31; }
         * { box-sizing: border-box; }
         
         body {
             margin: 0; background-color: black; color: white;
             font-family: -apple-system, system-ui, sans-serif;
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
+        }
+
+        /* --- פס התקדמות זמן עליון --- */
+        #progressBar {
+            position: absolute; top: 0; left: 0; height: 4px; background: var(--gold);
+            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000;
         }
 
         /* --- מסך פתיחה נקי וקלאסי (Splash Screen) --- */
@@ -74,19 +81,23 @@
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
 
-        .admin-header { position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; }
+        /* שדרוג הדר לתצורת זכוכית */
+        .admin-header { 
+            position: absolute; top: 15px; width: 90%; left: 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
+            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 5px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
+        }
         
         .game-clock { 
-            font-size: 2.2vw; font-family: monospace; color: rgba(255, 255, 255, 0.7); font-weight: bold; 
-            background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px;
+            font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
+            padding: 10px 0;
         }
-        .blind-info { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 50px; }
+        .blind-info { display: flex; align-items: center; gap: 8px; padding: 10px 0; }
         
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
         .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
-        .time-val { font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
+        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
 
         .top { top: 7vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
         .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
@@ -100,12 +111,40 @@
         @keyframes pulse-warning { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        .poker-table { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 75vw; height: 42vh; border: 12px solid #222; border-radius: 160px; background: radial-gradient(circle, #246b24 0%, #113811 100%); box-shadow: inset 0 0 60px #000; }
-        .player-seat { position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 50; }
+        /* --- עיצוב שולחן כחול רויאל פרימיום --- */
+        .poker-table { 
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
+            width: 75vw; height: 42vh; border: 15px solid #222; border-radius: 160px; 
+            background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); 
+            box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); 
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        /* הטבעת פווקר 2025 על הלבד */
+        .poker-table::after {
+            content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif;
+            font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none;
+        }
+
+        /* קו מוזהב פנימי בשולחן */
+        .table-inner-line {
+            position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none;
+        }
+
+        /* מושבי שחקנים משודרגים */
+        .player-seat { 
+            position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6), 0 0 10px rgba(255,204,0,0.15); z-index: 50; transition: all 0.3s ease; 
+        }
+        /* הילה לשחקן פעיל וטקסטורה מעוגלת */
+        .player-seat.in-game { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.35), inset 0 0 8px rgba(255,254,0,0.1); }
+        .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed; }
+
         .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white; }
 
         .total-pot-container { text-align: center; margin-top: 78vh; }
-        .total-pot-container h2 { font-size: 7vw; color: var(--gold); margin: 0; }
+        .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0; font-weight: 700; }
 
         .page-dots { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 100; }
         .dot { width: 10px; height: 10px; background: #333; border-radius: 50%; transition: 0.3s; }
@@ -126,9 +165,10 @@
         @media (max-width: 768px) {
             .setup-card, #rebuyModal, #endGameModal { width: 90%; padding: 20px; }
             .setup-card input, .modal-input { width: 95%; }
-            .poker-table { width: 90vw; height: 55vh; border-width: 6px; }
-            .player-seat { width: 60px; height: 60px; font-size: 11px; }
-            .player-seat span:last-child { font-size: 1em !important; }
+            .poker-table { width: 90vw; height: 55vh; border-width: 8px; }
+            .poker-table::after { font-size: 8vw; }
+            .player-seat { width: 62px; height: 62px; font-size: 11px; }
+            .player-seat span:last-child { font-size: 1.1em !important; }
             #splashLogo { width: 240px; height: 240px; filter: none; }
             .app-logo { width: 200px; height: 200px; }
             .time-val { font-size: 25vw; }
@@ -142,6 +182,8 @@
     </style>
 </head>
 <body>
+
+<div id="progressBar"></div>
 
 <div id="splashScreen">
     <div id="splashLogo"></div>
@@ -180,9 +222,11 @@
     </div>
 
     <div class="page" id="tablePage">
-        <div class="poker-table" id="seatsContainer"></div>
+        <div class="poker-table" id="seatsContainer">
+            <div class="table-inner-line"></div>
+        </div>
         <div class="total-pot-container">
-            <p style="color:#666; margin:0; font-weight: bold;">TOTAL BANK</p>
+            <p style="color:#666; margin:0; font-weight: bold; letter-spacing: 1px;">TOTAL BANK</p>
             <h2 id="potDisplay">0</h2>
         </div>
         <div class="controls">
@@ -320,7 +364,6 @@
         document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
     }
     
-    // מפעיל את הרשת מיד
     buildFriendsGrid();
 
     function playSound(f, d, type = 'sine') {
@@ -423,17 +466,21 @@
 
     function render() {
         const container = document.getElementById('seatsContainer');
-        container.innerHTML = '';
+        // שומר על קו ההפרדה המוזהב ברנדור מחדש
+        container.innerHTML = '<div class="table-inner-line"></div>';
         const activePlayers = players.filter(p => !p.removed);
         
         activePlayers.forEach((p, i) => {
             const angle = (i / activePlayers.length) * Math.PI * 2 + Math.PI/2;
             const x = 50 + 46 * Math.cos(angle), y = 50 + 46 * Math.sin(angle);
             const seat = document.createElement('div');
-            seat.className = 'player-seat';
+            
+            // שיוך קלאס עיצובי בהתאם למצב השחקן
+            seat.className = p.removed ? 'player-seat seat-removed' : 'player-seat in-game';
+            
             seat.style.left = x+'%'; seat.style.top = y+'%';
             const displayName = p.name ? p.name : `#${p.id}`;
-            seat.innerHTML = `<span style="opacity:0.8; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px;">${displayName}</span><span style="color:var(--gold); font-weight:bold; font-size:1.2em;">${p.in}</span>`;
+            seat.innerHTML = `<span style="opacity:0.9; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px;">${displayName}</span><span style="color:var(--gold); font-weight:bold; font-size:1.2em;">${p.in}</span>`;
             
             const origIdx = players.indexOf(p);
             seat.onclick = (e) => { e.stopPropagation(); openRebuy(origIdx); };
@@ -457,6 +504,20 @@
             if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
             if (timeLeft === 0) el.classList.add('zero-blink');
         });
+
+        // סנכרון ועדכון של ה-Progress Bar העליון
+        const percent = (timeLeft / defaultRoundTime) * 100;
+        const progressEl = document.getElementById('progressBar');
+        if (progressEl) {
+            progressEl.style.width = percent + '%';
+            if (timeLeft <= 5) {
+                progressEl.style.background = 'var(--danger)';
+                progressEl.style.boxShadow = '0 0 10px var(--danger)';
+            } else {
+                progressEl.style.background = 'var(--gold)';
+                progressEl.style.boxShadow = '0 0 10px var(--gold)';
+            }
+        }
     }
 
     function addTime(e) { e.stopPropagation(); timeLeft += defaultRoundTime; updateUI(); }
