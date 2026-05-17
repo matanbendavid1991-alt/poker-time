@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>פווקר 2025 העיגול - Poker OS Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;900&display=swap" rel="stylesheet">
+    <title>פוקר 2025 העיגול - Poker OS Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght=600;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #ffcc00; --danger: #ff3b30; --success: #34c759; --royal-blue: #1a3a6c; --dark-blue: #0d1b31; }
         * { box-sizing: border-box; }
@@ -22,7 +22,7 @@
             box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000;
         }
 
-        /* --- מסך פתיחה נקי וקלאסי (Splash Screen) --- */
+        /* --- מסך פתיחה נקי מבוסס לוגו --- */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -36,19 +36,12 @@
         }
         
         #splashLogo {
-            width: 340px;
-            height: 340px;
+            width: 200px;
+            height: 200px;
             background-image: url('logo.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            filter: none;
-            animation: logoEntrance 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes logoEntrance {
-            0% { transform: scale(0.85); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
         }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
@@ -81,17 +74,27 @@
         }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
 
-        /* שדרוג הדר לתצורת זכוכית */
+        /* --- קפסולות עצמאיות ללא מסגרת רוחבית מפריעה --- */
         .admin-header { 
-            position: absolute; top: 15px; width: 90%; left: 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
-            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); padding: 5px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);
+            position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
+            background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: none;
         }
         
+        /* קפסולת השעון */
         .game-clock { 
             font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
-            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-        .blind-info { display: flex; align-items: center; gap: 8px; padding: 10px 0; }
+
+        /* קפסולת הבליינדים */
+        .blind-info { 
+            display: flex; align-items: center; gap: 8px; 
+            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 6px 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
         
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
         .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
@@ -120,24 +123,20 @@
             display: flex; justify-content: center; align-items: center;
         }
         
-        /* הטבעת פווקר 2025 על הלבד */
         .poker-table::after {
             content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif;
             font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none;
         }
 
-        /* קו מוזהב פנימי בשולחן */
         .table-inner-line {
             position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none;
         }
 
-        /* מושבי שחקנים משודרגים */
         .player-seat { 
             position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); 
             box-shadow: 0 6px 15px rgba(0,0,0,0.6), 0 0 10px rgba(255,204,0,0.15); z-index: 50; transition: all 0.3s ease; 
         }
-        /* הילה לשחקן פעיל וטקסטורה מעוגלת */
         .player-seat.in-game { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.35), inset 0 0 8px rgba(255,254,0,0.1); }
         .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed; }
 
@@ -169,11 +168,10 @@
             .poker-table::after { font-size: 8vw; }
             .player-seat { width: 62px; height: 62px; font-size: 11px; }
             .player-seat span:last-child { font-size: 1.1em !important; }
-            #splashLogo { width: 240px; height: 240px; filter: none; }
-            .app-logo { width: 200px; height: 200px; }
             .time-val { font-size: 25vw; }
-            .game-clock { font-size: 4vw; }
-            .chip-icon { width: 6vw; height: 6vw; font-size: 3vw; }
+            .game-clock { font-size: 4.5vw; padding: 6px 14px; }
+            .blind-info { padding: 4px 12px; gap: 4px; }
+            .chip-icon { width: 6.5vw; height: 6.5vw; font-size: 3.2vw; }
             .total-pot-container { margin-top: 68vh; }
             .total-pot-container h2 { font-size: 15vw; }
             .controls { width: 90%; justify-content: center; left: 50%; transform: translateX(-50%); bottom: 60px; }
@@ -261,32 +259,18 @@
 </div>
 
 <script>
-    // --- הגנות LocalStorage למניעת קריסה ---
-    function safeGetLocal() {
-        try { return localStorage.getItem('pokerPendingSync'); } 
-        catch(e) { return null; }
-    }
-    function safeSetLocal(val) {
-        try { localStorage.setItem('pokerPendingSync', val); } 
-        catch(e) { console.warn('LocalStorage is disabled or full'); }
-    }
-    function safeRemoveLocal() {
-        try { localStorage.removeItem('pokerPendingSync'); } 
-        catch(e) {}
-    }
+    function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
+    function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
+    function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
 
     const splash = document.getElementById('splashScreen');
-
     function deactivateSplash() {
         if (splash && splash.style.display !== 'none') {
             splash.style.opacity = '0';
             setTimeout(() => { splash.style.display = 'none'; }, 800);
         }
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        } catch(e){}
+        try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
     }
-
     setTimeout(deactivateSplash, 3000);
 
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
@@ -296,7 +280,6 @@
     let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
     let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
     let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
-    
     let wakeLock = null;
     
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
@@ -313,31 +296,17 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: pendingData
                 })
-                .then(() => {
-                    alert('הנתונים נשלחו בהצלחה לגוגל שיטס!');
-                    safeRemoveLocal();
-                })
-                .catch(err => {
-                    alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.');
-                });
+                .then(() => { alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
+                .catch(err => { alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.'); });
             }
         }
     });
 
     async function requestWakeLock() {
-        try {
-            if ('wakeLock' in navigator) {
-                wakeLock = await navigator.wakeLock.request('screen');
-            }
-        } catch (err) {
-            console.warn('Wake Lock Error:', err);
-        }
+        try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {}
     }
-
     document.addEventListener('visibilitychange', async () => {
-        if (wakeLock !== null && document.visibilityState === 'visible') {
-            await requestWakeLock();
-        }
+        if (wakeLock !== null && document.visibilityState === 'visible') { await requestWakeLock(); }
     });
 
     function buildFriendsGrid() {
@@ -363,7 +332,6 @@
         }
         document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
     }
-    
     buildFriendsGrid();
 
     function playSound(f, d, type = 'sine') {
@@ -378,13 +346,8 @@
     }
 
     function startGame() {
-        if(selectedFriends.length === 0) {
-            alert("חובה לבחור שחקן אחד לפחות!");
-            return;
-        }
-        
+        if(selectedFriends.length === 0) { alert("חובה לבחור שחקן אחד לפחות!"); return; }
         requestWakeLock();
-
         try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
         const b = +document.getElementById('initialBuyin').value;
         defaultRoundTime = +document.getElementById('roundTimeInput').value || 30;
@@ -466,7 +429,6 @@
 
     function render() {
         const container = document.getElementById('seatsContainer');
-        // שומר על קו ההפרדה המוזהב ברנדור מחדש
         container.innerHTML = '<div class="table-inner-line"></div>';
         const activePlayers = players.filter(p => !p.removed);
         
@@ -474,10 +436,7 @@
             const angle = (i / activePlayers.length) * Math.PI * 2 + Math.PI/2;
             const x = 50 + 46 * Math.cos(angle), y = 50 + 46 * Math.sin(angle);
             const seat = document.createElement('div');
-            
-            // שיוך קלאס עיצובי בהתאם למצב השחקן
             seat.className = p.removed ? 'player-seat seat-removed' : 'player-seat in-game';
-            
             seat.style.left = x+'%'; seat.style.top = y+'%';
             const displayName = p.name ? p.name : `#${p.id}`;
             seat.innerHTML = `<span style="opacity:0.9; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px;">${displayName}</span><span style="color:var(--gold); font-weight:bold; font-size:1.2em;">${p.in}</span>`;
@@ -505,7 +464,6 @@
             if (timeLeft === 0) el.classList.add('zero-blink');
         });
 
-        // סנכרון ועדכון של ה-Progress Bar העליון
         const percent = (timeLeft / defaultRoundTime) * 100;
         const progressEl = document.getElementById('progressBar');
         if (progressEl) {
@@ -565,7 +523,6 @@
         calculateDistribution();
         document.getElementById('endGameModal').style.display = 'block';
     }
-
     function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
 
     function calculateDistribution() {
@@ -619,7 +576,6 @@
         });
 
         const payloadStr = JSON.stringify(payload);
-        
         safeSetLocal(payloadStr);
 
         fetch(WEB_APP_URL, {
@@ -636,7 +592,7 @@
             location.reload();
         })
         .catch(err => {
-            alert('שגיאת רשת! הנתונים לא נשלחו לגוגל שיטס, אבל הם נשמרו מקומית על המכשיר שלך. בפעם הבאה שתפתח את המערכת עם אינטרנט, תוקפץ הודעה לשלוח אותם שוב.');
+            alert('שגיאת רשת! הנתונים נשמרו מקומית על המכשיר שלך. בפעם הבאה שתפתח את המערכת עם אינטרנט, תוקפץ הודעה לשלוח אותם שוב.');
             if (wakeLock !== null) { wakeLock.release().then(() => wakeLock = null); }
             location.reload();
         });
