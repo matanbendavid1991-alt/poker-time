@@ -15,11 +15,11 @@
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
 
-        /* --- מסך פתיחה יוקרתי (Splash Screen) עם לוגו נושם --- */
+        /* --- מסך פתיחה נקי וקלאסי (Splash Screen) --- */
         #splashScreen {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle, #111111 0%, #000000 100%);
+            background: black;
             z-index: 100000; /* מעל הכל */
             display: flex;
             justify-content: center;
@@ -35,16 +35,15 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            /* הילה מוזהבת יוקרתית מסביב ללוגו העגול */
-            filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.45));
-            /* אפקט כניסה דרמטי של הלוגו */
+            /* הזוהר/הילה בוטלו לחלוטין כאן כדי לשמור על גבולות חדים */
+            filter: none;
+            /* אפקט כניסה דרמטי של הלוגו (גדילה ושקיפות בלבד) */
             animation: logoEntrance 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes logoEntrance {
-            0% { transform: scale(0.85); opacity: 0; filter: drop-shadow(0 0 0px rgba(255, 204, 0, 0)); }
-            50% { filter: drop-shadow(0 0 40px rgba(255, 204, 0, 0.65)); }
-            100% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 25px rgba(255, 204, 0, 0.45)); }
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
@@ -133,7 +132,8 @@
             .poker-table { width: 90vw; height: 55vh; border-width: 6px; }
             .player-seat { width: 60px; height: 60px; font-size: 11px; }
             .player-seat span:last-child { font-size: 1em !important; }
-            #splashLogo { width: 240px; height: 240px; filter: drop-shadow(0 0 15px rgba(255, 204, 0, 0.4)); }
+            /* ביטול הזוהר גם בגרסת המובייל */
+            #splashLogo { width: 240px; height: 240px; filter: none; }
             .app-logo { width: 200px; height: 200px; }
             .time-val { font-size: 25vw; }
             .game-clock { font-size: 4vw; }
