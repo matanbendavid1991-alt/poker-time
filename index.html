@@ -15,7 +15,7 @@
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
 
-        /* --- מסך פתיחה נקי וחלק (Splash Screen) --- */
+        /* --- מסך וידאו פתיחה קולנועי (Splash Screen) --- */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -24,16 +24,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease-in-out; /* אנימציית היעלמות חלקה בלבד */
+            transition: opacity 0.5s ease-in-out; /* אנימציית היעלמות חלקה */
             pointer-events: none; /* מונע חסימת לחיצות בשניות המעבר */
+            overflow: hidden;
         }
-        .splash-logo {
-            width: 250px;
-            height: 250px;
-            background-image: url('logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+        #splashVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* שומר על פרופורציות הוידאו המקוריות על רקע שחור חלק */
         }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
@@ -130,14 +128,13 @@
             .total-pot-container h2 { font-size: 15vw; }
             .controls { width: 90%; justify-content: center; left: 50%; transform: translateX(-50%); bottom: 60px; }
             .btn { padding: 10px 16px; font-size: 1em; }
-            .splash-logo { width: 180px; height: 180px; }
         }
     </style>
 </head>
 <body>
 
 <div id="splashScreen">
-    <div class="splash-logo"></div>
+    <video id="splashVideo" autoplay muted playsinline src="intro.mp4"></video>
 </div>
 
 <div id="setupScreen">
@@ -210,20 +207,44 @@
 </div>
 
 <script>
-    // הפעלה מיידית של הטיימר (ללא תלות ב-DOMContentLoaded שעלול להתפספס בדפדפנים מסוימים)
-    setTimeout(() => {
-        const splash = document.getElementById('splashScreen');
-        if (splash) {
-            splash.style.opacity = '0';
-            // העלמה מוחלטת מהקוד חצי שנייה אחרי סיום ה-Fade-out
+    // --- מנגנון ניהול וידאו הפתיחה וחיתוך תוכנתי ---
+    const splash = document.getElementById('splashScreen');
+    const video = document.getElementById('splashVideo');
+
+    function deactivateSplash() {
+        if (splash && splash.style.display !== 'none') {
+            splash.style.opacity = '0'; // התפוגגות חלקה
             setTimeout(() => {
-                splash.style.display = 'none';
+                splash.style.display = 'none'; // הסרה מוחלטת
+                // פינוי הוידאו מהזיכרון כדי שלא יכביד על המכשיר ברקע
+                if (video) {
+                    video.pause();
+                    video.src = "";
+                    video.load();
+                }
             }, 500);
         }
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         } catch(e){}
-    }, 2000); // קיצרתי ל-2 שניות כדי שהמעבר יהיה מהיר ונוח יותר
+    }
+
+    if (video) {
+        // ניסיון ניגון אוטומטי
+        video.play().catch(() => {
+            // הגנה: אם הדפדפן חסם ניגון אוטומטי מכל סיבה, נעלים אחרי 2 שניות בכל זאת
+            setTimeout(deactivateSplash, 2000);
+        });
+
+        // טריק החיתוך התוכנתי: מציג את הוידאו למשך 2.5 שניות בדיוק ואז מעלים (חוסך 2.5 שניות של המתנה מיותרת)
+        setTimeout(deactivateSplash, 2500);
+
+        // הגנה נוספת: אם הוידאו מסתיים לפני 2.5 שניות, מעלים מיד
+        video.onended = deactivateSplash;
+    } else {
+        // הגנה כללית אם קובץ הוידאו חסר
+        setTimeout(deactivateSplash, 2000);
+    }
 
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
     const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
@@ -308,8 +329,8 @@
     }, {passive: true});
 
     document.addEventListener('touchend', e => {
-        const splash = document.getElementById('splashScreen');
-        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#endGameModal') || (splash && splash.style.display !== 'none')) return;
+        const splashScreenObj = document.getElementById('splashScreen');
+        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#endGameModal') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 60) {
             currentPage = diff > 0 ? 1 : 0;
@@ -320,8 +341,8 @@
     });
 
     document.body.addEventListener('pointerdown', e => {
-        const splash = document.getElementById('splashScreen');
-        if(currentPage === 1 || (splash && splash.style.display !== 'none')) return;
+        const splashScreenObj = document.getElementById('splashScreen');
+        if(currentPage === 1 || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
         if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal')) return;
         
         if(!gameClockId) startClock();
