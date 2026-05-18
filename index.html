@@ -35,7 +35,6 @@
             pointer-events: none;
         }
         
-        /* הגדלנו את הלוגו והוספנו אנימציית כניסה עשירה וחיה */
         #splashLogo {
             width: 280px;
             height: 280px;
@@ -49,14 +48,8 @@
         }
 
         @keyframes splashEntrance {
-            0% {
-                opacity: 0;
-                transform: scale(0.85);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+            0% { opacity: 0; transform: scale(0.85); }
+            100% { opacity: 1; transform: scale(1); }
         }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; }
@@ -103,7 +96,26 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* קפסולת הבליינדים */
+        /* --- כפתורי ניווט בליינדים (שמאל למעלה) --- */
+        .blind-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .blind-nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1.2rem;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .blind-nav-btn:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
         .blind-info { 
             display: flex; align-items: center; gap: 8px; 
             background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -117,7 +129,7 @@
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
         .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
 
-        .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
+        .top { top: 2vh; left: 50%; transform: translateX(-50%) rotate(180deg); } /* עודכן ל-2vh */
         .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
         .left { left: 8vw; top: 50%; transform: translate(-50%, -50%) rotate(90deg); }
         .right { right: 8vw; top: 50%; transform: translate(50%, -50%) rotate(-90deg); }
@@ -167,18 +179,57 @@
         .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
         .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; cursor: pointer; }
 
-        #rebuyModal, #endGameModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 360px; max-height: 85vh; overflow-y: auto; }
+        /* --- כפתור גלגל שיניים צף --- */
+        #settings-gear-btn {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            font-size: 1.8rem;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background 0.2s;
+        }
+        #settings-gear-btn:active { transform: rotate(45deg) scale(0.9); }
+
+        /* --- מודלים (הגדרות, ריביי, סיום משחק) --- */
+        .modal, #rebuyModal, #endGameModal { 
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); 
+            z-index: 10000; text-align: center; width: 360px; max-height: 85vh; overflow-y: auto; 
+        }
+        
+        /* חלון ההגדרות צריך מעטפת שחורה מאחוריו */
+        .settings-overlay {
+            display: none; position: fixed; inset: 0; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 9999;
+        }
+
         .modal-input { width: 90%; padding: 18px; margin-bottom: 15px; background: #333; color: white; border: none; text-align: center; font-size: 1.6em; border-radius: 15px; font-weight: bold; }
         
         .end-game-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 12px; }
         .end-game-row span { font-weight: bold; font-size: 1.1em; color: var(--gold); }
         .end-game-row input { width: 100px; background: #444; border: none; color: white; padding: 8px; text-align: center; border-radius: 8px; font-size: 1.1em; }
 
+        /* פריטים בחלון ההגדרות */
+        .setting-item { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; font-weight: bold; }
+        .setting-item input[type="number"] { width: 70px; padding: 8px; border-radius: 8px; border: 1px solid #555; background: #2a2a2a; color: white; text-align: center; font-size: 1.1em;}
+        .setting-item button { padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; color: white; }
+        .btn-sync { width: 100%; background-color: #2196F3; font-size: 1.1em; padding: 12px; border-radius: 10px; border: none; color: white; font-weight: bold; cursor: pointer;}
+        .btn-reset { width: 100%; background-color: #d32f2f; color: white; padding: 14px; border: none; border-radius: 12px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; }
+
         @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
 
         @media (max-width: 768px) {
-            #splashLogo { width: 220px; height: 220px; } /* רספונסיביות ללוגו בנייד */
-            .setup-card, #rebuyModal, #endGameModal { width: 90%; padding: 20px; }
+            #splashLogo { width: 220px; height: 220px; } 
+            .setup-card, .modal, #rebuyModal, #endGameModal { width: 90%; padding: 20px; }
             .setup-card input, .modal-input { width: 95%; }
             .poker-table { width: 90vw; height: 55vh; border-width: 8px; }
             .poker-table::after { font-size: 8vw; }
@@ -186,6 +237,7 @@
             .player-seat span:last-child { font-size: 1.1em !important; }
             .time-val { font-size: 25vw; }
             .game-clock { font-size: 4.5vw; padding: 6px 14px; }
+            .blind-nav-btn { padding: 6px 10px; font-size: 1rem; }
             .blind-info { padding: 4px 12px; gap: 4px; }
             .chip-icon { width: 6.5vw; height: 6.5vw; font-size: 3.2vw; }
             .total-pot-container { margin-top: 68vh; }
@@ -195,7 +247,7 @@
         }
     </style>
 </head>
-<body>
+<body dir="rtl">
 
 <div id="progressBar"></div>
 
@@ -224,7 +276,11 @@
 <div class="slider-wrapper" id="slider">
     <div class="page" id="timerPage">
         <div class="admin-header">
-            <div id="blindDisplay" class="blind-info"></div>
+            <div class="blind-container">
+                <button class="blind-nav-btn" onclick="previousLevel(event)">▼</button>
+                <div id="blindDisplay" class="blind-info"></div>
+                <button class="blind-nav-btn" onclick="nextLevel(event)">▲</button>
+            </div>
             <div class="game-clock" id="gameClock">00:00:00</div>
         </div>
         <div class="logo-container"><div class="app-logo"></div></div>
@@ -232,7 +288,7 @@
         <div class="timer left"><span class="time-val">30</span></div>
         <div class="timer right"><span class="time-val">30</span></div>
         <div class="timer bottom"><span class="time-val">30</span></div>
-        <div class="controls" style="bottom: 20px; left: 20px;"><button class="btn" onclick="addTime(event)" style="border-color: var(--gold); color: var(--gold); font-size: 0.9em;">TIME BANK</button></div>
+        <div class="controls" style="bottom: 20px; right: 20px; left: auto;"><button class="btn" onclick="addTime(event)" style="border-color: var(--gold); color: var(--gold); font-size: 0.9em;">TIME BANK</button></div>
     </div>
 
     <div class="page" id="tablePage">
@@ -244,13 +300,43 @@
             <h2 id="potDisplay">0</h2>
         </div>
         <div class="controls">
-            <button class="btn" onclick="nextLevel(event)">NEXT LEVEL</button>
             <button class="btn" onclick="openEndGame(event)" style="border-color: var(--danger); color: var(--danger);">FINISH GAME</button>
         </div>
     </div>
 </div>
 
 <div class="page-dots"><div class="dot active" id="dot0"></div><div class="dot" id="dot1"></div></div>
+
+<button id="settings-gear-btn" onclick="openSettings()">⚙️</button>
+
+<div class="settings-overlay" id="settings-overlay" onclick="closeSettings()"></div>
+<div id="settings-modal" class="modal">
+    <h2 style="color:var(--gold); margin-top: 0;">הגדרות משחק</h2>
+    
+    <div class="setting-item">
+        <label>זמן סבב (שניות):</label>
+        <input type="number" id="settings-round-time" min="5" max="120" onchange="updateRoundTime(this.value)">
+    </div>
+
+    <div class="setting-item">
+        <label>אפקטים קוליים:</label>
+        <button id="sound-toggle-btn" onclick="toggleSound()" style="background-color: #34c759;">🔊 פעיל</button>
+    </div>
+
+    <div class="setting-item">
+        <label>מסך דולק (Wake Lock):</label>
+        <button id="wakelock-btn" onclick="toggleWakeLockBtn()" style="background-color: var(--gold); color: black;">💡 פעיל</button>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <button class="btn-sync" onclick="forceGoogleSheetsSync()">🔄 סנכרון נתונים מקומי ל-Sheets</button>
+    </div>
+
+    <hr style="border:0; border-top:1px solid #444; margin: 25px 0 15px;">
+    
+    <button class="btn-reset" onclick="confirmResetGame()">⚠️ איפוס משחק מוחלט</button>
+    <button class="btn" style="width:100%; margin-top:10px;" onclick="closeSettings()">סגור</button>
+</div>
 
 <div id="rebuyModal">
     <h2 id="rebuyTitle" style="color:var(--gold); margin-bottom: 20px;">עדכון שחקן</h2>
@@ -296,7 +382,11 @@
     let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
     let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
     let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
+    
+    // משתני מערכת חדשים
     let wakeLock = null;
+    let isSoundMuted = false;
+    let isWakeLockEnabled = true;
     
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
@@ -305,22 +395,14 @@
         const pendingData = safeGetLocal();
         if (pendingData) {
             if (confirm('זוהו נתוני משחק קודם שלא נשלחו עקב בעיית אינטרנט. האם לנסות לשלוח אותם עכשיו?')) {
-                fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    cache: 'no-cache',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: pendingData
-                })
-                .then(() => { alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
-                .catch(err => { alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.'); });
+                forceGoogleSheetsSync();
             }
         }
     });
 
     async function requestWakeLock() {
         try { 
-            if ('wakeLock' in navigator) { 
+            if ('wakeLock' in navigator && isWakeLockEnabled) { 
                 wakeLock = await navigator.wakeLock.request('screen');
                 wakeLock.addEventListener('release', () => {});
             } 
@@ -328,7 +410,7 @@
     }
 
     document.addEventListener('visibilitychange', async () => {
-        if (wakeLock !== null && document.visibilityState === 'visible') { 
+        if (wakeLock !== null && document.visibilityState === 'visible' && isWakeLockEnabled) { 
             await requestWakeLock(); 
         }
     });
@@ -359,6 +441,7 @@
     buildFriendsGrid();
 
     function playSound(f, d, type = 'sine') {
+        if (isSoundMuted) return; // השתקה
         try {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -398,7 +481,9 @@
 
     document.addEventListener('touchend', e => {
         const splashScreenObj = document.getElementById('splashScreen');
-        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#endGameModal') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
+        // התעלמות מגרירה אם לוחצים על אזורים לחיצים מסוימים
+        if(e.target.closest('.btn') || e.target.closest('.blind-nav-btn') || e.target.closest('#settings-gear-btn') || e.target.closest('.player-seat') || e.target.closest('.modal') || e.target.closest('.settings-overlay') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
+        
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 60) {
             currentPage = diff > 0 ? 1 : 0;
@@ -411,7 +496,9 @@
     document.body.addEventListener('pointerdown', e => {
         const splashScreenObj = document.getElementById('splashScreen');
         if(currentPage === 1 || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
-        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal')) return;
+        
+        // עצירת הפעלת הטיימר אם לחצו על אלמנטים אינטראקטיביים
+        if(e.target.closest('.btn') || e.target.closest('.blind-nav-btn') || e.target.closest('#settings-gear-btn') || e.target.closest('.modal') || e.target.closest('.settings-overlay') || e.target.closest('#setupScreen')) return;
         
         if(!gameClockId) startClock();
         const now = Date.now();
@@ -503,8 +590,116 @@
     }
 
     function addTime(e) { e.stopPropagation(); timeLeft += defaultRoundTime; updateUI(); }
-    function nextLevel(e) { e.stopPropagation(); if(currentLevelIdx < levels.length-1) currentLevelIdx++; render(); }
     
+    /* --- ניווט בליינדים חדש --- */
+    function nextLevel(e) { 
+        if(e) e.stopPropagation(); 
+        if(currentLevelIdx < levels.length-1) {
+            currentLevelIdx++; 
+            render(); 
+        }
+    }
+    
+    function previousLevel(e) {
+        if(e) e.stopPropagation();
+        if(currentLevelIdx > 0) {
+            currentLevelIdx--;
+            render();
+        } else {
+            alert("אתה נמצא בשלב הבליינדים הראשון.");
+        }
+    }
+    
+    /* --- פונקציות הגדרות (Settings) --- */
+    function openSettings() {
+        // עצירת הזמן הראשי כדי שהשעון לא ירוץ ברקע בזמן ההגדרות
+        if (isActionRunning) {
+            clearInterval(timerId); 
+            isActionRunning = false; 
+            updateUI();
+        }
+        document.getElementById('settings-round-time').value = defaultRoundTime;
+        document.getElementById('settings-overlay').style.display = 'block';
+        document.getElementById('settings-modal').style.display = 'block';
+    }
+
+    function closeSettings() { 
+        document.getElementById('settings-overlay').style.display = 'none';
+        document.getElementById('settings-modal').style.display = 'none'; 
+    }
+
+    function updateRoundTime(val) {
+        let v = parseInt(val);
+        if(v >= 5) {
+            defaultRoundTime = v;
+        }
+    }
+
+    function toggleSound() {
+        isSoundMuted = !isSoundMuted;
+        const btn = document.getElementById('sound-toggle-btn');
+        if (isSoundMuted) {
+            btn.innerHTML = "🔇 מושתק";
+            btn.style.backgroundColor = "#555";
+        } else {
+            btn.innerHTML = "🔊 פעיל";
+            btn.style.backgroundColor = "#34c759";
+        }
+    }
+
+    function toggleWakeLockBtn() {
+        const btn = document.getElementById('wakelock-btn');
+        if (isWakeLockEnabled) {
+            if (wakeLock !== null) { wakeLock.release().then(() => wakeLock = null); }
+            isWakeLockEnabled = false;
+            btn.innerHTML = "💡 כבוי";
+            btn.style.backgroundColor = "#555";
+            btn.style.color = "white";
+        } else {
+            isWakeLockEnabled = true;
+            requestWakeLock();
+            btn.innerHTML = "💡 פעיל";
+            btn.style.backgroundColor = "var(--gold)";
+            btn.style.color = "black";
+        }
+    }
+
+    function forceGoogleSheetsSync() {
+        const pendingData = safeGetLocal();
+        if (!pendingData) {
+            alert("אין נתונים מקומיים שממתינים לסנכרון כרגע. הכל מסונכרן!");
+            return;
+        }
+        
+        const btn = document.querySelector('.btn-sync');
+        btn.innerText = 'מנסה לסנכרן...';
+        
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: pendingData
+        })
+        .then(() => { 
+            alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); 
+            safeRemoveLocal(); 
+            btn.innerText = '🔄 סנכרון נתונים מקומי ל-Sheets';
+        })
+        .catch(err => { 
+            alert('עדיין אין חיבור יציב לאינטרנט. נסה שוב מאוחר יותר.'); 
+            btn.innerText = '🔄 סנכרון נתונים מקומי ל-Sheets';
+        });
+    }
+
+    function confirmResetGame() {
+        if(confirm("האם אתה בטוח שברצונך לאפס את כל המשחק? כל הנתונים הנוכחיים יימחקו ותוחזר למסך הראשי!")) {
+            if (wakeLock !== null) { wakeLock.release().then(() => wakeLock = null); }
+            window.location.reload();
+        }
+    }
+
+    /* --- ריביי וסיום משחק (נשאר זהה) --- */
     function openRebuy(i) { 
         selIdx = i; 
         document.getElementById('rebuyTitle').innerText = players[i].name; 
@@ -529,7 +724,7 @@
     };
 
     function openEndGame(e) {
-        e.stopPropagation();
+        if(e) e.stopPropagation();
         clearInterval(timerId); isActionRunning = false; updateUI();
         document.getElementById('endGameTotalBank').innerText = totalPot;
         const container = document.getElementById('endGamePlayersContainer');
