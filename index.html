@@ -7,30 +7,47 @@
     <title>פוקר 2025 העיגול - Poker OS Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght=600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #ffcc00; --danger: #ff3b30; --success: #34c759; --royal-blue: #1a3a6c; --dark-blue: #0d1b31; }
+        :root { 
+            --gold: #ffcc00;
+            --danger: #ff3b30; 
+            --success: #34c759; 
+            --royal-blue: #1a3a6c; 
+            --dark-blue: #0d1b31; 
+        }
         * { box-sizing: border-box; }
         
         body {
-            margin: 0; background-color: black; color: white;
+            margin: 0;
+            background-color: black; 
+            color: white;
             font-family: -apple-system, system-ui, sans-serif;
-            height: 100vh; width: 100vw; overflow: hidden; user-select: none;
+            height: 100vh; 
+            width: 100vw; 
+            overflow: hidden; 
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         /* --- פס התקדמות זמן עליון --- */
         #progressBar {
-            position: absolute; top: 0; left: 0; height: 4px; background: var(--gold);
-            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000;
+            position: absolute;
+            top: 0; left: 0; height: 4px; background: var(--gold);
+            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear;
+            z-index: 1000;
         }
 
-        /* --- מסך פתיחה דינמי ומעודכן --- */
+        /* --- מסך פתיחה דינמי --- */
         #splashScreen {
-            position: fixed; inset: 0; background: black; z-index: 100000;
+            position: fixed;
+            inset: 0; background: black; z-index: 100000;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
         }
         
         #splashLogo {
-            width: 280px; height: 280px;
+            width: 280px;
+            height: 280px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center;
             opacity: 0; transform: scale(0.85);
             animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -42,9 +59,11 @@
         }
         
         #setupScreen { 
-            position: fixed; inset: 0; background: black; z-index: 9999; 
+            position: fixed;
+            inset: 0; background: black; z-index: 9999; 
             display: flex; justify-content: center; align-items: center; 
-            overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease;
+            overflow-y: auto; padding: 20px 0;
+            transition: opacity 0.5s ease;
         }
         .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; }
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
@@ -52,31 +71,45 @@
         
         .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; max-height: 35vh; overflow-y: auto; padding: 10px; }
         .friend-circle { 
-            aspect-ratio: 1; background: #262626; border: 2px solid #444; border-radius: 50%; 
+            aspect-ratio: 1;
+            background: #262626; border: 2px solid #444; border-radius: 50%; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            font-weight: bold; font-size: 1.1em; color: #ccc; cursor: pointer; position: relative; transition: all 0.2s ease;
+            font-weight: bold; font-size: 1.1em;
+            color: #ccc; cursor: pointer; position: relative; transition: all 0.2s ease;
         }
         .friend-circle.selected { border-color: var(--gold); background: #332a00; color: white; box-shadow: 0 0 15px rgba(255, 204, 0, 0.3); }
         .friend-circle .v-badge { position: absolute; top: -2px; right: -2px; background: var(--gold); color: black; width: 22px; height: 22px; border-radius: 50%; font-size: 0.8em; display: flex; justify-content: center; align-items: center; display: none; }
         .friend-circle.selected .v-badge { display: flex; }
 
-        .slider-wrapper { display: flex; width: 200vw; height: 100vh; transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); display: none; }
-        .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
+        /* קונטיינר הסליידר של העמודים */
+        .slider-wrapper { 
+            display: none; 
+            width: 200vw; 
+            height: 100vh;
+            transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); 
+        }
+        .page { 
+            width: 100vw;
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden; 
+            flex-shrink: 0; 
+        }
 
-        /* --- קפסולות עצמאיות ללא מסגרת רוחבית מפריעה --- */
+        /* --- קפסולות עליונות --- */
         .admin-header { 
-            position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
+            position: absolute;
+            top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
             background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: none;
         }
         
-        /* קפסולת השעון */
         .game-clock { 
-            font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
-            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 8px 22px;
-            border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            font-size: 2.2vw;
+            font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
+            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* קפסולת הבליינדים - משודרגת לתמיכה בחצים מופרדים בצדדים */
         .blind-info { 
             display: flex; align-items: center; justify-content: space-between; gap: 12px; 
             background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -84,15 +117,15 @@
             min-width: 140px;
         }
 
-        /* חצים לשינוי שלב בליינדים */
         .blind-arrow-btn { background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .blind-arrow-btn:active { transform: scale(1.3); }
         
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
         .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
+        /* --- טיימרים --- */
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
-        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
+        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease, opacity 0.3s ease; }
 
         .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
         .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
@@ -100,13 +133,13 @@
         .right { right: 8vw; top: 50%; transform: translate(50%, -50%) rotate(-90deg); }
 
         .ready-active { opacity: 1 !important; }
-        .paused-dim { opacity: 0.3 !important; } 
+        .paused-dim { opacity: 0.25 !important; filter: blur(0.5px); } 
 
         .warning .time-val { color: var(--danger); animation: pulse-warning 1s infinite; }
         @keyframes pulse-warning { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        /* --- עיצוב שולחן כחול רויאל פרימיום --- */
+        /* --- עיצוב שולחן פרימיום --- */
         .poker-table { 
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
             width: 75vw; height: 42vh; border: 15px solid #222; border-radius: 160px;
@@ -114,7 +147,11 @@
             box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
         }
         
-        .poker-table::after { content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif; font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none; }
+        .poker-table::after {
+            content: "פוקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif;
+            font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none;
+        }
+
         .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none; }
 
         .player-seat { 
@@ -154,34 +191,17 @@
 
         @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
 
-        /* --- עיצוב קונטיינר כפתורים תחתון משודרג --- */
         .bottom-controls-container { position: absolute; bottom: 25px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 40; direction: rtl; }
-
-        .btn-settings {
-            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex;
-            justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
+        .btn-settings { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
         .btn-settings:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.15); }
-
-        .btn-timebank {
-            background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4);
-            padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35);
-        }
+        .btn-timebank { background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4); padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35); }
         .btn-timebank:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(255, 59, 48, 0.2); }
-
-        /* כפתור איפוס אדום פרימיום */
-        .btn-danger-reset {
-            background: linear-gradient(135deg, #ff3b30, #bc1e1e) !important; color: white !important;
-            border: 1px solid rgba(255, 61, 0, 0.4) !important; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3) !important;
-            font-weight: bold; transition: all 0.2s ease;
-        }
-        .btn-danger-reset:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(255, 59, 48, 0.15); }
 
         @media (max-width: 768px) {
             #splashLogo { width: 220px; height: 220px; } 
             .setup-card, #rebuyModal, #endGameModal, #settingsModal { width: 90%; padding: 20px; }
             .setup-card input, .modal-input { width: 95%; }
-            .poker-table { width: 90vw; height: 55vh; border-width: 8px; }
+            .poker-table { width: 90vw; height: 42vh; border-width: 8px; }
             .poker-table::after { font-size: 8vw; }
             .player-seat { width: 62px; height: 62px; font-size: 11px; }
             .player-seat span:last-child { font-size: 1.1em !important; }
@@ -189,7 +209,7 @@
             .game-clock { font-size: 4.5vw; padding: 6px 14px; }
             .blind-info { padding: 4px 12px; gap: 4px; }
             .chip-icon { width: 6.5vw; height: 6.5vw; font-size: 3.2vw; }
-            .total-pot-container { margin-top: 68vh; }
+            .total-pot-container { margin-top: 72vh; }
             .total-pot-container h2 { font-size: 15vw; }
             .controls { width: 90%; justify-content: center; left: 50%; transform: translateX(-50%); bottom: 60px; }
             .btn { padding: 10px 16px; font-size: 1em; }
@@ -209,7 +229,7 @@
 
 <div id="setupScreen">
     <div class="setup-card">
-        <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom:10px;">פווקר 2025</h1>
+        <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom:10px;">פוקר 2025</h1>
         <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:10px; direction: rtl;">
             <div><p style="font-size: 0.8em; margin: 5px 0;">זמן (ש')</p><input type="number" id="roundTimeInput" class="num-input" value="30"></div>
             <div><p style="font-size: 0.8em; margin: 5px 0;">כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
@@ -278,35 +298,23 @@
 
 <div id="settingsModal">
     <h2 style="color:var(--gold); margin-bottom: 20px;">הגדרות משחק</h2>
-
     <div class="settings-row">
         <span>זמן סבב (שניות)⏳</span>
         <input type="number" id="liveRoundTimeInput" oninput="updateLiveRoundTime(this.value)">
     </div>
-    
     <div class="settings-row">
         <span>השתקת צלילים🔇</span>
         <div id="muteToggle" class="settings-toggle" onclick="toggleMute()"></div>
     </div>
-
     <div class="settings-row">
         <span>מסך דולק תמיד📱</span>
         <div id="wakeLockToggle" class="settings-toggle active" onclick="toggleWakeLockLive()"></div>
     </div>
-   
-    <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
-        <span style="text-align: center;">הוספת שחקן לשולחן (באיחור) 🏃‍♂️</span>
-        <button class="btn" style="font-size: 0.9em; padding: 8px; color: var(--gold); border-color: var(--gold);" onclick="addLatePlayer()">+ הוסף שחקן חדש</button>
-    </div>
-    
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
         <span style="text-align: center;">סנכרון נתונים מקומי☁️</span>
         <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
     </div>
-    
-    <button class="btn" style="width:100%; margin-top: 10px; margin-bottom: 10px;" onclick="closeSettings()">סגור</button>
-    
-    <button class="btn btn-danger-reset" style="width:100%;" onclick="resetToSetup()">איפוס וחזרה למסך הפתיחה 🔄</button>
+    <button class="btn" style="width:100%; margin-top: 10px;" onclick="closeSettings()">סגור</button>
 </div>
 
 <div id="endGameModal">
@@ -323,482 +331,469 @@
 </div>
 
 <script>
-function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
-function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
-function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
+    // לוגיקת סנכרון ו-LocalStorage
+    function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
+    function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
+    function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
 
-const splash = document.getElementById('splashScreen');
-function deactivateSplash() {
-    if (splash && splash.style.display !== 'none') {
-        splash.style.opacity = '0';
-        setTimeout(() => { splash.style.display = 'none'; }, 800);
+    const splash = document.getElementById('splashScreen');
+    function deactivateSplash() { 
+        if (splash && splash.style.display !== 'none') { 
+            splash.style.opacity = '0'; 
+            setTimeout(() => { splash.style.display = 'none'; }, 800); 
+        } 
+        try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} 
     }
-    try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
-}
-setTimeout(deactivateSplash, 3000);
+    setTimeout(deactivateSplash, 3000);
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
-const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
-let selectedFriends = [];
-let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
-let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
-let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
-let wakeLock = null;
-let isMuted = false;
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
+    const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
+    let selectedFriends = [];
+    let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
+    let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
+    let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = ''; 
+    let wakeLock = null, isMuted = false;
+    let gameElapsedTime = 0; // מונה שניות מצטבר למשחק כולו
 
-const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
-const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
+    const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
+    const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
 
-window.addEventListener('load', () => { runLocalStorageSyncCheck(); });
-
-function runLocalStorageSyncCheck(isManual = false) {
-    const pendingData = safeGetLocal();
-    if (pendingData) {
-        if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו עקב בעיית אינטרנט. האם לנסות לשלוח אותם עכשיו?')) {
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                cache: 'no-cache',
-                headers: { 'Content-Type': 'application/json' },
-                body: pendingData
-            })
-            .then(() => { alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
-            .catch(err => { alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.'); });
-        }
-    } else if (isManual) {
-        alert('כל הנתונים מסונכרנים! אין מידע שממתין לשליחה מקומית.');
-    }
-}
-
-async function requestWakeLock() {
-    try {
-        if ('wakeLock' in navigator) {
-            wakeLock = await navigator.wakeLock.request('screen');
-            wakeLock.addEventListener('release', () => {});
-        }
-    } catch (err) {}
-}
-
-document.addEventListener('visibilitychange', async () => {
-    const wlToggle = document.getElementById('wakeLockToggle');
-    if (wakeLock !== null && document.visibilityState === 'visible' && wlToggle && wlToggle.classList.contains('active')) {
-        await requestWakeLock();
-    }
-});
-
-function buildFriendsGrid() {
-    const grid = document.getElementById('friendsGrid');
-    if(!grid) return;
-    grid.innerHTML = '';
-    fixedFriends.forEach(name => {
-        const el = document.createElement('div');
-        el.className = 'friend-circle';
-        el.innerHTML = `<span>${name}</span><div class="v-badge">&#10003;</div>`;
-        el.onclick = () => toggleFriend(name, el);
-        grid.appendChild(el);
+    window.addEventListener('load', () => { 
+        runLocalStorageSyncCheck(); 
+        buildFriendsGrid();
     });
-}
 
-function toggleFriend(name, el) {
-    if(selectedFriends.includes(name)) {
-        selectedFriends = selectedFriends.filter(f => f !== name);
-        el.classList.remove('selected');
-    } else {
-        selectedFriends.push(name);
-        el.classList.add('selected');
+    function runLocalStorageSyncCheck(isManual = false) { 
+        const pendingData = safeGetLocal();
+        if (pendingData) { 
+            if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו עקב בעיית אינטרנט. האם לנסות לשלוח אותם עכשיו?')) { 
+                fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json' }, body: pendingData })
+                .then(() => { alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
+                .catch(err => { alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.'); });
+            } 
+        } else if (isManual) { 
+            alert('כל הנתונים מסונכרנים! אין מידע שממתין לשליחה מקומית.');
+        } 
     }
-    document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
-}
-buildFriendsGrid();
 
-function playSound(f, d, type = 'sine') {
-    if (isMuted) return;
-    try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-        osc.type = type; osc.frequency.value = f;
-        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + d);
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + d);
-    } catch(e){}
-}
+    function forceSyncData() { runLocalStorageSyncCheck(true); }
 
-function updateBlindDisplay() {
-    const lvl = levels[currentLevelIdx];
-    document.getElementById('blindDisplay').innerHTML = `
-        <span class="chip-icon" style="background:${chipColors[lvl.s] || '#555'}">${lvl.s}</span>
-        <span style="font-size:1.4em; font-weight:bold; font-family:'Rajdhani';">/</span>
-        <span class="chip-icon" style="background:${chipColors[lvl.b] || '#555'}">${lvl.b}</span>
-    `;
-}
+    async function requestWakeLock() { try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {} }
+    document.addEventListener('visibilitychange', async () => { 
+        const wlToggle = document.getElementById('wakeLockToggle'); 
+        if (wakeLock !== null && document.visibilityState === 'visible' && wlToggle && wlToggle.classList.contains('active')) { await requestWakeLock(); } 
+    });
 
-function changeBlindLevel(e, dir) {
-    if(e) e.stopPropagation();
-    let n = currentLevelIdx + dir;
-    if(n >= 0 && n < levels.length) {
-        currentLevelIdx = n;
-        updateBlindDisplay();
-        playSound(440, 0.12, 'triangle');
+    function buildFriendsGrid() { 
+        const grid = document.getElementById('friendsGrid'); 
+        if(!grid) return; grid.innerHTML = '';
+        fixedFriends.forEach(name => { 
+            const el = document.createElement('div'); 
+            el.className = 'friend-circle'; 
+            el.innerHTML = `<span>${name}</span><div class="v-badge">&#10003;</div>`; 
+            el.onclick = () => toggleFriend(name, el); 
+            grid.appendChild(el); 
+        });
+    } 
+
+    function toggleFriend(name, el) { 
+        if(selectedFriends.includes(name)) { 
+            selectedFriends = selectedFriends.filter(f => f !== name); 
+            el.classList.remove('selected'); 
+        } else { 
+            selectedFriends.push(name); 
+            el.classList.add('selected'); 
+        } 
+        document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
     }
-}
 
-function startGame() {
-    if(selectedFriends.length === 0) { alert('אנא בחר שחקן אחד לפחות!'); return; }
-    deactivateSplash();
-    
-    defaultRoundTime = +document.getElementById('roundTimeInput').value || 30;
-    const initialBuy = +document.getElementById('initialBuyin').value || 50;
-    
-    document.getElementById('liveRoundTimeInput').value = defaultRoundTime;
-    timeLeft = defaultRoundTime;
-    
-    const now = new Date();
-    startTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-    
-    players = selectedFriends.map((name, i) => ({
-        id: i + 1, name: name, in: initialBuy, joinTime: startTimeStr, leaveTime: 'עדין במשחק', removed: false
-    }));
-    
-    totalPot = players.length * initialBuy;
-    
-    document.getElementById('setupScreen').style.display = 'none';
-    const slider = document.getElementById('slider');
-    slider.style.display = 'flex';
-    
-    render();
-    updateUI();
-    updateBlindDisplay();
-    
-    const wlToggle = document.getElementById('wakeLockToggle');
-    if (wlToggle && wlToggle.classList.contains('active')) { requestWakeLock(); }
-    
-    startTimers();
-}
+    function updateLiveRoundTime(val) {
+        let n = parseInt(val);
+        if(!isNaN(n) && n > 0) {
+            defaultRoundTime = n;
+            if(!isActionRunning && timeLeft > defaultRoundTime) {
+                timeLeft = defaultRoundTime;
+                updateVisualTimer();
+            }
+        }
+    }
 
-function startTimers() {
-    if(timerId) clearInterval(timerId);
-    timerId = setInterval(() => {
-        if(!isActionRunning) return;
-        if(timeLeft > 0) {
-            timeLeft--;
-            updateUI();
-            if(timeLeft === 5) playSound(392, 0.2, 'sawtooth');
-            if(timeLeft <= 3 && timeLeft > 0) playSound(392, 0.15, 'sawtooth');
+    function toggleMute() {
+        isMuted = !isMuted;
+        document.getElementById('muteToggle').classList.toggle('active', isMuted);
+    }
+
+    function toggleWakeLockLive() {
+        const wl = document.getElementById('wakeLockToggle');
+        if(wl.classList.contains('active')) {
+            wl.classList.remove('active');
+            if(wakeLock) { wakeLock.release(); wakeLock = null; }
         } else {
-            playSound(220, 0.6, 'sawtooth');
+            wl.classList.add('active');
+            requestWakeLock();
+        }
+    }
+
+    function playBeep(freq, duration) {
+        if(isMuted || !audioCtx) return;
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch(e){}
+    }
+
+    function startGame() {
+        if(selectedFriends.length === 0) { alert('אנא בחר שחקן אחד לפחות!'); return; }
+        deactivateSplash();
+        
+        const rTime = parseInt(document.getElementById('roundTimeInput').value);
+        if(!isNaN(rTime) && rTime > 0) { defaultRoundTime = rTime; timeLeft = rTime; }
+        document.getElementById('liveRoundTimeInput').value = defaultRoundTime;
+
+        const buy = parseInt(document.getElementById('initialBuyin').value) || 50;
+        startTimeStr = new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+
+        players = selectedFriends.map(name => ({
+            name: name, in: buy, out: 0, active: true, joinTime: startTimeStr, leaveTime: ''
+        }));
+        totalPot = players.length * buy;
+
+        document.getElementById('setupScreen').style.opacity = '0';
+        setTimeout(() => { document.getElementById('setupScreen').style.display = 'none'; }, 500);
+
+        const slider = document.getElementById('slider');
+        slider.style.display = 'flex';
+        
+        renderBlinds();
+        renderSeats();
+        updateVisualTimer();
+        startGlobalClock();
+        requestWakeLock();
+    }
+
+    function renderBlinds() {
+        const lvl = levels[currentLevelIdx];
+        document.getElementById('blindDisplay').innerHTML = `
+            <span class="chip-icon" style="background:${chipColors[lvl.s] || '#333'}">${lvl.s}</span>
+            <span style="font-size:1.6vw; font-weight:bold; font-family:'Rajdhani'; color:#fff;">/</span>
+            <span class="chip-icon" style="background:${chipColors[lvl.b] || '#333'}">${lvl.b}</span>
+        `;
+    }
+
+    function changeBlindLevel(e, dir) {
+        if(e) e.stopPropagation();
+        let next = currentLevelIdx + dir;
+        if(next >= 0 && next < levels.length) {
+            currentLevelIdx = next;
+            renderBlinds();
+            playBeep(587.33, 0.15);
+        }
+    }
+
+    function updateVisualTimer() {
+        const pct = (timeLeft / defaultRoundTime) * 100;
+        const pb = document.getElementById('progressBar');
+        pb.style.width = pct + '%';
+
+        const vals = document.querySelectorAll('.time-val');
+        vals.forEach(v => {
+            v.innerText = timeLeft;
+            const container = v.parentElement;
+            if(timeLeft <= 5 && timeLeft > 0) {
+                container.className = `timer ${container.classList[1]} warning`;
+            } else if(timeLeft === 0) {
+                container.className = `timer ${container.classList[1]} zero-blink`;
+            } else {
+                container.className = `timer ${container.classList[1]}`;
+            }
+        });
+    }
+
+    function startGlobalClock() {
+        if(gameClockId) clearInterval(gameClockId);
+        gameClockId = setInterval(() => {
+            gameElapsedTime++;
+            let hrs = Math.floor(gameElapsedTime / 3600);
+            let mins = Math.floor((gameElapsedTime % 3600) / 60);
+            let secs = gameElapsedTime % 60;
+            document.getElementById('gameClock').innerText = 
+                `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        }, 1000);
+    }
+
+    // --- לוגיקת הלחיצות והאינטראקציה החדשה של הטיימר ---
+    document.getElementById('timerPage').addEventListener('click', (e) => {
+        // מניעת הפעלה אם לחצו על כפתורי ההגדרות או ה-Timebank
+        if(e.target.closest('.bottom-controls-container') || e.target.closest('.admin-header')) return;
+        
+        const now = Date.now();
+        const delta = now - lastTap;
+        lastTap = now;
+
+        if (delta < 280 && delta > 0) {
+            // לחיצה כפולה - איפוס מיידי לזמן המקורי
+            handleDoubleTap();
+        } else {
+            // לחיצה בודדת רגילה - השהיה קלה כדי לוודא שזו לא לחיצה כפולה
+            setTimeout(() => {
+                if (Date.now() - lastTap >= 280) {
+                    handleSingleTap();
+                }
+            }, 285);
+        }
+    });
+
+    function handleSingleTap() {
+        if (isActionRunning) {
+            // אם הטיימר רץ -> עונדים ומעממים אותו
             isActionRunning = false;
-            timeLeft = defaultRoundTime;
-            updateUI();
-        }
-    }, 1000);
-
-    let totalSecs = 0;
-    if(gameClockId) clearInterval(gameClockId);
-    gameClockId = setInterval(() => {
-        totalSecs++;
-        let h = Math.floor(totalSecs / 3600), m = Math.floor((totalSecs % 3600) / 60), s = totalSecs % 60;
-        document.getElementById('gameClock').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-    }, 1000);
-}
-
-function updateUI() {
-    const tNodes = document.querySelectorAll('.time-val');
-    tNodes.forEach(node => {
-        node.innerText = timeLeft;
-        const parent = node.parentElement;
-        parent.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
-        
-        if(!isActionRunning && timeLeft === defaultRoundTime) {
-            parent.classList.add('paused-dim');
-        } else if(!isActionRunning) {
-            parent.classList.add('paused-dim');
+            if(timerId) { clearInterval(timerId); timerId = null; }
+            document.querySelectorAll('.time-val').forEach(v => v.classList.add('paused-dim'));
+            playBeep(329.63, 0.2); // צליל עצירה
         } else {
-            parent.classList.add('ready-active');
+            // אם הטיימר עצור -> מפעילים או ממשיכים מאיפה שעצר
+            isActionRunning = true;
+            document.querySelectorAll('.time-val').forEach(v => v.classList.remove('paused-dim'));
+            playBeep(440, 0.1); // צליל הפעלה
+            
+            if(timerId) clearInterval(timerId);
+            timerId = setInterval(() => {
+                if(timeLeft > 0) {
+                    timeLeft--;
+                    updateVisualTimer();
+                    if(timeLeft <= 5 && timeLeft > 0) playBeep(880, 0.08);
+                    if(timeLeft === 0) playBeep(440, 0.6);
+                } else {
+                    clearInterval(timerId);
+                    timerId = null;
+                    isActionRunning = false;
+                }
+            }, 1000);
         }
-        
-        if(timeLeft <= 5 && timeLeft > 0) parent.classList.add('warning');
-        if(timeLeft === 0) parent.classList.add('zero-blink');
-    });
-
-    const progress = (timeLeft / defaultRoundTime) * 100;
-    document.getElementById('progressBar').style.width = `${progress}%`;
-    document.getElementById('potDisplay').innerText = totalPot;
-}
-
-function render() {
-    const container = document.getElementById('seatsContainer');
-    const oldSeats = container.querySelectorAll('.player-seat');
-    oldSeats.forEach(s => s.remove());
-    
-    const activePlayers = players.filter(p => !p.removed);
-    const n = activePlayers.length;
-    if(n === 0) return;
-    
-    const tableW = container.clientWidth, tableH = container.clientHeight;
-    const rx = (tableW / 2) + 10, ry = (tableH / 2) + 10;
-    
-    activePlayers.forEach((p, idx) => {
-        const angle = (idx * (2 * Math.PI / n)) + Math.PI / 2;
-        const x = (tableW / 2) + rx * Math.cos(angle);
-        const y = (tableH / 2) + ry * Math.sin(angle);
-        
-        const seat = document.createElement('div');
-        seat.className = `player-seat in-game`;
-        seat.style.left = `${x}px`; seat.style.top = `${y}px`;
-        seat.innerHTML = `<span style="font-weight:bold; margin-bottom:2px; max-width:80px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${p.name}</span><span style="color:var(--gold); font-size:1.3em; font-family:'Rajdhani', sans-serif; font-weight:900;">₪${p.in}</span>`;
-        
-        seat.onclick = (e) => { e.stopPropagation(); openRebuy(p.id); };
-        container.appendChild(seat);
-    });
-}
-
-/* --- פונקציית תיקון לכפתור TICKET TIME --- */
-function addTime(event) {
-    if (event) event.stopPropagation();
-    timeLeft += defaultRoundTime; // מוסיף את ערך הסבב המלא שהוגדר
-    updateUI();
-    playSound(587.33, 0.1, 'sine'); // צליל נעים כאינדיקציה להצלחה
-}
-
-/* --- הוספת שחקן מאוחר באמצע המשחק --- */
-function addLatePlayer() {
-    const name = prompt("הכנס את שם השחקן המצטרף:");
-    if (!name || name.trim() === "") return;
-    
-    const nameExists = players.some(p => p.name === name.trim() && !p.removed);
-    if (nameExists) {
-        alert("שחקן בשם זה כבר נמצא בשולחן!");
-        return;
     }
-    
-    const initialBuy = +document.getElementById('initialBuyin').value || 50;
-    const now = new Date();
-    const joinTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-    
-    const newId = players.length + 1;
-    players.push({
-        id: newId, name: name.trim(), in: initialBuy, joinTime: joinTimeStr, leaveTime: 'עדין במשחק', removed: false
-    });
-    
-    totalPot += initialBuy;
-    
-    render();
-    updateUI();
-    
-    alert(`השחקן ${name.trim()} נוסף בהצלחה עם כניסה של ₪${initialBuy}!`);
-    closeSettings();
-}
 
-/* --- פונקציית איפוס מלא וחזרה למסך הראשון --- */
-function resetToSetup() {
-    const confirmReset = confirm("האם אתה בטוח שברצונך לאפס את כל נתוני המשחק הנוכחי ולחזור למסך הבחירה הראשוני? (המידע הנוכחי יימחק ולא יישלח לגוגל שיטס)");
-    if (!confirmReset) return;
-    
-    if (timerId) clearInterval(timerId);
-    if (gameClockId) clearInterval(gameClockId);
-    
-    players = [];
-    selectedFriends = [];
-    totalPot = 0;
-    currentLevelIdx = 0;
-    currentPage = 0;
-    isActionRunning = false;
-    timerId = null;
-    gameClockId = null;
-    timeLeft = +document.getElementById('roundTimeInput').value || 30;
-    
-    document.getElementById('gameClock').innerText = "00:00:00";
-    
-    buildFriendsGrid();
-    document.getElementById('activeCountDisplay').innerText = "0";
-    
-    updatePageSlider();
-    
-    document.getElementById('slider').style.display = 'none';
-    closeSettings();
-    
-    const setupScreen = document.getElementById('setupScreen');
-    setupScreen.style.display = 'flex';
-    setTimeout(() => { setupScreen.style.opacity = '1'; }, 50);
-}
+    function handleDoubleTap() {
+        // איפוס מלא לזמן המוגדר מההתחלה
+        isActionRunning = false;
+        if(timerId) { clearInterval(timerId); timerId = null; }
+        timeLeft = defaultRoundTime;
+        updateVisualTimer();
+        document.querySelectorAll('.time-val').forEach(v => v.classList.remove('paused-dim'));
+        playBeep(523.25, 0.15); // צליל איפוס
+    }
 
-function openRebuy(id) {
-    selIdx = players.findIndex(p => p.id === id);
-    if(selIdx === -1) return;
-    const p = players[selIdx];
-    document.getElementById('rebuyTitle').innerText = `עדכון: ${p.name}`;
-    document.getElementById('playerNameInput').value = p.name;
-    document.getElementById('rebuyAmount').value = 50;
-    
-    const m = document.getElementById('rebuyModal');
-    m.style.display = 'block';
-    
+    function addTime(e) {
+        if(e) e.stopPropagation();
+        timeLeft += 15;
+        updateVisualTimer();
+        playBeep(659.25, 0.1);
+    }
+
+    // --- מערכת החלקה (Swipe Gestures) טבעית ומתוקנת ---
+    window.addEventListener('touchstart', (e) => { 
+        startX = e.touches[0].clientX; 
+    }, {passive: true});
+
+    window.addEventListener('touchend', (e) => {
+        if(players.length === 0) return; // המשחק עוד לא התחיל
+        const deltaX = e.changedTouches[0].clientX - startX;
+        
+        // החלקה ימינה (האצבע נעה ימינה -> מעבר לעמוד 0, טיימר)
+        if (deltaX > 60 && currentPage === 1) { 
+            switchPage(0); 
+        } 
+        // החלקה שמאלה (האצבע נעה שמאלה -> מעבר לעמוד 1, שולחן)
+        else if (deltaX < -60 && currentPage === 0) { 
+            switchPage(1); 
+        }
+    }, {passive: true});
+
+    function switchPage(idx) {
+        currentPage = idx;
+        const slider = document.getElementById('slider');
+        
+        // תיקון הזזת הסליידר לפי סוג הדפדפנים והחזרת מסך השולחן לפוקוס
+        slider.style.transform = `translateX(${-idx * 100}vw)`;
+        
+        document.getElementById('dot0').classList.toggle('active', idx === 0);
+        document.getElementById('dot1').classList.toggle('active', idx === 1);
+    }
+
+    // הגדרות ומודאלים
+    function openSettings(e) { if(e) e.stopPropagation(); document.getElementById('settingsModal').style.display = 'block'; }
+    function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
+
+    // ניהול מושבים ושחקנים בשולחן
+    function renderSeats() {
+        const container = document.getElementById('seatsContainer');
+        if(!container) return;
+        
+        // ניקוי אלמנטים ישנים פרט לקו הפנימי
+        const innerLine = container.querySelector('.table-inner-line');
+        container.innerHTML = '';
+        if(innerLine) container.appendChild(innerLine);
+
+        const count = players.length;
+        document.getElementById('potDisplay').innerText = totalPot;
+
+        players.forEach((p, idx) => {
+            // חישוב מיקום מעגלי על השולחן
+            const angle = (idx / count) * 2 * Math.PI - Math.PI / 2;
+            const rx = 36, ry = 18; // רדיוסים תואמים לאליפסת השולחן
+            const left = 50 + rx * Math.cos(angle);
+            const top = 45 + ry * Math.sin(angle);
+
+            const seat = document.createElement('div');
+            seat.className = `player-seat ${p.active ? 'in-game' : 'seat-removed'}`;
+            seat.style.left = left + '%';
+            seat.style.top = top + '%';
+
+            seat.innerHTML = `
+                <span style="font-weight:900; color:#fff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80px;">${p.name}</span>
+                <span style="color:var(--gold); font-family:'Rajdhani'; font-weight:700; font-size:1.3em; margin-top:2px;">${p.in}</span>
+            `;
+
+            seat.onclick = () => openRebuy(idx);
+            container.appendChild(seat);
+        });
+    }
+
+    function openRebuy(idx) {
+        selIdx = idx;
+        const p = players[idx];
+        document.getElementById('playerNameInput').value = p.name;
+        document.getElementById('rebuyAmount').value = 50;
+        document.getElementById('rebuyTitle').innerText = `עדכון: ${p.name}`;
+        
+        const rmBtn = document.getElementById('removeBtn');
+        rmBtn.innerText = p.active ? "הסר מהשולחן" : "החזר לשולחן";
+        
+        document.getElementById('rebuyModal').style.display = 'block';
+    }
+
+    function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
+
+    // שינוי שם שחקן, הוספת Rebuy או שינוי סטטוס אקטיביות
     document.getElementById('confirmBtn').onclick = () => {
-        const val = +document.getElementById('rebuyAmount').value || 0;
+        if(selIdx === -1) return;
+        const p = players[selIdx];
         const newName = document.getElementById('playerNameInput').value.trim();
         if(newName) p.name = newName;
-        p.in += val;
-        totalPot += val;
-        closeRebuy();
-        render();
-        updateUI();
-    };
-    
-    document.getElementById('removeBtn').onclick = () => {
-        if(confirm(`האם להסיר את ${p.name} מהשולחן?`)) {
-            p.removed = true;
-            const now = new Date();
-            p.leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-            closeRebuy();
-            render();
-            updateUI();
+
+        const rebuy = parseInt(document.getElementById('rebuyAmount').value) || 0;
+        if(rebuy > 0) {
+            p.in += rebuy;
+            totalPot += rebuy;
         }
+        closeRebuy();
+        renderSeats();
     };
-}
 
-function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
+    document.getElementById('removeBtn').onclick = () => {
+        if(selIdx === -1) return;
+        const p = players[selIdx];
+        p.active = !p.active;
+        p.leaveTime = p.active ? '' : new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        closeRebuy();
+        renderSeats();
+    };
 
-function openSettings(e) {
-    if(e) e.stopPropagation();
-    document.getElementById('settingsModal').style.display = 'block';
-}
-function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
-
-function updateLiveRoundTime(val) {
-    const parsed = +val;
-    if(parsed > 0) { defaultRoundTime = parsed; timeLeft = parsed; updateUI(); }
-}
-
-function toggleMute() {
-    isMuted = !isMuted;
-    document.getElementById('muteToggle').classList.toggle('active', !isMuted);
-}
-
-async function toggleWakeLockLive() {
-    const wlToggle = document.getElementById('wakeLockToggle');
-    if(wlToggle.classList.contains('active')) {
-        wlToggle.classList.remove('active');
-        if(wakeLock) { await wakeLock.release(); wakeLock = null; }
-    } else {
-        wlToggle.classList.add('active');
-        await requestWakeLock();
-    }
-}
-
-function forceSyncData() { runLocalStorageSyncCheck(true); }
-
-function openEndGame(e) {
-    if(e) e.stopPropagation();
-    const active = players.filter(p => !p.removed);
-    const container = document.getElementById('endGamePlayersContainer');
-    container.innerHTML = '';
-    
-    active.forEach((p, i) => {
-        const row = document.createElement('div');
-        row.className = 'end-game-row';
-        row.innerHTML = `<span>${p.name}</span><input type="number" class="end-game-out-input" data-idx="${players.indexOf(p)}" value="0" oninput="calculateDistributedSum()">`;
-        container.appendChild(row);
-    });
-    
-    document.getElementById('endGameTotalBank').innerText = totalPot;
-    document.getElementById('endGameDistributed').innerText = '0';
-    document.getElementById('validationMessage').style.display = 'none';
-    document.getElementById('endGameModal').style.display = 'block';
-}
-
-function calculateDistributedSum() {
-    let totalOut = 0;
-    const inputs = document.querySelectorAll('.end-game-out-input');
-    inputs.forEach(input => { totalOut += (+input.value || 0); });
-    document.getElementById('endGameDistributed').innerText = totalOut;
-    
-    if(totalOut === totalPot) {
+    function openEndGame(e) {
+        if(e) e.stopPropagation();
+        const cont = document.getElementById('endGamePlayersContainer');
+        cont.innerHTML = '';
+        
+        document.getElementById('endGameTotalBank').innerText = totalPot;
+        document.getElementById('endGameDistributed').innerText = '0';
         document.getElementById('validationMessage').style.display = 'none';
+
+        players.forEach((p, idx) => {
+            const row = document.createElement('div');
+            row.className = 'end-game-row';
+            row.innerHTML = `
+                <span>${p.name} (נכנס: ${p.in})</span>
+                <input type="number" class="end-game-out-input" data-idx="${idx}" value="0" oninput="calculateDistributedSum()">
+            `;
+            cont.appendChild(row);
+        });
+
+        document.getElementById('endGameModal').style.display = 'block';
     }
-}
 
-function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
+    function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
 
-function submitGameHistory() {
-    let totalOut = 0;
-    const inputs = document.querySelectorAll('.end-game-out-input');
-    inputs.forEach(input => { totalOut += (+input.value || 0); });
-    
-    if (totalOut !== totalPot) {
-        document.getElementById('validationMessage').style.display = 'block';
-        return;
+    function calculateDistributedSum() {
+        let sum = 0;
+        document.querySelectorAll('.end-game-out-input').forEach(input => {
+            sum += parseInt(input.value) || 0;
+        });
+        document.getElementById('endGameDistributed').innerText = sum;
+        
+        const validMsg = document.getElementById('validationMessage');
+        if(sum !== totalPot) {
+            validMsg.style.display = 'block';
+        } else {
+            validMsg.style.display = 'none';
+        }
     }
 
-    const gameData = {
-        startTime: startTimeStr,
-        endTime: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}),
-        totalPot: totalPot,
-        players: players.map((p, idx) => {
-            const inputEl = document.querySelector(`.end-game-out-input[data-idx="${idx}"]`);
-            const outVal = inputEl ? (+inputEl.value || 0) : 0;
-            return {
-                name: p.name, buyin: p.in, cashout: outVal, profit: outVal - p.in, joinTime: p.joinTime, leaveTime: p.leaveTime
-            };
+    function submitGameHistory() {
+        let totalOut = 0;
+        document.querySelectorAll('.end-game-out-input').forEach(input => {
+            totalOut += parseInt(input.value) || 0;
+        });
+
+        if (totalOut !== totalPot) {
+            document.getElementById('validationMessage').style.display = 'block';
+            alert('שגיאה: סך כל כספי היציאה שהזנת אינו שווה לקופה הכוללת!');
+            return;
+        }
+
+        const gameData = {
+            startTime: startTimeStr,
+            endTime: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}),
+            totalPot: totalPot,
+            players: players.map((p, idx) => {
+                const outVal = parseInt(document.querySelector(`.end-game-out-input[data-idx="${idx}"]`).value) || 0;
+                return {
+                    name: p.name,
+                    buyin: p.in,
+                    cashout: outVal,
+                    profit: outVal - p.in,
+                    joinTime: p.joinTime,
+                    leaveTime: p.leaveTime || new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+                };
+            })
+        };
+
+        const stringified = JSON.stringify(gameData);
+        safeSetLocal(stringified);
+
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: stringified
         })
-    };
-
-    const stringified = JSON.stringify(gameData);
-    safeSetLocal(stringified);
-
-    fetch(WEB_APP_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json' },
-        body: stringified
-    })
-    .then(() => {
-        alert('המשחק הסתיים בהצלחה והדוח נשלח לגוגל שיטס!');
-        safeRemoveLocal();
-        location.reload();
-    })
-    .catch(err => {
-        alert('הנתונים נשמרו מקומית בדפדפן ויסונכרנו ברגע שיהיה חיבור לאינטרנט!');
-        location.reload();
-    });
-}
-
-function handleGlobalTap() {
-    if(document.getElementById('rebuyModal').style.display === 'block' || 
-       document.getElementById('settingsModal').style.display === 'block' || 
-       document.getElementById('endGameModal').style.display === 'block') return;
-       
-    isActionRunning = !isActionRunning;
-    updateUI();
-    playSound(600, 0.08, 'sine');
-}
-
-window.addEventListener('touchstart', e => {
-    if(document.getElementById('setupScreen').style.display !== 'none') return;
-    startX = e.touches[0].clientX;
-}, {passive:true});
-
-window.addEventListener('touchend', e => {
-    if(document.getElementById('setupScreen').style.display !== 'none') return;
-    let diffX = e.changedTouches[0].clientX - startX;
-    if(Math.abs(diffX) > 60) {
-        if(diffX > 0 && currentPage > 0) { currentPage--; }
-        else if(diffX < 0 && currentPage < 1) { currentPage++; }
-        updatePageSlider();
-    } else {
-        let now = Date.now();
-        if(now - lastTap < 250) { handleGlobalTap(); }
-        lastTap = now;
+        .then(() => {
+            alert('המשחק הסתיים בהצלחה והדוח נשלח לגוגל שיטס!');
+            safeRemoveLocal();
+            location.reload();
+        })
+        .catch(err => {
+            alert('הנתונים נשמרו מקומית במכשיר עקב בעיית רשת זמנית. הם יסונכרנו אוטומטית בהמשך!');
+            location.reload();
+        });
     }
-}, {passive:true});
-
-function updatePageSlider() {
-    document.getElementById('slider').style.transform = `translateX(${currentPage * 100}vw)`;
-    document.getElementById('dot0').classList.toggle('active', currentPage === 0);
-    document.getElementById('dot1').classList.toggle('active', currentPage === 1);
-}
 </script>
 
 </body>
