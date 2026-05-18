@@ -273,28 +273,28 @@
     <h2 style="color:var(--gold); margin-bottom: 20px;">הגדרות משחק</h2>
 
     <div class="settings-row">
-        <span>זמן סבב (שניות)⏳</span>
+        <span>⏳זמן סבב (שניות)</span>
         <input type="number" id="liveRoundTimeInput" oninput="updateLiveRoundTime(this.value)">
     </div>
     
     <div class="settings-row">
-        <span>השתקת צלילים🔇</span>
+        <span>🔇השתקת צלילים</span>
         <div id="muteToggle" class="settings-toggle" onclick="toggleMute()"></div>
     </div>
 
     <div class="settings-row">
-        <span>מסך דולק תמיד תמיד📱</span>
+        <span>📱מסך דולק קבוע</span>
         <div id="wakeLockToggle" class="settings-toggle active" onclick="toggleWakeLockLive()"></div>
     </div>
 
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
-        <span style="text-align: center;">ניהול שחקנים ומשחק משודרג🛠️</span>
-        <button class="btn" style="font-size: 0.9em; padding: 10px; border-color: var(--success); color: var(--success);" onclick="addLatePlayerLive()">➕ הוסף שחקן באיחור</button>
+        <span style="text-align: center;">📱ניהול שחקנים ומשחק משודרג</span>
+        <button class="btn" style="font-size: 0.9em; padding: 10px; border-color: var(--success); color: var(--success);" onclick="addLatePlayerLive()">➕ הוסף שחקן</button>
         <button class="btn" style="font-size: 0.9em; padding: 10px; border-color: var(--danger); color: var(--danger);" onclick="resetGameToSetup()">🔄 איפוס והתחלה מחדש</button>
     </div>
     
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
-        <span style="text-align: center;">סנכרון נתונים מקומי☁️</span>
+        <span style="text-align: center;">☁️סנכרון נתונים מקומי</span>
         <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
     </div>
     
