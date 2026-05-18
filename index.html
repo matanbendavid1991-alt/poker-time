@@ -11,372 +11,189 @@
         * { box-sizing: border-box; }
         
         body {
-            margin: 0;
-            background-color: black; color: white;
+            margin: 0; background-color: black; color: white;
             font-family: -apple-system, system-ui, sans-serif;
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
 
         /* --- פס התקדמות זמן עליון --- */
         #progressBar {
-            position: absolute;
-            top: 0; left: 0; height: 4px; background: var(--gold);
-            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear;
-            z-index: 1000;
+            position: absolute; top: 0; left: 0; height: 4px; background: var(--gold);
+            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000;
         }
 
         /* --- מסך פתיחה דינמי ומעודכן --- */
         #splashScreen {
-            position: fixed;
-            inset: 0;
-            background: black;
-            z-index: 100000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
+            position: fixed; inset: 0; background: black; z-index: 100000;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
         }
         
-        /* הגדלנו את הלוגו והוספנו אנימציית כניסה עשירה וחיה */
         #splashLogo {
-            width: 280px;
-            height: 280px;
-            background-image: url('logo.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0;
-            transform: scale(0.85);
+            width: 280px; height: 280px;
+            background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center;
+            opacity: 0; transform: scale(0.85);
             animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes splashEntrance {
-            0% {
-                opacity: 0;
-                transform: scale(0.85);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+            0% { opacity: 0; transform: scale(0.85); }
+            100% { opacity: 1; transform: scale(1); }
         }
         
         #setupScreen { 
-            position: fixed;
-            inset: 0; background: black; z-index: 9999; 
+            position: fixed; inset: 0; background: black; z-index: 9999; 
             display: flex; justify-content: center; align-items: center; 
-            overflow-y: auto; padding: 20px 0;
-            transition: opacity 0.5s ease; /* מעבר חלק למסך המשחק */
+            overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease;
         }
-        .setup-card { background: #1a1a1a;
-            padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 400px; max-height: 95vh; overflow-y: auto;
-        }
-        .setup-card input { background: #333; border: none; color: white; padding: 12px;
-            border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0;
-        }
-        .setup-card .num-input { width: 80px; font-size: 1.8em;
-        }
+        .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; }
+        .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
+        .setup-card .num-input { width: 80px; font-size: 1.8em; }
         
-        .friends-grid { display: grid;
-            grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; max-height: 35vh; overflow-y: auto; padding: 10px;
-        }
+        .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; max-height: 35vh; overflow-y: auto; padding: 10px; }
         .friend-circle { 
-            aspect-ratio: 1;
-            background: #262626; border: 2px solid #444; border-radius: 50%; 
+            aspect-ratio: 1; background: #262626; border: 2px solid #444; border-radius: 50%; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            font-weight: bold; font-size: 1.1em;
-            color: #ccc; cursor: pointer; position: relative;
-            transition: all 0.2s ease;
+            font-weight: bold; font-size: 1.1em; color: #ccc; cursor: pointer; position: relative; transition: all 0.2s ease;
         }
-        .friend-circle.selected { 
-            border-color: var(--gold);
-            background: #332a00; color: white; 
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
-        }
-        .friend-circle .v-badge { 
-            position: absolute;
-            top: -2px; right: -2px; background: var(--gold); color: black; 
-            width: 22px; height: 22px; border-radius: 50%; font-size: 0.8em; 
-            display: flex; justify-content: center;
-            align-items: center; display: none;
-        }
-        .friend-circle.selected .v-badge { display: flex;
-        }
+        .friend-circle.selected { border-color: var(--gold); background: #332a00; color: white; box-shadow: 0 0 15px rgba(255, 204, 0, 0.3); }
+        .friend-circle .v-badge { position: absolute; top: -2px; right: -2px; background: var(--gold); color: black; width: 22px; height: 22px; border-radius: 50%; font-size: 0.8em; display: flex; justify-content: center; align-items: center; display: none; }
+        .friend-circle.selected .v-badge { display: flex; }
 
-        .slider-wrapper { 
-            display: flex;
-            width: 200vw; height: 100vh; 
-            transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); 
-            display: none;
-        }
-        .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0;
-        }
+        .slider-wrapper { display: flex; width: 200vw; height: 100vh; transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); display: none; }
+        .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
 
         /* --- קפסולות עצמאיות ללא מסגרת רוחבית מפריעה --- */
         .admin-header { 
-            position: absolute;
-            top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
-            background: none; backdrop-filter: none;
-            -webkit-backdrop-filter: none; border: none;
+            position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
+            background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: none;
         }
         
         /* קפסולת השעון */
         .game-clock { 
-            font-size: 2.2vw;
-            font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
+            font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
             background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 8px 22px;
-            border-radius: 50px; border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* קפסולת הבליינדים */
+        /* קפסולת הבליינדים - משודרגת לתמיכה בחצים מופרדים בצדדים */
         .blind-info { 
-            display: flex;
-            align-items: center; gap: 8px; 
+            display: flex; align-items: center; justify-content: space-between; gap: 12px; 
             background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 6px 18px; border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            padding: 6px 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            min-width: 140px;
         }
 
         /* חצים לשינוי שלב בליינדים */
-        .blind-arrows {
-            display: flex;
-            flex-direction: column; gap: 2px; margin-right: 5px; justify-content: center;
-        }
         .blind-arrow-btn {
-            background: none;
-            border: none; color: var(--gold); cursor: pointer; padding: 2px; font-size: 11px; line-height: 1; display: flex; align-items: center; justify-content: center;
+            background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;
         }
-        .blind-arrow-btn:active { transform: scale(1.2);
-        }
+        .blind-arrow-btn:active { transform: scale(1.3); }
         
-        .logo-container { position: absolute;
-            top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center;
-        }
-        .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat;
-            background-position: center; }
+        .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
+        .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
-        .timer { position: absolute; display: flex; justify-content: center; align-items: center;
-            font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10;
-        }
-        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1;
-            transition: transform 0.2s ease; }
+        .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
+        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
 
-        .top { top: 5vh; left: 50%;
-            transform: translateX(-50%) rotate(180deg); }
-        .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%);
-        }
-        .left { left: 8vw; top: 50%; transform: translate(-50%, -50%) rotate(90deg);
-        }
-        .right { right: 8vw; top: 50%; transform: translate(50%, -50%) rotate(-90deg);
-        }
+        .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
+        .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
+        .left { left: 8vw; top: 50%; transform: translate(-50%, -50%) rotate(90deg); }
+        .right { right: 8vw; top: 50%; transform: translate(50%, -50%) rotate(-90deg); }
 
-        .ready-active { opacity: 1 !important;
-        }
-        .paused-dim { opacity: 0.3 !important;
-        } 
+        .ready-active { opacity: 1 !important; }
+        .paused-dim { opacity: 0.3 !important; } 
 
-        .warning .time-val { color: var(--danger); animation: pulse-warning 1s infinite;
-        }
-        @keyframes pulse-warning { 0%, 100% { transform: scale(1);
-        } 50% { transform: scale(1.15); } }
-        .zero-blink .time-val { animation: pulseZero 0.5s infinite;
-            color: var(--danger); }
+        .warning .time-val { color: var(--danger); animation: pulse-warning 1s infinite; }
+        @keyframes pulse-warning { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
         /* --- עיצוב שולחן כחול רויאל פרימיום --- */
         .poker-table { 
-            position: absolute;
-            top: 45%; left: 50%; transform: translate(-50%, -50%); 
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
             width: 75vw; height: 42vh; border: 15px solid #222; border-radius: 160px;
             background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); 
-            box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); 
-            display: flex; justify-content: center;
-            align-items: center;
+            box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
         }
         
         .poker-table::after {
-            content: "פווקר 2025";
-            position: absolute; font-family: 'Rajdhani', sans-serif;
+            content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif;
             font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none;
         }
 
-        .table-inner-line {
-            position: absolute;
-            inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none;
-        }
+        .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none; }
 
         .player-seat { 
-            position: absolute;
-            width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-size: 15px; transform: translate(-50%, -50%); 
+            position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); 
             box-shadow: 0 6px 15px rgba(0,0,0,0.6), 0 0 10px rgba(255,204,0,0.15); z-index: 50; transition: all 0.3s ease;
         }
-        .player-seat.in-game { border-color: var(--gold);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.35), inset 0 0 8px rgba(255,254,0,0.1);
-        }
-        .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed;
-        }
+        .player-seat.in-game { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.35), inset 0 0 8px rgba(255,254,0,0.1); }
+        .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed; }
 
-        .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw;
-            border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white;
-        }
+        .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white; }
 
-        .total-pot-container { text-align: center; margin-top: 78vh;
-        }
-        .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0;
-            font-weight: 700; }
+        .total-pot-container { text-align: center; margin-top: 78vh; }
+        .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0; font-weight: 700; }
 
-        .page-dots { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 12px; z-index: 100; }
-        .dot { width: 10px; height: 10px;
-            background: #333; border-radius: 50%; transition: 0.3s; cursor: pointer; }
-        .dot.active { background: var(--gold);
-            width: 30px; border-radius: 10px; }
+        .page-dots { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 100; }
+        .dot { width: 10px; height: 10px; background: #333; border-radius: 50%; transition: 0.3s; cursor: pointer; }
+        .dot.active { background: var(--gold); width: 30px; border-radius: 10px; }
 
-        .controls { position: absolute; bottom: 30px; left: 30px;
-            display: flex; gap: 15px; z-index: 40; }
-        .btn { background: #1a1a1a;
-            border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; cursor: pointer;
-        }
+        .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
+        .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; cursor: pointer; }
 
-        #rebuyModal, #endGameModal, #settingsModal { display: none; position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 360px;
-            max-height: 85vh; overflow-y: auto; }
-        .modal-input { width: 90%; padding: 18px; margin-bottom: 15px;
-            background: #333; color: white; border: none; text-align: center; font-size: 1.6em; border-radius: 15px; font-weight: bold;
-        }
+        #rebuyModal, #endGameModal, #settingsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 360px; max-height: 85vh; overflow-y: auto; }
+        .modal-input { width: 90%; padding: 18px; margin-bottom: 15px; background: #333; color: white; border: none; text-align: center; font-size: 1.6em; border-radius: 15px; font-weight: bold; }
         
-        /* סגנון לשורות בתוך חלון ההגדרות */
-        .settings-row { display: flex;
-            justify-content: space-between; align-items: center; margin-bottom: 15px; background: #222; padding: 12px 15px; border-radius: 12px; direction: rtl;
-        }
-        .settings-row span { font-weight: bold; font-size: 1em; color: white;
-        }
-        .settings-row input[type="number"] { width: 80px; background: #444; border: none; color: white;
-            padding: 6px; text-align: center; border-radius: 8px; font-size: 1.1em; }
-        .settings-toggle { width: 50px;
-            height: 26px; background: #444; border-radius: 15px; position: relative; cursor: pointer; transition: background 0.3s;
-        }
-        .settings-toggle.active { background: var(--success);
-        }
-        .settings-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%;
-            background: white; top: 2px; left: 2px; transition: transform 0.3s; }
-        .settings-toggle.active::after { transform: translateX(24px);
-        }
+        .settings-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #222; padding: 12px 15px; border-radius: 12px; direction: rtl; }
+        .settings-row span { font-weight: bold; font-size: 1em; color: white; }
+        .settings-row input[type="number"] { width: 80px; background: #444; border: none; color: white; padding: 6px; text-align: center; border-radius: 8px; font-size: 1.1em; }
+        .settings-toggle { width: 50px; height: 26px; background: #444; border-radius: 15px; position: relative; cursor: pointer; transition: background 0.3s; }
+        .settings-toggle.active { background: var(--success); }
+        .settings-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: white; top: 2px; left: 2px; transition: transform 0.3s; }
+        .settings-toggle.active::after { transform: translateX(24px); }
 
-        .end-game-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #222;
-            padding: 10px; border-radius: 12px; }
-        .end-game-row span { font-weight: bold; font-size: 1.1em;
-            color: var(--gold); }
-        .end-game-row input { width: 100px; background: #444; border: none;
-            color: white; padding: 8px; text-align: center; border-radius: 8px; font-size: 1.1em;
-        }
+        .end-game-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 12px; }
+        .end-game-row span { font-weight: bold; font-size: 1.1em; color: var(--gold); }
+        .end-game-row input { width: 100px; background: #444; border: none; color: white; padding: 8px; text-align: center; border-radius: 8px; font-size: 1.1em; }
 
-        @keyframes pulseZero { 0%, 100% { transform: scale(1.1);
-        } 50% { transform: scale(1.3); } }
+        @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
 
         /* --- עיצוב קונטיינר כפתורים תחתון משודרג --- */
         .bottom-controls-container {
-            position: absolute; 
-            bottom: 25px; 
-            left: 20px; 
-            right: 20px; 
-            display: flex; 
-            justify-content: space-between;
-            align-items: center; 
-            z-index: 40; 
-            direction: rtl;
+            position: absolute; bottom: 25px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 40; direction: rtl;
         }
 
-        /* כפתור הגדרות זכוכית מעוגל ויוקרתי */
         .btn-settings {
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 50%; 
-            width: 52px; 
-            height: 52px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
-        .btn-settings:active {
-            transform: scale(0.92);
-            background: rgba(255, 255, 255, 0.15);
-        }
+        .btn-settings:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.15); }
 
-        /* כפתור טיים בנק אדום פרימיום */
         .btn-timebank {
-            background: linear-gradient(135deg, #ff3b30, #bc1e1e);
-            color: white;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255, 61, 0, 0.4);
-            padding: 12px 26px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35);
+            background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4); padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35);
         }
-        .btn-timebank:active {
-            transform: scale(0.95);
-            box-shadow: 0 2px 10px rgba(255, 59, 48, 0.2);
-        }
+        .btn-timebank:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(255, 59, 48, 0.2); }
 
         @media (max-width: 768px) {
-            #splashLogo { width: 220px;
-                height: 220px; } 
-            .setup-card, #rebuyModal, #endGameModal, #settingsModal { width: 90%;
-                padding: 20px; }
-            .setup-card input, .modal-input { width: 95%;
-                }
-            .poker-table { width: 90vw; height: 55vh; border-width: 8px;
-                }
-            .poker-table::after { font-size: 8vw;
-                }
-            .player-seat { width: 62px; height: 62px; font-size: 11px;
-                }
-            .player-seat span:last-child { font-size: 1.1em !important;
-                }
-            .time-val { font-size: 25vw;
-                }
-            .game-clock { font-size: 4.5vw; padding: 6px 14px;
-                }
-            .blind-info { padding: 4px 12px; gap: 4px;
-                }
-            .chip-icon { width: 6.5vw; height: 6.5vw; font-size: 3.2vw;
-                }
-            .total-pot-container { margin-top: 68vh;
-                }
-            .total-pot-container h2 { font-size: 15vw;
-                }
-            .controls { width: 90%; justify-content: center; left: 50%;
-                transform: translateX(-50%); bottom: 60px; }
-            .btn { padding: 10px 16px;
-                font-size: 1em; }
-            
-            /* התאמות מובייל לכפתורים החדשים */
-            .bottom-controls-container {
-                bottom: 35px;
-            }
-            .btn-timebank {
-                padding: 10px 22px;
-                font-size: 13px;
-            }
-            .btn-settings {
-                width: 46px;
-                height: 46px;
-            }
+            #splashLogo { width: 220px; height: 220px; } 
+            .setup-card, #rebuyModal, #endGameModal, #settingsModal { width: 90%; padding: 20px; }
+            .setup-card input, .modal-input { width: 95%; }
+            .poker-table { width: 90vw; height: 55vh; border-width: 8px; }
+            .poker-table::after { font-size: 8vw; }
+            .player-seat { width: 62px; height: 62px; font-size: 11px; }
+            .player-seat span:last-child { font-size: 1.1em !important; }
+            .time-val { font-size: 25vw; }
+            .game-clock { font-size: 4.5vw; padding: 6px 14px; }
+            .blind-info { padding: 4px 12px; gap: 4px; }
+            .chip-icon { width: 6.5vw; height: 6.5vw; font-size: 3.2vw; }
+            .total-pot-container { margin-top: 68vh; }
+            .total-pot-container h2 { font-size: 15vw; }
+            .controls { width: 90%; justify-content: center; left: 50%; transform: translateX(-50%); bottom: 60px; }
+            .btn { padding: 10px 16px; font-size: 1em; }
+            .bottom-controls-container { bottom: 35px; }
+            .btn-timebank { padding: 10px 22px; font-size: 13px; }
+            .btn-settings { width: 46px; height: 46px; }
         }
     </style>
 </head>
@@ -410,11 +227,11 @@
     <div class="page" id="timerPage">
         <div class="admin-header">
             <div class="blind-info">
-                <div class="blind-arrows">
-                    <button class="blind-arrow-btn" onclick="changeBlindLevel(event, -1)">▲</button>
-                    <button class="blind-arrow-btn" onclick="changeBlindLevel(event, 1)">▼</button>
-                </div>
+                <button class="blind-arrow-btn" onclick="changeBlindLevel(event, -1)">▲</button>
+                
                 <div id="blindDisplay" style="display: flex; align-items: center; gap: 8px;"></div>
+                
+                <button class="blind-arrow-btn" onclick="changeBlindLevel(event, 1)">▼</button>
             </div>
             <div class="game-clock" id="gameClock">00:00:00</div>
         </div>
@@ -476,7 +293,7 @@
         <span>מסך דולק תמיד תמיד📱</span>
         <div id="wakeLockToggle" class="settings-toggle active" onclick="toggleWakeLockLive()"></div>
     </div>
-     
+   
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
         <span style="text-align: center;">סנכרון נתונים מקומי☁️</span>
         <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
@@ -524,9 +341,11 @@
     
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
+
     window.addEventListener('load', () => {
         runLocalStorageSyncCheck();
     });
+
     function runLocalStorageSyncCheck(isManual = false) {
         const pendingData = safeGetLocal();
         if (pendingData) {
@@ -586,6 +405,7 @@
         document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
     }
     buildFriendsGrid();
+
     function playSound(f, d, type = 'sine') {
         if (isMuted) return;
         try {
@@ -627,6 +447,7 @@
         if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
         startX = e.touches[0].clientX;
     }, {passive: true});
+
     document.addEventListener('touchend', e => {
         const splashScreenObj = document.getElementById('splashScreen');
         if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
@@ -645,6 +466,7 @@
 
     document.getElementById('dot0').onclick = () => { currentPage = 0; updatePageSlider(); };
     document.getElementById('dot1').onclick = () => { currentPage = 1; updatePageSlider(); };
+
     document.body.addEventListener('pointerdown', e => {
         const splashScreenObj = document.getElementById('splashScreen');
         if(currentPage === 1 || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
@@ -769,8 +591,7 @@
         document.getElementById('rebuyAmount').value = 50; 
         document.getElementById('rebuyModal').style.display = 'block';
     }
-    function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none';
-    }
+    function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
     
     document.getElementById('confirmBtn').onclick = () => { 
         players[selIdx].name = document.getElementById('playerNameInput').value;
@@ -784,21 +605,14 @@
         players[selIdx].removed = true;
         render(); closeRebuy(); updateUI(); 
     };
-    
     function openSettings(e) {
         e.stopPropagation();
         document.getElementById('liveRoundTimeInput').value = defaultRoundTime;
         document.getElementById('settingsModal').style.display = 'block';
     }
     
-    function closeSettings() {
-        document.getElementById('settingsModal').style.display = 'none';
-    }
-    
-    function toggleMute() {
-        isMuted = !isMuted;
-        document.getElementById('muteToggle').classList.toggle('active', isMuted);
-    }
+    function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
+    function toggleMute() { isMuted = !isMuted; document.getElementById('muteToggle').classList.toggle('active', isMuted); }
     
     function updateLiveRoundTime(val) {
         const parsed = parseInt(val);
@@ -811,9 +625,7 @@
         }
     }
     
-    function forceSyncData() {
-        runLocalStorageSyncCheck(true);
-    }
+    function forceSyncData() { runLocalStorageSyncCheck(true); }
     
     async function toggleWakeLockLive() {
         const wlToggle = document.getElementById('wakeLockToggle');
@@ -851,8 +663,7 @@
         calculateDistribution();
         document.getElementById('endGameModal').style.display = 'block';
     }
-    function closeEndGame() { document.getElementById('endGameModal').style.display = 'none';
-    }
+    function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
 
     function calculateDistribution() {
         const inputs = document.querySelectorAll('.end-game-out-input');
