@@ -18,15 +18,19 @@
 
         /* --- פס התקדמות זמן עליון --- */
         #progressBar {
-            position: absolute; top: 0; left: 0; height: 4px; background: var(--gold);
-            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000;
+            position: absolute;
+            top: 0; left: 0; height: 4px; background: var(--gold);
+            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear;
+            z-index: 1000;
         }
 
         /* --- מסך פתיחה דינמי ומעודכן --- */
         #splashScreen {
-            position: fixed; inset: 0; background: black; z-index: 100000;
+            position: fixed;
+            inset: 0; background: black; z-index: 100000;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
         }
         
         #splashLogo {
@@ -42,9 +46,11 @@
         }
         
         #setupScreen { 
-            position: fixed; inset: 0; background: black; z-index: 9999; 
+            position: fixed;
+            inset: 0; background: black; z-index: 9999; 
             display: flex; justify-content: center; align-items: center; 
-            overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease;
+            overflow-y: auto; padding: 20px 0;
+            transition: opacity 0.5s ease;
         }
         .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; }
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
@@ -76,7 +82,7 @@
             padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* קפסולת הבליינדים - משודרגת לתמיכה בחצים מופרדים בצדדים */
+        /* קפסולת הבליינדים */
         .blind-info { 
             display: flex; align-items: center; justify-content: space-between; gap: 12px; 
             background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -85,9 +91,7 @@
         }
 
         /* חצים לשינוי שלב בליינדים */
-        .blind-arrow-btn {
-            background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;
-        }
+        .blind-arrow-btn { background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .blind-arrow-btn:active { transform: scale(1.3); }
         
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
@@ -116,10 +120,7 @@
             box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
         }
         
-        .poker-table::after {
-            content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif;
-            font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none;
-        }
+        .poker-table::after { content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif; font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none; }
 
         .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none; }
 
@@ -161,18 +162,12 @@
         @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
 
         /* --- עיצוב קונטיינר כפתורים תחתון משודרג --- */
-        .bottom-controls-container {
-            position: absolute; bottom: 25px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 40; direction: rtl;
-        }
+        .bottom-controls-container { position: absolute; bottom: 25px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 40; direction: rtl; }
 
-        .btn-settings {
-            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
+        .btn-settings { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
         .btn-settings:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.15); }
 
-        .btn-timebank {
-            background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4); padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35);
-        }
+        .btn-timebank { background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4); padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35); }
         .btn-timebank:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(255, 59, 48, 0.2); }
 
         @media (max-width: 768px) {
@@ -228,9 +223,7 @@
         <div class="admin-header">
             <div class="blind-info">
                 <button class="blind-arrow-btn" onclick="changeBlindLevel(event, -1)">▼</button>
-                
                 <div id="blindDisplay" style="display: flex; align-items: center; gap: 8px;"></div>
-                
                 <button class="blind-arrow-btn" onclick="changeBlindLevel(event, 1)">▲</button>
             </div>
             <div class="game-clock" id="gameClock">00:00:00</div>
@@ -247,7 +240,7 @@
                     <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
                 </svg>
             </button>
-            <button class="btn-timebank" onclick="addTime(event)">TICKET TIME</button>
+            <button class="btn-timebank" onclick="addTime(event)">TIKCET TIME</button>
         </div>
     </div>
 
@@ -293,7 +286,13 @@
         <span>מסך דולק תמיד תמיד📱</span>
         <div id="wakeLockToggle" class="settings-toggle active" onclick="toggleWakeLockLive()"></div>
     </div>
-   
+
+    <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
+        <span style="text-align: center;">ניהול שחקנים ומשחק משודרג🛠️</span>
+        <button class="btn" style="font-size: 0.9em; padding: 10px; border-color: var(--success); color: var(--success);" onclick="addLatePlayerLive()">➕ הוסף שחקן באיחור</button>
+        <button class="btn" style="font-size: 0.9em; padding: 10px; border-color: var(--danger); color: var(--danger);" onclick="resetGameToSetup()">🔄 איפוס והתחלה מחדש</button>
+    </div>
+    
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
         <span style="text-align: center;">סנכרון נתונים מקומי☁️</span>
         <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
@@ -338,6 +337,7 @@
     let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
     let wakeLock = null;
     let isMuted = false; 
+    let gameSecondsElapsed = 0; // פתרון למניעת האצת השעון
     
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
@@ -430,7 +430,7 @@
         const now = new Date();
         startTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         
-        players = []; totalPot = 0;
+        players = []; totalPot = 0; gameSecondsElapsed = 0;
         selectedFriends.forEach((name, i) => { 
             players.push({ id: i+1, name: name, in: b, joinTime: startTimeStr, leaveTime: 'עדין במשחק', removed: false }); 
             totalPot += b; 
@@ -502,12 +502,12 @@
     });
 
     function startClock() {
-        let sec = 0;
+        if(gameClockId) clearInterval(gameClockId);
         gameClockId = setInterval(() => {
-            sec++;
-            const h = Math.floor(sec/3600).toString().padStart(2,'0');
-            const m = Math.floor((sec%3600)/60).toString().padStart(2,'0');
-            const s = (sec%60).toString().padStart(2,'0');
+            gameSecondsElapsed++;
+            const h = Math.floor(gameSecondsElapsed/3600).toString().padStart(2,'0');
+            const m = Math.floor((gameSecondsElapsed%3600)/60).toString().padStart(2,'0');
+            const s = (gameSecondsElapsed%60).toString().padStart(2,'0');
             document.getElementById('gameClock').innerText = `${h}:${m}:${s}`;
         }, 1000);
     }
@@ -599,12 +599,14 @@
         if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; } 
         render(); closeRebuy(); updateUI(); 
     };
+
     document.getElementById('removeBtn').onclick = () => { 
         const now = new Date();
         players[selIdx].leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         players[selIdx].removed = true;
         render(); closeRebuy(); updateUI(); 
     };
+
     function openSettings(e) {
         e.stopPropagation();
         document.getElementById('liveRoundTimeInput').value = defaultRoundTime;
@@ -643,6 +645,70 @@
             wlToggle.classList.add('active');
             await requestWakeLock();
         }
+    }
+
+    /* פונקציית הוספת שחקן באיחור */
+    function addLatePlayerLive() {
+        const name = prompt("הכנס את שם השחקן שהגיע באיחור:");
+        if (!name || name.trim() === "") return;
+        
+        const currentBuyin = +document.getElementById('initialBuyin').value || 50;
+        const now = new Date();
+        const joinTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        
+        // יצירת אובייקט שחקן חדש והוספתו למשחק הקיים
+        const newId = players.length + 1;
+        players.push({
+            id: newId,
+            name: name.trim(),
+            in: currentBuyin,
+            joinTime: joinTimeStr,
+            leaveTime: 'עדין במשחק',
+            removed: false
+        });
+        
+        totalPot += currentBuyin; // עדכון סך הקופה
+        render();
+        updateUI();
+        alert(`השחקן ${name.trim()} הוסף בהצלחה עם כניסה של ${currentBuyin}!`);
+    }
+
+    /* פונקציית איפוס וחזרה למסך הראשי */
+    function resetGameToSetup() {
+        if (!confirm("האם אתה בטוח שברצונך לאפס את כל המשחק הנוכחי ולחזור למסך הגדרת השחקנים?")) return;
+        
+        // עצירת כל הטיימרים
+        clearInterval(timerId);
+        clearInterval(gameClockId);
+        isActionRunning = false;
+        timerId = null;
+        gameClockId = null;
+        gameSecondsElapsed = 0;
+        
+        // איפוס משתנים
+        players = [];
+        totalPot = 0;
+        currentLevelIdx = 0;
+        currentPage = 0;
+        selectedFriends = [];
+        
+        // איפוס ממשק השעון
+        document.getElementById('gameClock').innerText = "00:00:00";
+        
+        // ניקוי בחירת השחקנים מהתצוגה
+        document.getElementById('activeCountDisplay').innerText = "0";
+        buildFriendsGrid();
+        
+        // עדכון מצב הסליידר
+        updatePageSlider();
+        
+        // החזרת מסך ה-Setup
+        document.getElementById('slider').style.display = 'none';
+        const setupScreen = document.getElementById('setupScreen');
+        setupScreen.style.display = 'flex';
+        setupScreen.style.opacity = '1';
+        
+        closeSettings();
     }
 
     function openEndGame(e) {
