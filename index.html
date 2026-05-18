@@ -140,9 +140,13 @@
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
         /* --- עיצוב שולחן פרימיום --- */
-        .poker-table { 
+        .table-container {
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
-            width: 75vw; height: 42vh; border: 15px solid #222; border-radius: 160px;
+            width: 75vw; height: 42vh;
+        }
+
+        .poker-table { 
+            position: absolute; inset: 0; border: 15px solid #222; border-radius: 160px;
             background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); 
             box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
         }
@@ -156,7 +160,8 @@
 
         .player-seat { 
             position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px;
+            transform: translate(-50%, -50%); /* ממקם את מרכז העיגול בדיוק על הנקודה */
             box-shadow: 0 6px 15px rgba(0,0,0,0.6), 0 0 10px rgba(255,204,0,0.15); z-index: 50; transition: all 0.3s ease;
         }
         .player-seat.in-game { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.35), inset 0 0 8px rgba(255,254,0,0.1); }
@@ -201,9 +206,9 @@
             #splashLogo { width: 220px; height: 220px; } 
             .setup-card, #rebuyModal, #endGameModal, #settingsModal { width: 90%; padding: 20px; }
             .setup-card input, .modal-input { width: 95%; }
-            .poker-table { width: 90vw; height: 42vh; border-width: 8px; }
+            .table-container { width: 90vw; height: 42vh; }
             .poker-table::after { font-size: 8vw; }
-            .player-seat { width: 62px; height: 62px; font-size: 11px; }
+            .player-seat { width: 66px; height: 66px; font-size: 11px; }
             .player-seat span:last-child { font-size: 1.1em !important; }
             .time-val { font-size: 25vw; }
             .game-clock { font-size: 4.5vw; padding: 6px 14px; }
@@ -264,7 +269,7 @@
         <div class="bottom-controls-container">
             <button class="btn-settings" onclick="openSettings(event)" title="הגדרות">
                 <svg viewBox="0 0 24 24" style="fill: var(--gold); width: 24px; height: 24px;">
-                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
                 </svg>
             </button>
             <button class="btn-timebank" onclick="addTime(event)">TICKET TIME</button>
@@ -272,9 +277,11 @@
     </div>
 
     <div class="page" id="tablePage">
-        <div class="poker-table" id="seatsContainer">
-            <div class="table-inner-line"></div>
-        </div>
+        <div class="table-container" id="tableWrapper">
+            <div class="poker-table">
+                <div class="table-inner-line"></div>
+            </div>
+            </div>
         <div class="total-pot-container">
             <p style="color:#666; margin:0; font-weight: bold; letter-spacing: 1px;">TOTAL BANK</p>
             <h2 id="potDisplay">0</h2>
@@ -331,7 +338,6 @@
 </div>
 
 <script>
-    // לוגיקת סנכרון ו-LocalStorage
     function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
     function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
     function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
@@ -353,7 +359,7 @@
     let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
     let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = ''; 
     let wakeLock = null, isMuted = false;
-    let gameElapsedTime = 0; // מונה שניות מצטבר למשחק כולו
+    let gameElapsedTime = 0;
 
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
@@ -529,9 +535,7 @@
         }, 1000);
     }
 
-    // --- לוגיקת הלחיצות והאינטראקציה החדשה של הטיימר ---
     document.getElementById('timerPage').addEventListener('click', (e) => {
-        // מניעת הפעלה אם לחצו על כפתורי ההגדרות או ה-Timebank
         if(e.target.closest('.bottom-controls-container') || e.target.closest('.admin-header')) return;
         
         const now = Date.now();
@@ -539,10 +543,8 @@
         lastTap = now;
 
         if (delta < 280 && delta > 0) {
-            // לחיצה כפולה - איפוס מיידי לזמן המקורי
             handleDoubleTap();
         } else {
-            // לחיצה בודדת רגילה - השהיה קלה כדי לוודא שזו לא לחיצה כפולה
             setTimeout(() => {
                 if (Date.now() - lastTap >= 280) {
                     handleSingleTap();
@@ -553,16 +555,14 @@
 
     function handleSingleTap() {
         if (isActionRunning) {
-            // אם הטיימר רץ -> עונדים ומעממים אותו
             isActionRunning = false;
             if(timerId) { clearInterval(timerId); timerId = null; }
             document.querySelectorAll('.time-val').forEach(v => v.classList.add('paused-dim'));
-            playBeep(329.63, 0.2); // צליל עצירה
+            playBeep(329.63, 0.2);
         } else {
-            // אם הטיימר עצור -> מפעילים או ממשיכים מאיפה שעצר
             isActionRunning = true;
             document.querySelectorAll('.time-val').forEach(v => v.classList.remove('paused-dim'));
-            playBeep(440, 0.1); // צליל הפעלה
+            playBeep(440, 0.1);
             
             if(timerId) clearInterval(timerId);
             timerId = setInterval(() => {
@@ -581,13 +581,12 @@
     }
 
     function handleDoubleTap() {
-        // איפוס מלא לזמן המוגדר מההתחלה
         isActionRunning = false;
         if(timerId) { clearInterval(timerId); timerId = null; }
         timeLeft = defaultRoundTime;
         updateVisualTimer();
         document.querySelectorAll('.time-val').forEach(v => v.classList.remove('paused-dim'));
-        playBeep(523.25, 0.15); // צליל איפוס
+        playBeep(523.25, 0.15);
     }
 
     function addTime(e) {
@@ -597,21 +596,16 @@
         playBeep(659.25, 0.1);
     }
 
-    // --- מערכת החלקה (Swipe Gestures) טבעית ומתוקנת ---
     window.addEventListener('touchstart', (e) => { 
         startX = e.touches[0].clientX; 
     }, {passive: true});
 
     window.addEventListener('touchend', (e) => {
-        if(players.length === 0) return; // המשחק עוד לא התחיל
+        if(players.length === 0) return;
         const deltaX = e.changedTouches[0].clientX - startX;
-        
-        // החלקה ימינה (האצבע נעה ימינה -> מעבר לעמוד 0, טיימר)
         if (deltaX > 60 && currentPage === 1) { 
             switchPage(0); 
-        } 
-        // החלקה שמאלה (האצבע נעה שמאלה -> מעבר לעמוד 1, שולחן)
-        else if (deltaX < -60 && currentPage === 0) { 
+        } else if (deltaX < -60 && currentPage === 0) { 
             switchPage(1); 
         }
     }, {passive: true});
@@ -619,37 +613,36 @@
     function switchPage(idx) {
         currentPage = idx;
         const slider = document.getElementById('slider');
-        
-        // תיקון הזזת הסליידר לפי סוג הדפדפנים והחזרת מסך השולחן לפוקוס
         slider.style.transform = `translateX(${-idx * 100}vw)`;
-        
         document.getElementById('dot0').classList.toggle('active', idx === 0);
         document.getElementById('dot1').classList.toggle('active', idx === 1);
     }
 
-    // הגדרות ומודאלים
     function openSettings(e) { if(e) e.stopPropagation(); document.getElementById('settingsModal').style.display = 'block'; }
     function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
 
-    // ניהול מושבים ושחקנים בשולחן
+    // --- מערכת פריסת המושבים המשופרת מסביב לשולחן ---
     function renderSeats() {
-        const container = document.getElementById('seatsContainer');
+        const container = document.getElementById('tableWrapper');
         if(!container) return;
         
-        // ניקוי אלמנטים ישנים פרט לקו הפנימי
-        const innerLine = container.querySelector('.table-inner-line');
-        container.innerHTML = '';
-        if(innerLine) container.appendChild(innerLine);
+        // הסרת כיסאות קודמים כדי לא ליצור כפילויות
+        document.querySelectorAll('.player-seat').forEach(el => el.remove());
 
         const count = players.length;
         document.getElementById('potDisplay').innerText = totalPot;
 
+        // רדיוסים מוגדלים כדי לפרוס את הכיסאות בחוץ מסביב למסגרת האליפטית
+        const rx = 48; // רדיוס אופקי באחוזים מתוך הראפר
+        const ry = 24; // רדיוס אנכי באחוזים מתוך הראפר
+
         players.forEach((p, idx) => {
-            // חישוב מיקום מעגלי על השולחן
+            // זווית לכל שחקן (התחלה מלמעלה במינוס 90 מעלות)
             const angle = (idx / count) * 2 * Math.PI - Math.PI / 2;
-            const rx = 36, ry = 18; // רדיוסים תואמים לאליפסת השולחן
+            
+            // נקודת האמצע היא 50% רוחב ו-50% גובה של השולחן
             const left = 50 + rx * Math.cos(angle);
-            const top = 45 + ry * Math.sin(angle);
+            const top = 50 + ry * Math.sin(angle);
 
             const seat = document.createElement('div');
             seat.className = `player-seat ${p.active ? 'in-game' : 'seat-removed'}`;
@@ -681,7 +674,6 @@
 
     function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
 
-    // שינוי שם שחקן, הוספת Rebuy או שינוי סטטוס אקטיביות
     document.getElementById('confirmBtn').onclick = () => {
         if(selIdx === -1) return;
         const p = players[selIdx];
