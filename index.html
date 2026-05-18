@@ -72,8 +72,8 @@
         /* קפסולת השעון */
         .game-clock { 
             font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
-            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 8px 22px;
-            border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
         /* קפסולת הבליינדים - משודרגת לתמיכה בחצים מופרדים בצדדים */
@@ -85,7 +85,9 @@
         }
 
         /* חצים לשינוי שלב בליינדים */
-        .blind-arrow-btn { background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+        .blind-arrow-btn {
+            background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;
+        }
         .blind-arrow-btn:active { transform: scale(1.3); }
         
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
@@ -114,7 +116,11 @@
             box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
         }
         
-        .poker-table::after { content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif; font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none; }
+        .poker-table::after {
+            content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif;
+            font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none;
+        }
+
         .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none; }
 
         .player-seat { 
@@ -155,27 +161,19 @@
         @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
 
         /* --- עיצוב קונטיינר כפתורים תחתון משודרג --- */
-        .bottom-controls-container { position: absolute; bottom: 25px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 40; direction: rtl; }
+        .bottom-controls-container {
+            position: absolute; bottom: 25px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 40; direction: rtl;
+        }
 
         .btn-settings {
-            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex;
-            justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
         .btn-settings:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.15); }
 
         .btn-timebank {
-            background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4);
-            padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35);
+            background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4); padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 20px rgba(255, 59, 48, 0.35);
         }
         .btn-timebank:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(255, 59, 48, 0.2); }
-
-        /* כפתור איפוס אדום פרימיום */
-        .btn-danger-reset {
-            background: linear-gradient(135deg, #ff3b30, #bc1e1e) !important; color: white !important;
-            border: 1px solid rgba(255, 61, 0, 0.4) !important; box-shadow: 0 4px 15px rgba(255, 59, 48, 0.3) !important;
-            font-weight: bold; transition: all 0.2s ease;
-        }
-        .btn-danger-reset:active { transform: scale(0.95); box-shadow: 0 2px 8px rgba(255, 59, 48, 0.15); }
 
         @media (max-width: 768px) {
             #splashLogo { width: 220px; height: 220px; } 
@@ -230,7 +228,9 @@
         <div class="admin-header">
             <div class="blind-info">
                 <button class="blind-arrow-btn" onclick="changeBlindLevel(event, -1)">▼</button>
+                
                 <div id="blindDisplay" style="display: flex; align-items: center; gap: 8px;"></div>
+                
                 <button class="blind-arrow-btn" onclick="changeBlindLevel(event, 1)">▲</button>
             </div>
             <div class="game-clock" id="gameClock">00:00:00</div>
@@ -295,18 +295,11 @@
     </div>
    
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
-        <span style="text-align: center;">הוספת שחקן לשולחן (באיחור) 🏃‍♂️</span>
-        <button class="btn" style="font-size: 0.9em; padding: 8px; color: var(--gold); border-color: var(--gold);" onclick="addLatePlayer()">+ הוסף שחקן חדש</button>
-    </div>
-    
-    <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
         <span style="text-align: center;">סנכרון נתונים מקומי☁️</span>
         <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
     </div>
     
-    <button class="btn" style="width:100%; margin-top: 10px; margin-bottom: 10px;" onclick="closeSettings()">סגור</button>
-    
-    <button class="btn btn-danger-reset" style="width:100%;" onclick="resetToSetup()">איפוס וחזרה למסך הפתיחה 🔄</button>
+    <button class="btn" style="width:100%; margin-top: 10px;" onclick="closeSettings()">סגור</button>
 </div>
 
 <div id="endGameModal">
@@ -323,98 +316,413 @@
 </div>
 
 <script>
-function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
-function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
-function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
+    function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
+    function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
+    function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
 
-const splash = document.getElementById('splashScreen');
-function deactivateSplash() {
-    if (splash && splash.style.display !== 'none') {
-        splash.style.opacity = '0';
-        setTimeout(() => { splash.style.display = 'none'; }, 800);
-    }
-    try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
-}
-setTimeout(deactivateSplash, 3000);
-
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
-const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
-let selectedFriends = [];
-let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
-let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
-let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
-let wakeLock = null;
-let isMuted = false;
-
-const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
-const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
-
-window.addEventListener('load', () => { runLocalStorageSyncCheck(); });
-
-function runLocalStorageSyncCheck(isManual = false) {
-    const pendingData = safeGetLocal();
-    if (pendingData) {
-        if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו עקב בעיית אינטרנט. האם לנסות לשלוח אותם עכשיו?')) {
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                cache: 'no-cache',
-                headers: { 'Content-Type': 'application/json' },
-                body: pendingData
-            })
-            .then(() => { alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
-            .catch(err => { alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.'); });
+    const splash = document.getElementById('splashScreen');
+    function deactivateSplash() {
+        if (splash && splash.style.display !== 'none') {
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.display = 'none'; }, 800);
         }
-    } else if (isManual) {
-        alert('כל הנתונים מסונכרנים! אין מידע שממתין לשליחה מקומית.');
+        try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
     }
-}
+    setTimeout(deactivateSplash, 3000);
 
-async function requestWakeLock() {
-    try {
-        if ('wakeLock' in navigator) {
-            wakeLock = await navigator.wakeLock.request('screen');
-            wakeLock.addEventListener('release', () => {});
-        }
-    } catch (err) {}
-}
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
+    const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
+    let selectedFriends = [];
+    let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
+    let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
+    let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
+    let wakeLock = null;
+    let isMuted = false; 
+    
+    const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
+    const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
 
-document.addEventListener('visibilitychange', async () => {
-    const wlToggle = document.getElementById('wakeLockToggle');
-    if (wakeLock !== null && document.visibilityState === 'visible' && wlToggle && wlToggle.classList.contains('active')) {
-        await requestWakeLock();
-    }
-});
-
-function buildFriendsGrid() {
-    const grid = document.getElementById('friendsGrid');
-    if(!grid) return;
-    grid.innerHTML = '';
-    fixedFriends.forEach(name => {
-        const el = document.createElement('div');
-        el.className = 'friend-circle';
-        el.innerHTML = `<span>${name}</span><div class="v-badge">&#10003;</div>`;
-        el.onclick = () => toggleFriend(name, el);
-        grid.appendChild(el);
+    window.addEventListener('load', () => {
+        runLocalStorageSyncCheck();
     });
-}
 
-function toggleFriend(name, el) {
-    if(selectedFriends.includes(name)) {
-        selectedFriends = selectedFriends.filter(f => f !== name);
-        el.classList.remove('selected');
-    } else {
-        selectedFriends.push(name);
-        el.classList.add('selected');
+    function runLocalStorageSyncCheck(isManual = false) {
+        const pendingData = safeGetLocal();
+        if (pendingData) {
+            if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו עקב בעיית אינטרנט. האם לנסות לשלוח אותם עכשיו?')) {
+                fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: pendingData
+                })
+                .then(() => { alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
+                .catch(err => { alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.'); });
+            }
+        } else if (isManual) {
+            alert('כל הנתונים מסונכרנים! אין מידע שממתין לשליחה מקומית.');
+        }
     }
-    document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
-}
-buildFriendsGrid();
 
-function playSound(f, d, type = 'sine') {
-    if (isMuted) return;
-    try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-        osc.type = type; osc
+    async function requestWakeLock() {
+        try { 
+            if ('wakeLock' in navigator) { 
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => {});
+            } 
+        } catch (err) {}
+    }
+
+    document.addEventListener('visibilitychange', async () => {
+        const wlToggle = document.getElementById('wakeLockToggle');
+        if (wakeLock !== null && document.visibilityState === 'visible' && wlToggle && wlToggle.classList.contains('active')) { 
+            await requestWakeLock(); 
+        }
+    });
+
+    function buildFriendsGrid() {
+        const grid = document.getElementById('friendsGrid');
+        if(!grid) return;
+        grid.innerHTML = '';
+        fixedFriends.forEach(name => {
+            const el = document.createElement('div');
+            el.className = 'friend-circle';
+            el.innerHTML = `<span>${name}</span><div class="v-badge">&#10003;</div>`;
+            el.onclick = () => toggleFriend(name, el);
+            grid.appendChild(el);
+        });
+    }
+
+    function toggleFriend(name, el) {
+        if(selectedFriends.includes(name)) {
+            selectedFriends = selectedFriends.filter(f => f !== name);
+            el.classList.remove('selected');
+        } else {
+            selectedFriends.push(name);
+            el.classList.add('selected');
+        }
+        document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
+    }
+    buildFriendsGrid();
+
+    function playSound(f, d, type = 'sine') {
+        if (isMuted) return;
+        try {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = type; o.connect(g); g.connect(audioCtx.destination);
+            o.frequency.value = f;
+            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            o.start(); o.stop(audioCtx.currentTime + d);
+        } catch(e) {}
+    }
+
+    function startGame() {
+        if(selectedFriends.length === 0) { alert("חובה לבחור שחקן אחד לפחות!"); return; }
+        requestWakeLock();
+        try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
+        const b = +document.getElementById('initialBuyin').value;
+        defaultRoundTime = +document.getElementById('roundTimeInput').value || 30;
+        timeLeft = defaultRoundTime;
+        
+        const now = new Date();
+        startTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        
+        players = []; totalPot = 0;
+        selectedFriends.forEach((name, i) => { 
+            players.push({ id: i+1, name: name, in: b, joinTime: startTimeStr, leaveTime: 'עדין במשחק', removed: false }); 
+            totalPot += b; 
+        });
+        const setupScreen = document.getElementById('setupScreen');
+        document.getElementById('slider').style.display = 'flex';
+        setupScreen.style.opacity = '0';
+        setTimeout(() => { setupScreen.style.display = 'none'; }, 500);
+
+        render(); updateUI();
+    }
+
+    document.addEventListener('touchstart', e => {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        startX = e.touches[0].clientX;
+    }, {passive: true});
+
+    document.addEventListener('touchend', e => {
+        const splashScreenObj = document.getElementById('splashScreen');
+        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
+        const diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 60) {
+            currentPage = diff > 0 ? 1 : 0;
+            updatePageSlider();
+        }
+    });
+
+    function updatePageSlider() {
+        document.getElementById('slider').style.transform = `translateX(-${currentPage * 100}vw)`;
+        document.getElementById('dot0').classList.toggle('active', currentPage === 0);
+        document.getElementById('dot1').classList.toggle('active', currentPage === 1);
+    }
+
+    document.getElementById('dot0').onclick = () => { currentPage = 0; updatePageSlider(); };
+    document.getElementById('dot1').onclick = () => { currentPage = 1; updatePageSlider(); };
+
+    document.body.addEventListener('pointerdown', e => {
+        const splashScreenObj = document.getElementById('splashScreen');
+        if(currentPage === 1 || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
+        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.page-dots') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank')) return;
+        
+        if(!gameClockId) startClock();
+        const now = Date.now();
+        
+        if(now - lastTap < 300) { 
+            clearInterval(timerId); isActionRunning = false; timeLeft = defaultRoundTime; 
+        } else {
+            if(isActionRunning) { 
+                clearInterval(timerId); isActionRunning = false; 
+            } else {
+                if(timeLeft === 0) timeLeft = defaultRoundTime;
+                isActionRunning = true;
+                timerId = setInterval(() => {
+                    if(timeLeft > 0) {
+                        timeLeft--;
+                        if(timeLeft === 10) playSound(523, 0.1, 'sine');
+                        if(timeLeft <= 5 && timeLeft > 0) playSound(659, 0.05, 'sine');
+                        if(timeLeft === 0) playSound(330, 0.7, 'triangle');
+                    } else {
+                        clearInterval(timerId);
+                        isActionRunning = false;
+                    }
+                    updateUI();
+                }, 1000);
+            }
+        }
+        lastTap = now;
+        updateUI();
+    });
+
+    function startClock() {
+        let sec = 0;
+        gameClockId = setInterval(() => {
+            sec++;
+            const h = Math.floor(sec/3600).toString().padStart(2,'0');
+            const m = Math.floor((sec%3600)/60).toString().padStart(2,'0');
+            const s = (sec%60).toString().padStart(2,'0');
+            document.getElementById('gameClock').innerText = `${h}:${m}:${s}`;
+        }, 1000);
+    }
+
+    function render() {
+        const container = document.getElementById('seatsContainer');
+        const line = container.querySelector('.table-inner-line');
+        container.innerHTML = '';
+        if(line) container.appendChild(line);
+        else {
+            const newLine = document.createElement('div');
+            newLine.className = 'table-inner-line';
+            container.appendChild(newLine);
+        }
+        
+        const activePlayers = players.filter(p => !p.removed);
+        activePlayers.forEach((p, i) => {
+            const angle = (i / activePlayers.length) * Math.PI * 2 + Math.PI/2;
+            const x = 50 + 46 * Math.cos(angle), y = 50 + 46 * Math.sin(angle);
+            const seat = document.createElement('div');
+            seat.className = p.removed ? 'player-seat seat-removed' : 'player-seat in-game';
+            seat.style.left = x+'%'; seat.style.top = y+'%';
+            const displayName = p.name ? p.name : `#${p.id}`;
+            seat.innerHTML = `<span style="opacity:0.9; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px;">${displayName}</span><span style="color:var(--gold); font-weight:bold; font-size:1.2em;">${p.in}</span>`;
+            
+            const origIdx = players.indexOf(p);
+            seat.onclick = (e) => { e.stopPropagation(); openRebuy(origIdx); };
+            container.appendChild(seat);
+        });
+        
+        const lvl = levels[currentLevelIdx];
+        document.getElementById('blindDisplay').innerHTML = `<div class="chip-icon" style="background:${chipColors[lvl.s]||'#444'}">${lvl.s}</div><span style="color:#555; font-weight:bold">/</span><div class="chip-icon" style="background:${chipColors[lvl.b]||'#222'}">${lvl.b}</div>`;
+    }
+
+    function updateUI() {
+        document.getElementById('potDisplay').innerText = totalPot;
+        document.querySelectorAll('.timer').forEach(el => {
+            const valEl = el.querySelector('.time-val');
+            valEl.innerText = timeLeft;
+            el.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
+            
+            if (isActionRunning || timeLeft === defaultRoundTime) el.classList.add('ready-active');
+            else el.classList.add('paused-dim');
+            
+            if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
+            if (timeLeft === 0) el.classList.add('zero-blink');
+        });
+        const percent = (timeLeft / defaultRoundTime) * 100;
+        const progressEl = document.getElementById('progressBar');
+        if (progressEl) {
+            progressEl.style.width = percent + '%';
+            if (timeLeft <= 5) {
+                progressEl.style.background = 'var(--danger)';
+                progressEl.style.boxShadow = '0 0 10px var(--danger)';
+            } else {
+                progressEl.style.background = 'var(--gold)';
+                progressEl.style.boxShadow = '0 0 10px var(--gold)';
+            }
+        }
+    }
+
+    function addTime(e) { 
+        e.stopPropagation();
+        timeLeft += defaultRoundTime; 
+        updateUI(); 
+    }
+    
+    function changeBlindLevel(e, direction) {
+        e.stopPropagation();
+        let newIndex = currentLevelIdx + direction;
+        if(newIndex >= 0 && newIndex < levels.length) {
+            currentLevelIdx = newIndex;
+            render();
+        }
+    }
+    
+    function openRebuy(i) { 
+        selIdx = i;
+        document.getElementById('rebuyTitle').innerText = players[i].name; 
+        document.getElementById('playerNameInput').value = players[i].name; 
+        document.getElementById('rebuyAmount').value = 50; 
+        document.getElementById('rebuyModal').style.display = 'block';
+    }
+    function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
+    
+    document.getElementById('confirmBtn').onclick = () => { 
+        players[selIdx].name = document.getElementById('playerNameInput').value;
+        const addAmount = +document.getElementById('rebuyAmount').value; 
+        if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; } 
+        render(); closeRebuy(); updateUI(); 
+    };
+    document.getElementById('removeBtn').onclick = () => { 
+        const now = new Date();
+        players[selIdx].leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        players[selIdx].removed = true;
+        render(); closeRebuy(); updateUI(); 
+    };
+    function openSettings(e) {
+        e.stopPropagation();
+        document.getElementById('liveRoundTimeInput').value = defaultRoundTime;
+        document.getElementById('settingsModal').style.display = 'block';
+    }
+    
+    function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
+    function toggleMute() { isMuted = !isMuted; document.getElementById('muteToggle').classList.toggle('active', isMuted); }
+    
+    function updateLiveRoundTime(val) {
+        const parsed = parseInt(val);
+        if(parsed > 0) {
+            defaultRoundTime = parsed;
+            if(!isActionRunning && timeLeft > defaultRoundTime) {
+                timeLeft = defaultRoundTime;
+                updateUI();
+            }
+        }
+    }
+    
+    function forceSyncData() { runLocalStorageSyncCheck(true); }
+    
+    async function toggleWakeLockLive() {
+        const wlToggle = document.getElementById('wakeLockToggle');
+        const isActive = wlToggle.classList.contains('active');
+        
+        if(isActive) {
+            wlToggle.classList.remove('active');
+            if(wakeLock) {
+                try {
+                    await wakeLock.release();
+                    wakeLock = null;
+                } catch(e){}
+            }
+        } else {
+            wlToggle.classList.add('active');
+            await requestWakeLock();
+        }
+    }
+
+    function openEndGame(e) {
+        e.stopPropagation();
+        clearInterval(timerId); isActionRunning = false; updateUI();
+        document.getElementById('endGameTotalBank').innerText = totalPot;
+        const container = document.getElementById('endGamePlayersContainer');
+        container.innerHTML = '';
+        players.forEach((p, i) => {
+            const div = document.createElement('div');
+            div.className = 'end-game-row';
+            div.innerHTML = `
+                <span>${p.name} (השקיע: ${p.in})</span>
+                <input type="number" class="end-game-out-input" data-idx="${i}" value="0" oninput="calculateDistribution()">
+            `;
+            container.appendChild(div);
+        });
+        calculateDistribution();
+        document.getElementById('endGameModal').style.display = 'block';
+    }
+    function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
+
+    function calculateDistribution() {
+        const inputs = document.querySelectorAll('.end-game-out-input');
+        let totalOut = 0;
+        inputs.forEach(input => { totalOut += +input.value || 0; });
+        document.getElementById('endGameDistributed').innerText = totalOut;
+        if(totalOut === totalPot) {
+            document.getElementById('endGameDistributed').style.color = 'var(--success)';
+            document.getElementById('validationMessage').style.display = 'none';
+        } else {
+            document.getElementById('endGameDistributed').style.color = 'var(--danger)';
+        }
+    }
+
+    function submitGameHistory() {
+        const inputs = document.querySelectorAll('.end-game-out-input');
+        let totalOut = 0;
+        inputs.forEach(input => { totalOut += +input.value || 0; });
+        if (totalOut !== totalPot) {
+            document.getElementById('validationMessage').style.display = 'block';
+            return;
+        }
+
+        const gameData = {
+            startTime: startTimeStr,
+            endTime: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}),
+            totalPot: totalPot,
+            players: players.map((p, idx) => {
+                const outVal = +document.querySelector(`.end-game-out-input[data-idx="${idx}"]`).value || 0;
+                return {
+                    name: p.name,
+                    buyin: p.in,
+                    cashout: outVal,
+                    profit: outVal - p.in,
+                    joinTime: p.joinTime,
+                    leaveTime: p.leaveTime
+                };
+            })
+        };
+        const stringified = JSON.stringify(gameData);
+        safeSetLocal(stringified);
+
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            headers: { 'Content-Type': 'application/json' },
+            body: stringified
+        })
+        .then(() => {
+            alert('המשחק הסתיים בהצלחה והדוח נשלח לגוגל שיטס!');
+            safeRemoveLocal();
+            location.reload();
+        })
+        .catch(err => {
+            alert('הנתונים נשמרו מקומית במכשיר עקב בעיית רשת. נסנכרן אוטומטית בהפעלה הבאה.');
+            location.reload();
+        });
+    }
+</script>
+</body>
+</html>
