@@ -299,25 +299,25 @@
 
 <div id="settingsModal">
     <h2 style="color:var(--gold); margin-bottom: 20px;">הגדרות משחק</h2>
-    
-    <div class="settings-row">
-        <span>השתקת צלילים🔇</span>
-        <div id="muteToggle" class="settings-toggle" onclick="toggleMute()"></div>
-    </div>
-    
+
     <div class="settings-row">
         <span>זמן סבב (שניות)⏳</span>
         <input type="number" id="liveRoundTimeInput" oninput="updateLiveRoundTime(this.value)">
     </div>
     
-    <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
-        <span style="text-align: center;">סנכרון נתונים מקומי☁️</span>
-        <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
+    <div class="settings-row">
+        <span>השתקת צלילים🔇</span>
+        <div id="muteToggle" class="settings-toggle" onclick="toggleMute()"></div>
     </div>
-    
+
     <div class="settings-row">
         <span>מסך דולק תמיד תמיד📱</span>
         <div id="wakeLockToggle" class="settings-toggle active" onclick="toggleWakeLockLive()"></div>
+    </div>
+    
+    <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
+        <span style="text-align: center;">סנכרון נתונים מקומי☁️</span>
+        <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
     </div>
     
     <button class="btn" style="width:100%; margin-top: 10px;" onclick="closeSettings()">סגור</button>
