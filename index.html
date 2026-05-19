@@ -16,30 +16,25 @@
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
 
-        /* --- מערכת הודעות פרימיום (Toasts) --- */
         #toastContainer { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 999999; pointer-events: none; }
         .toast { background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--gold); color: white; padding: 14px 28px; border-radius: 40px; font-weight: bold; font-size: 1.1em; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; direction: rtl; text-align: center; }
         @keyframes toastEnter { from { opacity: 0; transform: translateY(-30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes toastExit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-30px) scale(0.9); } }
 
-        /* --- פס התקדמות זמן עליון --- */
         #progressBar { position: absolute; top: 0; left: 0; height: 4px; background: var(--gold); box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000; }
 
-        /* --- מסך פתיחה דינמי --- */
         #splashScreen { position: fixed; inset: 0; background: black; z-index: 100000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
         #splashLogo { width: 280px; height: 280px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; transform: scale(0.85); animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes splashEntrance { 0% { opacity: 0; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1); } }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease; }
         
-        /* --- עיצוב Glassmorphism למודלים וכרטיסיות --- */
         .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal { 
             background: rgba(26, 26, 26, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
             border: 1px solid rgba(255, 204, 0, 0.4); box-shadow: 0 15px 50px rgba(0,0,0,0.8);
             padding: 30px; border-radius: 35px; text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; 
         }
         
-        /* --- שדות קלט פרימיום --- */
         .setup-card input, .modal-input { 
             background: rgba(0, 0, 0, 0.5); border: 1px solid transparent; color: white; padding: 14px; 
             border-radius: 15px; width: 80%; text-align: center; font-size: 1.3em; margin: 8px 0; transition: all 0.3s ease; 
@@ -58,7 +53,6 @@
 
         .admin-header { position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; }
         
-        /* קפסולת השעון עם טקסט זוהר */
         .game-clock { 
             font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
             text-shadow: 0 0 10px rgba(255,204,0,0.5);
@@ -74,7 +68,6 @@
         .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
-        /* מספרים זוהרים לטיימר */
         .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; text-shadow: 0 0 25px rgba(255,255,255,0.4); }
 
         .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
@@ -89,10 +82,9 @@
         @keyframes pulse-warning { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        /* --- עיצוב שולחן מבוסס פרופורציות מושלמות (Aspect Ratio) --- */
         .poker-table { 
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
-            width: 80vw; max-width: 900px; aspect-ratio: 21 / 9; /* שומר על אליפסה מושלמת תמיד */
+            width: 80vw; max-width: 900px; aspect-ratio: 21 / 9; 
             border: 15px solid #222; border-radius: 999px;
             background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); 
             box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
@@ -101,7 +93,6 @@
         .poker-table::after { content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif; font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none; }
         .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 999px; pointer-events: none; }
 
-        /* --- מושבי שחקנים משודרגים --- */
         .player-seat { 
             position: absolute; width: 95px; height: 95px; background: #151515; border-radius: 50%; 
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -111,7 +102,6 @@
         .player-seat.in-game { border-color: var(--gold); box-shadow: inset 0 -4px 10px rgba(0,0,0,0.9), 0 0 20px rgba(255, 204, 0, 0.3); }
         .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed; }
         
-        /* אלמנטים פנימיים למושב */
         .seat-name { opacity:0.95; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:75px; font-size: 15px; }
         .seat-divider { width: 65%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 4px 0; opacity: 0.6; }
         .seat-buyin { color:var(--gold); font-weight:900; font-size:18px; text-shadow: 0 0 8px rgba(255, 204, 0, 0.6); }
@@ -119,7 +109,6 @@
         .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white; }
 
         .total-pot-container { text-align: center; margin-top: 78vh; }
-        /* מספר קופה זוהר */
         .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0; font-weight: 700; text-shadow: 0 0 20px rgba(255,204,0,0.5), 0 0 40px rgba(255,204,0,0.2); }
 
         .page-dots { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 100; }
@@ -307,13 +296,12 @@
         <span style="color:#aaa;">קופה כוללת: </span><span id="endGameTotalBank" style="font-weight:900; color:var(--gold); font-size:1.2em; text-shadow:0 0 8px rgba(255,204,0,0.5);">0</span><br>
         <span style="color:#aaa;">סכום שחולק: </span><span id="endGameDistributed" style="font-weight:900; color:white; font-size:1.2em;">0</span>
     </div>
-    <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none; text-shadow:0 0 5px rgba(255,59,48,0.5);">הסכום שחולק אינו תואם לקופה!</div>
+    <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none; text-shadow:0 0 5px rgba(255,59,48,0.5);">הסכום שחולק אינו תואם לקופה! המשחק לא יישמר באקסל עד לתיקון.</div>
     <button class="btn" id="finishAndSendBtn" style="width:100%; color:var(--success); border-color:var(--success); margin-bottom: 12px; background:rgba(52,199,89,0.1);" onclick="submitGameHistory()">הפק דוח וסיים משחק</button>
     <button class="btn" id="cancelEndGameBtn" style="width:100%;" onclick="closeEndGame()">חזור למשחק</button>
 </div>
 
 <script>
-    // --- מערכת Toasts במקום Alerts ---
     function showToast(msg, isError = false) {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
@@ -345,7 +333,9 @@
     }
     setTimeout(deactivateSplash, 3000);
 
+    // הקישור המעודכן שלך לגוגל סקריפט:
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
+    
     const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
     let selectedFriends = [];
     let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
@@ -367,16 +357,13 @@
         if (pendingData) {
             if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו. לנסות לשלוח אותם עכשיו?')) {
                 fetch(WEB_APP_URL, {
-            method: 'POST',
-            mode: 'no-cors', // שומרים על זה כדי למנוע שגיאות אדומות בקונסול
-            headers: { 
-                // השינוי הקריטי: מעבר מ-json ל-text
-                'Content-Type': 'text/plain;charset=utf-8' 
-            },
-            body: stringified
-        })
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: pendingData
+                })
                 .then(() => { showToast('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
-                .catch(err => { showToast('בעיית רשת: נשמר מקומית.', true); });
+                .catch(err => { showToast('בעיית רשת: עדיין לא ניתן לסנכרן.', true); });
             }
         } else if (isManual) {
             showToast('כל הנתונים מסונכרנים! אין מידע ממתין.');
@@ -551,7 +538,6 @@
             seat.style.left = x+'%'; seat.style.top = y+'%';
             
             const displayName = p.name ? p.name : `#${p.id}`;
-            // שינוי מבנה המושב כדי לכלול מפריד זהוב
             seat.innerHTML = `<span class="seat-name">${displayName}</span><div class="seat-divider"></div><span class="seat-buyin">${p.in}</span>`;
             
             const origIdx = players.indexOf(p);
@@ -660,7 +646,6 @@
         }
     }
 
-    /* פונקציות להוספת שחקן מאחר בעזרת מודל */
     function openAddPlayerModal() {
         closeSettings();
         document.getElementById('newPlayerNameInput').value = '';
@@ -694,7 +679,6 @@
         showToast(`השחקן ${name.trim()} הוסף עם ${currentBuyin}!`);
     }
 
-    /* פונקציית איפוס */
     function resetGameToSetup() {
         if (!confirm("האם אתה בטוח שברצונך לאפס את כל המשחק הנוכחי ולחזור למסך ההגדרות?")) return;
         clearInterval(timerId); clearInterval(gameClockId);
@@ -740,6 +724,7 @@
         inputs.forEach(input => { totalOut += +input.value || 0; });
         document.getElementById('endGameDistributed').innerText = totalOut;
 
+        // וידוא שהחלוקה תואמת לחלוטין לקופה
         if(totalOut === totalPot) {
             document.getElementById('endGameDistributed').style.color = 'var(--success)';
             document.getElementById('endGameDistributed').style.textShadow = '0 0 10px rgba(52,199,89,0.5)';
@@ -754,13 +739,15 @@
         const inputs = document.querySelectorAll('.end-game-out-input');
         let totalOut = 0;
         inputs.forEach(input => { totalOut += +input.value || 0; });
+        
+        // עצירה אם החלוקה לא תואמת במדויק לקופה הכללית (למניעת טעויות באקסל)
         if (totalOut !== totalPot) {
             document.getElementById('validationMessage').style.display = 'block';
             return;
         }
 
         const submitBtn = document.getElementById('finishAndSendBtn');
-        submitBtn.innerText = "...מסנכרן נתונים לאקסל⏳"; 
+        submitBtn.innerText = "⏳ מסנכרן נתונים לאקסל..."; 
         submitBtn.style.opacity = "0.5"; 
         submitBtn.style.pointerEvents = "none"; 
 
@@ -777,22 +764,20 @@
         const stringified = JSON.stringify(gameData);
         safeSetLocal(stringified);
 
-fetch(WEB_APP_URL, {
+        // שליחה עם text/plain שמונעת מגוגל לחסום את הנתונים
+        fetch(WEB_APP_URL, {
             method: 'POST',
-            mode: 'no-cors', // שומרים על זה כדי למנוע שגיאות אדומות בקונסול
-            headers: { 
-                // השינוי הקריטי: מעבר מ-json ל-text
-                'Content-Type': 'text/plain;charset=utf-8' 
-            },
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
             body: stringified
         })
         .then(() => {
-            showToast('המשחק הסתיים והנתונים נשמרו!');
+            showToast('המשחק הסתיים והנתונים נשמרו בהצלחה לאקסל!');
             safeRemoveLocal();
-            setTimeout(() => location.reload(), 3000); // ממתין כדי שההודעה תספיק להופיע
+            setTimeout(() => location.reload(), 2500); 
         })
         .catch(err => {
-            showToast('בעיית רשת: הנתונים נשמרו מקומית במכשיר.', true);
+            showToast('בעיית רשת: הנתונים נשמרו במכשיר, ויסונכרנו בהמשך.', true);
             setTimeout(() => location.reload(), 3000);
         });
     }
