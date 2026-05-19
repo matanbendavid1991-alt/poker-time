@@ -734,7 +734,7 @@
         }
     }
 
-    function submitGameHistory() {
+function submitGameHistory() {
         const inputs = document.querySelectorAll('.end-game-out-input');
         let totalOut = 0;
         inputs.forEach(input => { totalOut += +input.value || 0; });
@@ -749,7 +749,7 @@
         submitBtn.style.opacity = "0.5"; 
         submitBtn.style.pointerEvents = "none"; 
 
-        // קביעת שעת סיום כללית למשחק כרגע
+        // קביעת שעת סיום כללית למשחק ברגע הלחיצה
         const endOfGameTime = new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
 
         const gameData = {
@@ -758,7 +758,8 @@
             players: players.map((p, idx) => {
                 const outVal = +document.querySelector(`.end-game-out-input[data-idx="${idx}"]`).value || 0;
                 
-                // בדיקה חכמה: אם השחקן לא הוסר באמצע המשחק, תן לו את שעת הסיום הכללית
+                // לוגיקה חדשה: אם השחקן הוסר - השאר את זמן היציאה המקורי שלו. 
+                // אם הוא לא הוסר (עדיין במשחק) - תן לו את זמן סיום המשחק הכללי.
                 const finalLeaveTime = p.removed ? p.leaveTime : endOfGameTime;
                 
                 return { 
@@ -782,7 +783,7 @@
             body: stringified
         })
         .then(() => {
-            showToast('המשחק הסתיים והנתונים נשמרו בהצלחה לאקסל!');
+            showToast('המשחק הסתיים והנתונים נשמרו בהצלחה!');
             safeRemoveLocal();
             setTimeout(() => location.reload(), 2500); 
         })
