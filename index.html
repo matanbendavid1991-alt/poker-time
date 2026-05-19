@@ -16,74 +16,57 @@
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
 
+        /* --- מערכת הודעות פרימיום (Toasts) --- */
+        #toastContainer { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 999999; pointer-events: none; }
+        .toast { background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--gold); color: white; padding: 14px 28px; border-radius: 40px; font-weight: bold; font-size: 1.1em; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; direction: rtl; text-align: center; }
+        @keyframes toastEnter { from { opacity: 0; transform: translateY(-30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes toastExit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-30px) scale(0.9); } }
+
         /* --- פס התקדמות זמן עליון --- */
-        #progressBar {
-            position: absolute; top: 0; left: 0; height: 4px; background: var(--gold);
-            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000;
-        }
+        #progressBar { position: absolute; top: 0; left: 0; height: 4px; background: var(--gold); box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000; }
 
-        /* --- מסך פתיחה דינמי ומעודכן --- */
-        #splashScreen {
-            position: fixed; inset: 0; background: black; z-index: 100000;
-            display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
+        /* --- מסך פתיחה דינמי --- */
+        #splashScreen { position: fixed; inset: 0; background: black; z-index: 100000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
+        #splashLogo { width: 280px; height: 280px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; transform: scale(0.85); animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes splashEntrance { 0% { opacity: 0; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1); } }
+        
+        #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease; }
+        
+        /* --- עיצוב Glassmorphism למודלים וכרטיסיות --- */
+        .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal { 
+            background: rgba(26, 26, 26, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 204, 0, 0.4); box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+            padding: 30px; border-radius: 35px; text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; 
         }
         
-        #splashLogo {
-            width: 280px; height: 280px;
-            background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center;
-            opacity: 0; transform: scale(0.85); animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        /* --- שדות קלט פרימיום --- */
+        .setup-card input, .modal-input { 
+            background: rgba(0, 0, 0, 0.5); border: 1px solid transparent; color: white; padding: 14px; 
+            border-radius: 15px; width: 80%; text-align: center; font-size: 1.3em; margin: 8px 0; transition: all 0.3s ease; 
         }
-
-        @keyframes splashEntrance {
-            0% { opacity: 0; transform: scale(0.85); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-        
-        #setupScreen { 
-            position: fixed; inset: 0; background: black; z-index: 9999; 
-            display: flex; justify-content: center; align-items: center; 
-            overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease;
-        }
-        .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; }
-        .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
-        .setup-card .num-input { width: 80px; font-size: 1.8em; }
+        .setup-card input:focus, .modal-input:focus { border: 1px solid var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.3); outline: none; }
+        .setup-card .num-input { width: 85px; font-size: 1.8em; }
         
         .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; max-height: 35vh; overflow-y: auto; padding: 10px; }
-        .friend-circle { 
-            aspect-ratio: 1; background: #262626; border: 2px solid #444; border-radius: 50%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            font-weight: bold; font-size: 1.1em; color: #ccc; cursor: pointer; position: relative; transition: all 0.2s ease;
-        }
-        .friend-circle.selected { border-color: var(--gold); background: #332a00; color: white; box-shadow: 0 0 15px rgba(255, 204, 0, 0.3); }
+        .friend-circle { aspect-ratio: 1; background: #262626; border: 2px solid #444; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; font-weight: bold; font-size: 1.1em; color: #ccc; cursor: pointer; position: relative; transition: all 0.2s ease; }
+        .friend-circle.selected { border-color: var(--gold); background: rgba(51, 42, 0, 0.8); color: white; box-shadow: 0 0 15px rgba(255, 204, 0, 0.4); }
         .friend-circle .v-badge { position: absolute; top: -2px; right: -2px; background: var(--gold); color: black; width: 22px; height: 22px; border-radius: 50%; font-size: 0.8em; display: flex; justify-content: center; align-items: center; display: none; }
         .friend-circle.selected .v-badge { display: flex; }
 
         .slider-wrapper { display: flex; width: 200vw; height: 100vh; transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); display: none; }
         .page { width: 100vw; height: 100vh; position: relative; overflow: hidden; flex-shrink: 0; }
 
-        /* --- קפסולות עצמאיות ללא מסגרת רוחבית מפריעה --- */
-        .admin-header { 
-            position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; 
-            background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: none;
-        }
+        .admin-header { position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; }
         
-        /* קפסולת השעון */
+        /* קפסולת השעון עם טקסט זוהר */
         .game-clock { 
             font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
+            text-shadow: 0 0 10px rgba(255,204,0,0.5);
             background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
             padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
-        /* קפסולת הבליינדים */
-        .blind-info { 
-            display: flex; align-items: center; justify-content: space-between; gap: 12px; 
-            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 6px 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            min-width: 140px;
-        }
-
-        /* חצים לשינוי שלב בליינדים */
+        .blind-info { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 6px 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4); min-width: 140px; }
         .blind-arrow-btn { background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .blind-arrow-btn:active { transform: scale(1.3); }
         
@@ -91,7 +74,8 @@
         .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
-        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
+        /* מספרים זוהרים לטיימר */
+        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; text-shadow: 0 0 25px rgba(255,255,255,0.4); }
 
         .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
         .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
@@ -101,63 +85,72 @@
         .ready-active { opacity: 1 !important; }
         .paused-dim { opacity: 0.3 !important; } 
 
-        .warning .time-val { color: var(--danger); animation: pulse-warning 1s infinite; }
+        .warning .time-val { color: var(--danger); text-shadow: 0 0 30px rgba(255,59,48,0.7); animation: pulse-warning 1s infinite; }
         @keyframes pulse-warning { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        /* --- עיצוב שולחן כחול רויאל פרימיום --- */
+        /* --- עיצוב שולחן מבוסס פרופורציות מושלמות (Aspect Ratio) --- */
         .poker-table { 
             position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
-            width: 75vw; height: 42vh; border: 15px solid #222; border-radius: 160px;
+            width: 80vw; max-width: 900px; aspect-ratio: 21 / 9; /* שומר על אליפסה מושלמת תמיד */
+            border: 15px solid #222; border-radius: 999px;
             background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); 
             box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
         }
         
         .poker-table::after { content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif; font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none; }
+        .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 999px; pointer-events: none; }
 
-        .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 145px; pointer-events: none; }
-
+        /* --- מושבי שחקנים משודרגים --- */
         .player-seat { 
-            position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; 
+            position: absolute; width: 95px; height: 95px; background: #151515; border-radius: 50%; 
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-size: 15px; transform: translate(-50%, -50%); 
-            box-shadow: 0 6px 15px rgba(0,0,0,0.6), 0 0 10px rgba(255,204,0,0.15); z-index: 50; transition: all 0.3s ease;
+            transform: translate(-50%, -50%); z-index: 50; transition: all 0.3s ease;
+            box-shadow: inset 0 -4px 10px rgba(0,0,0,0.9), 0 8px 15px rgba(0,0,0,0.7); border: 2px solid #333;
         }
-        .player-seat.in-game { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.35), inset 0 0 8px rgba(255,254,0,0.1); }
+        .player-seat.in-game { border-color: var(--gold); box-shadow: inset 0 -4px 10px rgba(0,0,0,0.9), 0 0 20px rgba(255, 204, 0, 0.3); }
         .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed; }
+        
+        /* אלמנטים פנימיים למושב */
+        .seat-name { opacity:0.95; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:75px; font-size: 15px; }
+        .seat-divider { width: 65%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 4px 0; opacity: 0.6; }
+        .seat-buyin { color:var(--gold); font-weight:900; font-size:18px; text-shadow: 0 0 8px rgba(255, 204, 0, 0.6); }
 
         .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white; }
 
         .total-pot-container { text-align: center; margin-top: 78vh; }
-        .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0; font-weight: 700; }
+        /* מספר קופה זוהר */
+        .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0; font-weight: 700; text-shadow: 0 0 20px rgba(255,204,0,0.5), 0 0 40px rgba(255,204,0,0.2); }
 
         .page-dots { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 100; }
-        .dot { width: 10px; height: 10px; background: #333; border-radius: 50%; transition: 0.3s; cursor: pointer; }
-        .dot.active { background: var(--gold); width: 30px; border-radius: 10px; }
+        .dot { width: 10px; height: 10px; background: #444; border-radius: 50%; transition: 0.3s; cursor: pointer; }
+        .dot.active { background: var(--gold); width: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(255,204,0,0.5); }
 
         .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
-        .btn { background: #1a1a1a; border: 1px solid #444; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; cursor: pointer; }
+        .btn { background: rgba(0,0,0,0.6); border: 1px solid #555; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; cursor: pointer; transition: all 0.2s ease; }
+        .btn:hover { background: rgba(30,30,30,0.8); }
+        .btn:active { transform: scale(0.96); }
 
-        #rebuyModal, #endGameModal, #settingsModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1a1a; padding: 30px; border-radius: 30px; border: 3px solid var(--gold); z-index: 10000; text-align: center; width: 360px; max-height: 85vh; overflow-y: auto; }
-        .modal-input { width: 90%; padding: 18px; margin-bottom: 15px; background: #333; color: white; border: none; text-align: center; font-size: 1.6em; border-radius: 15px; font-weight: bold; }
+        #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; }
         
-        .settings-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #222; padding: 12px 15px; border-radius: 12px; direction: rtl; }
+        .settings-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 15px; direction: rtl; border: 1px solid rgba(255,255,255,0.05); }
         .settings-row span { font-weight: bold; font-size: 1em; color: white; }
-        .settings-row input[type="number"] { width: 80px; background: #444; border: none; color: white; padding: 6px; text-align: center; border-radius: 8px; font-size: 1.1em; }
+        .settings-row input[type="number"] { width: 80px; background: rgba(0,0,0,0.6); border: 1px solid transparent; color: white; padding: 8px; text-align: center; border-radius: 10px; font-size: 1.1em; transition: 0.3s; }
+        .settings-row input[type="number"]:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 10px rgba(255,204,0,0.3); }
+        
         .settings-toggle { width: 50px; height: 26px; background: #444; border-radius: 15px; position: relative; cursor: pointer; transition: background 0.3s; }
-        .settings-toggle.active { background: var(--success); }
+        .settings-toggle.active { background: var(--success); box-shadow: 0 0 10px rgba(52, 199, 89, 0.4); }
         .settings-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: white; top: 2px; left: 2px; transition: transform 0.3s; }
         .settings-toggle.active::after { transform: translateX(24px); }
 
-        .end-game-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 12px; }
+        .end-game-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .end-game-row span { font-weight: bold; font-size: 1.1em; color: var(--gold); }
-        .end-game-row input { width: 100px; background: #444; border: none; color: white; padding: 8px; text-align: center; border-radius: 8px; font-size: 1.1em; }
+        .end-game-row input { width: 100px; background: rgba(0,0,0,0.6); border: 1px solid transparent; color: white; padding: 8px; text-align: center; border-radius: 10px; font-size: 1.1em; transition: 0.3s; }
+        .end-game-row input:focus { border-color: var(--gold); outline:none; }
 
         @keyframes pulseZero { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.3); } }
 
-        /* --- עיצוב קונטיינר כפתורים תחתון משודרג --- */
         .bottom-controls-container { position: absolute; bottom: 25px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 40; direction: rtl; }
-
         .btn-settings { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 52px; height: 52px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
         .btn-settings:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.15); }
 
@@ -166,12 +159,13 @@
 
         @media (max-width: 768px) {
             #splashLogo { width: 220px; height: 220px; } 
-            .setup-card, #rebuyModal, #endGameModal, #settingsModal { width: 90%; padding: 20px; }
+            .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal { width: 90%; padding: 25px 20px; }
             .setup-card input, .modal-input { width: 95%; }
-            .poker-table { width: 90vw; height: 55vh; border-width: 8px; }
-            .poker-table::after { font-size: 8vw; }
-            .player-seat { width: 62px; height: 62px; font-size: 11px; }
-            .player-seat span:last-child { font-size: 1.1em !important; }
+            .poker-table { width: 92vw; aspect-ratio: 1.8 / 1; border-width: 10px; }
+            .poker-table::after { font-size: 7vw; }
+            .player-seat { width: 70px; height: 70px; }
+            .seat-name { font-size: 12px; max-width: 55px; }
+            .seat-buyin { font-size: 14px; }
             .time-val { font-size: 25vw; }
             .game-clock { font-size: 4.5vw; padding: 6px 14px; }
             .blind-info { padding: 4px 12px; gap: 4px; }
@@ -188,6 +182,7 @@
 </head>
 <body>
 
+<div id="toastContainer"></div>
 <div id="progressBar"></div>
 
 <div id="splashScreen">
@@ -196,19 +191,19 @@
 
 <div id="setupScreen">
     <div class="setup-card">
-        <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom:10px;">פווקר 2025</h1>
+        <h1 style="color:var(--gold); font-size: 2.5em; margin-bottom:10px; text-shadow: 0 0 15px rgba(255,204,0,0.4);">פווקר 2025</h1>
         <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:10px; direction: rtl;">
             <div><p style="font-size: 0.8em; margin: 5px 0;">זמן (ש')</p><input type="number" id="roundTimeInput" class="num-input" value="30"></div>
             <div><p style="font-size: 0.8em; margin: 5px 0;">כניסה</p><input type="number" id="initialBuyin" class="num-input" value="50"></div>
-            <div><p style="font-size: 0.8em; margin: 5px 0;">נבחרו</p><div id="activeCountDisplay" style="font-size: 1.8em; font-weight: bold; color: var(--gold); margin-top:10px;">0</div></div>
+            <div><p style="font-size: 0.8em; margin: 5px 0;">נבחרו</p><div id="activeCountDisplay" style="font-size: 1.8em; font-weight: bold; color: var(--gold); margin-top:10px; text-shadow: 0 0 10px rgba(255,204,0,0.5);">0</div></div>
         </div>
-        <hr style="border:0; border-top:1px solid #333; margin-bottom: 10px;">
-        <p style="color:#aaa; font-size:0.9em; margin: 0 0 10px 0;">:בחר שחקנים לערב זה</p>
+        <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+        <p style="color:#bbb; font-size:0.9em; margin: 0 0 10px 0;">:בחר שחקנים לערב זה</p>
         
         <div class="friends-grid" id="friendsGrid"></div>
         
         <br>
-        <button class="btn" style="color:var(--gold); width:100%; font-size: 1.4em;" onclick="startGame()">צאו לדרך</button>
+        <button class="btn" style="color:var(--gold); width:100%; font-size: 1.4em; border-color: var(--gold); background: rgba(255,204,0,0.1);" onclick="startGame()">צאו לדרך</button>
     </div>
 </div>
 
@@ -243,11 +238,11 @@
             <div class="table-inner-line"></div>
         </div>
         <div class="total-pot-container">
-            <p style="color:#666; margin:0; font-weight: bold; letter-spacing: 1px;">TOTAL BANK</p>
+            <p style="color:#aaa; margin:0; font-weight: bold; letter-spacing: 2px;">TOTAL BANK</p>
             <h2 id="potDisplay">0</h2>
         </div>
         <div class="controls">
-            <button class="btn" onclick="openEndGame(event)" style="border-color: var(--danger); color: var(--danger);">FINISH GAME</button>
+            <button class="btn" onclick="openEndGame(event)" style="border-color: var(--danger); color: var(--danger); background: rgba(255,59,48,0.1);">FINISH GAME</button>
         </div>
     </div>
 </div>
@@ -255,16 +250,25 @@
 <div class="page-dots"><div class="dot active" id="dot0"></div><div class="dot" id="dot1"></div></div>
 
 <div id="rebuyModal">
-    <h2 id="rebuyTitle" style="color:var(--gold); margin-bottom: 20px;">עדכון שחקן</h2>
+    <h2 id="rebuyTitle" style="color:var(--gold); margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,204,0,0.4);">עדכון שחקן</h2>
     <input type="text" id="playerNameInput" class="modal-input" placeholder="הכנס שם...">
     <input type="number" id="rebuyAmount" class="modal-input" value="50">
-    <button class="btn" style="width:100%; color:var(--gold); margin-bottom: 10px; font-size: 1.3em;" id="confirmBtn">שמור עדכון</button>
-    <button class="btn" style="width:100%; color:var(--danger); margin-bottom: 10px;" id="removeBtn">הסר מהשולחן</button>
+    <button class="btn" style="width:100%; color:var(--gold); border-color:var(--gold); margin-bottom: 12px; font-size: 1.2em; background:rgba(255,204,0,0.1);" id="confirmBtn">שמור עדכון</button>
+    <button class="btn" style="width:100%; color:var(--danger); border-color:var(--danger); margin-bottom: 12px; background:rgba(255,59,48,0.1);" id="removeBtn">הסר מהשולחן</button>
     <button class="btn" style="width:100%;" onclick="closeRebuy()">ביטול</button>
 </div>
 
+<div id="addPlayerModal">
+    <h2 style="color:var(--success); margin-bottom: 20px; text-shadow: 0 0 10px rgba(52,199,89,0.4);">הוספת שחקן מאחר</h2>
+    <input type="text" id="newPlayerNameInput" class="modal-input" placeholder="שם השחקן...">
+    <div style="display:flex; gap:12px; margin-top: 10px;">
+        <button class="btn" style="flex:1; color:var(--success); border-color:var(--success); background:rgba(52,199,89,0.1);" onclick="confirmAddLatePlayer()">הוסף</button>
+        <button class="btn" style="flex:1;" onclick="document.getElementById('addPlayerModal').style.display='none'">ביטול</button>
+    </div>
+</div>
+
 <div id="settingsModal">
-    <h2 style="color:var(--gold); margin-bottom: 20px;">הגדרות משחק</h2>
+    <h2 style="color:var(--gold); margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,204,0,0.4);">הגדרות משחק</h2>
 
     <div class="settings-row">
         <span>⏳זמן סבב (שניות)</span>
@@ -282,33 +286,51 @@
     </div>
 
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
-        <span style="text-align: center;">📱ניהול שחקנים ומשחק משודרג</span>
-        <button class="btn" style="font-size: 0.9em; padding: 10px; border-color: var(--success); color: var(--success);" onclick="addLatePlayerLive()">➕ הוסף שחקן</button>
-        <button class="btn" style="font-size: 0.9em; padding: 10px; border-color: var(--danger); color: var(--danger);" onclick="resetGameToSetup()">🔄 איפוס והתחלה מחדש</button>
+        <span style="text-align: center;">📱ניהול משחק</span>
+        <button class="btn" style="font-size: 0.9em; padding: 12px; border-color: var(--success); color: var(--success); background:rgba(52,199,89,0.1);" onclick="openAddPlayerModal()">➕ הוסף שחקן</button>
+        <button class="btn" style="font-size: 0.9em; padding: 12px; border-color: var(--danger); color: var(--danger); background:rgba(255,59,48,0.1);" onclick="resetGameToSetup()">🔄 איפוס והתחלה מחדש</button>
     </div>
     
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
         <span style="text-align: center;">☁️ סנכרון נתונים מקומי</span>
-        <button class="btn" style="font-size: 0.9em; padding: 8px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
+        <button class="btn" style="font-size: 0.9em; padding: 10px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
     </div>
     
     <button class="btn" style="width:100%; margin-top: 10px;" onclick="closeSettings()">סגור</button>
 </div>
 
 <div id="endGameModal">
-    <h2 style="color:var(--gold); margin-bottom: 10px;">סיכום וחלוקת כספים</h2>
+    <h2 style="color:var(--gold); margin-bottom: 10px; text-shadow: 0 0 10px rgba(255,204,0,0.4);">סיכום וחלוקת כספים</h2>
     <p style="color:#aaa; font-size:0.9em; margin-bottom:20px;">הזן כמה כסף/צ'יפים כל שחקן קיבל בסיום</p>
     <div id="endGamePlayersContainer"></div>
-    <div style="margin: 20px 0; padding: 10px; background:#222; border-radius:10px;">
-        <span style="color:#aaa;">קופה כוללת: </span><span id="endGameTotalBank" style="font-weight:bold; color:var(--gold);">0</span><br>
-        <span style="color:#aaa;">סכום שחולק: </span><span id="endGameDistributed" style="font-weight:bold; color:white;">0</span>
+    <div style="margin: 20px 0; padding: 15px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:15px;">
+        <span style="color:#aaa;">קופה כוללת: </span><span id="endGameTotalBank" style="font-weight:900; color:var(--gold); font-size:1.2em; text-shadow:0 0 8px rgba(255,204,0,0.5);">0</span><br>
+        <span style="color:#aaa;">סכום שחולק: </span><span id="endGameDistributed" style="font-weight:900; color:white; font-size:1.2em;">0</span>
     </div>
-    <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none;">הסכום שחולק אינו תואם לקופה!</div>
-    <button class="btn" id="finishAndSendBtn" style="width:100%; color:var(--success); border-color:var(--success); margin-bottom: 10px;" onclick="submitGameHistory()">הפק דוח וסיים משחק</button>
+    <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none; text-shadow:0 0 5px rgba(255,59,48,0.5);">הסכום שחולק אינו תואם לקופה!</div>
+    <button class="btn" id="finishAndSendBtn" style="width:100%; color:var(--success); border-color:var(--success); margin-bottom: 12px; background:rgba(52,199,89,0.1);" onclick="submitGameHistory()">הפק דוח וסיים משחק</button>
     <button class="btn" id="cancelEndGameBtn" style="width:100%;" onclick="closeEndGame()">חזור למשחק</button>
 </div>
 
 <script>
+    // --- מערכת Toasts במקום Alerts ---
+    function showToast(msg, isError = false) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        if(isError) {
+            toast.style.borderColor = 'var(--danger)';
+            toast.style.boxShadow = '0 10px 30px rgba(255,59,48,0.3)';
+        }
+        toast.innerText = msg;
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'toastExit 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    }
+
     function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
     function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
     function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
@@ -331,7 +353,7 @@
     let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
     let wakeLock = null;
     let isMuted = false; 
-    let gameSecondsElapsed = 0; // פתרון למניעת האצת השעון
+    let gameSecondsElapsed = 0;
     
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
@@ -343,7 +365,7 @@
     function runLocalStorageSyncCheck(isManual = false) {
         const pendingData = safeGetLocal();
         if (pendingData) {
-            if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו עקב בעיית אינטרנט. האם לנסות לשלוח אותם עכשיו?')) {
+            if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו. לנסות לשלוח אותם עכשיו?')) {
                 fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -351,11 +373,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: pendingData
                 })
-                .then(() => { alert('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
-                .catch(err => { alert('עדיין אין חיבור יציב לאינטרנט. המידע שמור וננסה שוב בפעם הבאה.'); });
+                .then(() => { showToast('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
+                .catch(err => { showToast('בעיית רשת: נשמר מקומית.', true); });
             }
         } else if (isManual) {
-            alert('כל הנתונים מסונכרנים! אין מידע שממתין לשליחה מקומית.');
+            showToast('כל הנתונים מסונכרנים! אין מידע ממתין.');
         }
     }
 
@@ -414,7 +436,7 @@
     }
 
     function startGame() {
-        if(selectedFriends.length === 0) { alert("חובה לבחור שחקן אחד לפחות!"); return; }
+        if(selectedFriends.length === 0) { showToast("חובה לבחור שחקן אחד לפחות!", true); return; }
         requestWakeLock();
         try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
         const b = +document.getElementById('initialBuyin').value;
@@ -445,7 +467,7 @@
 
     document.addEventListener('touchend', e => {
         const splashScreenObj = document.getElementById('splashScreen');
-        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
+        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 60) {
             currentPage = diff > 0 ? 1 : 0;
@@ -465,7 +487,7 @@
     document.body.addEventListener('pointerdown', e => {
         const splashScreenObj = document.getElementById('splashScreen');
         if(currentPage === 1 || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
-        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.page-dots') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank')) return;
+        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.page-dots') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank')) return;
         
         if(!gameClockId) startClock();
         const now = Date.now();
@@ -525,8 +547,10 @@
             const seat = document.createElement('div');
             seat.className = p.removed ? 'player-seat seat-removed' : 'player-seat in-game';
             seat.style.left = x+'%'; seat.style.top = y+'%';
+            
             const displayName = p.name ? p.name : `#${p.id}`;
-            seat.innerHTML = `<span style="opacity:0.9; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px;">${displayName}</span><span style="color:var(--gold); font-weight:bold; font-size:1.2em;">${p.in}</span>`;
+            // שינוי מבנה המושב כדי לכלול מפריד זהוב
+            seat.innerHTML = `<span class="seat-name">${displayName}</span><div class="seat-divider"></div><span class="seat-buyin">${p.in}</span>`;
             
             const origIdx = players.indexOf(p);
             seat.onclick = (e) => { e.stopPropagation(); openRebuy(origIdx); };
@@ -534,7 +558,7 @@
         });
         
         const lvl = levels[currentLevelIdx];
-        document.getElementById('blindDisplay').innerHTML = `<div class="chip-icon" style="background:${chipColors[lvl.s]||'#444'}">${lvl.s}</div><span style="color:#555; font-weight:bold">/</span><div class="chip-icon" style="background:${chipColors[lvl.b]||'#222'}">${lvl.b}</div>`;
+        document.getElementById('blindDisplay').innerHTML = `<div class="chip-icon" style="background:${chipColors[lvl.s]||'#444'}">${lvl.s}</div><span style="color:#bbb; font-weight:bold; font-size:1.2em; text-shadow:0 0 5px rgba(255,255,255,0.4);">/</span><div class="chip-icon" style="background:${chipColors[lvl.b]||'#222'}">${lvl.b}</div>`;
     }
 
     function updateUI() {
@@ -565,11 +589,7 @@
         }
     }
 
-    function addTime(e) { 
-        e.stopPropagation();
-        timeLeft += defaultRoundTime; 
-        updateUI(); 
-    }
+    function addTime(e) { e.stopPropagation(); timeLeft += defaultRoundTime; updateUI(); }
     
     function changeBlindLevel(e, direction) {
         e.stopPropagation();
@@ -631,28 +651,31 @@
         
         if(isActive) {
             wlToggle.classList.remove('active');
-            if(wakeLock) {
-                try {
-                    await wakeLock.release();
-                    wakeLock = null;
-                } catch(e){}
-            }
+            if(wakeLock) { try { await wakeLock.release(); wakeLock = null; } catch(e){} }
         } else {
             wlToggle.classList.add('active');
             await requestWakeLock();
         }
     }
 
-    /* פונקציית הוספת שחקן באיחור */
-    function addLatePlayerLive() {
-        const name = prompt("הכנס את שם השחקן שהגיע באיחור:");
-        if (!name || name.trim() === "") return;
+    /* פונקציות להוספת שחקן מאחר בעזרת מודל */
+    function openAddPlayerModal() {
+        closeSettings();
+        document.getElementById('newPlayerNameInput').value = '';
+        document.getElementById('addPlayerModal').style.display = 'block';
+    }
+
+    function confirmAddLatePlayer() {
+        const name = document.getElementById('newPlayerNameInput').value;
+        if (!name || name.trim() === "") {
+            showToast("נא להזין שם שחקן", true);
+            return;
+        }
         
         const currentBuyin = +document.getElementById('initialBuyin').value || 50;
         const now = new Date();
         const joinTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         
-        // יצירת אובייקט שחקן חדש והוספתו למשחק הקיים
         const newId = players.length + 1;
         players.push({
             id: newId,
@@ -662,43 +685,28 @@
             leaveTime: 'עדין במשחק',
             removed: false
         });
-        totalPot += currentBuyin; // עדכון סך הקופה
-        render();
-        updateUI();
-        alert(`השחקן ${name.trim()} הוסף בהצלחה עם כניסה של ${currentBuyin}!`);
+        
+        totalPot += currentBuyin;
+        document.getElementById('addPlayerModal').style.display = 'none';
+        render(); updateUI();
+        showToast(`השחקן ${name.trim()} הוסף עם ${currentBuyin}!`);
     }
 
-    /* פונקציית איפוס וחזרה למסך הראשי */
+    /* פונקציית איפוס */
     function resetGameToSetup() {
-        if (!confirm("האם אתה בטוח שברצונך לאפס את כל המשחק הנוכחי ולחזור למסך הגדרת השחקנים?")) return;
-        // עצירת כל הטיימרים
-        clearInterval(timerId);
-        clearInterval(gameClockId);
-        isActionRunning = false;
-        timerId = null;
-        gameClockId = null;
-        gameSecondsElapsed = 0;
+        if (!confirm("האם אתה בטוח שברצונך לאפס את כל המשחק הנוכחי ולחזור למסך ההגדרות?")) return;
+        clearInterval(timerId); clearInterval(gameClockId);
+        isActionRunning = false; timerId = null; gameClockId = null; gameSecondsElapsed = 0;
         
-        // איפוס משתנים
-        players = [];
-        totalPot = 0;
-        currentLevelIdx = 0;
-        currentPage = 0;
-        selectedFriends = [];
+        players = []; totalPot = 0; currentLevelIdx = 0; currentPage = 0; selectedFriends = [];
 
-        // איפוס ממשק השעון
         document.getElementById('gameClock').innerText = "00:00:00";
-        // ניקוי בחירת השחקנים מהתצוגה
         document.getElementById('activeCountDisplay').innerText = "0";
-        buildFriendsGrid();
-        // עדכון מצב הסליידר
-        updatePageSlider();
+        buildFriendsGrid(); updatePageSlider();
         
-        // החזרת מסך ה-Setup
         document.getElementById('slider').style.display = 'none';
         const setupScreen = document.getElementById('setupScreen');
-        setupScreen.style.display = 'flex';
-        setupScreen.style.opacity = '1';
+        setupScreen.style.display = 'flex'; setupScreen.style.opacity = '1';
         
         closeSettings();
     }
@@ -732,9 +740,11 @@
 
         if(totalOut === totalPot) {
             document.getElementById('endGameDistributed').style.color = 'var(--success)';
+            document.getElementById('endGameDistributed').style.textShadow = '0 0 10px rgba(52,199,89,0.5)';
             document.getElementById('validationMessage').style.display = 'none';
         } else {
             document.getElementById('endGameDistributed').style.color = 'var(--danger)';
+            document.getElementById('endGameDistributed').style.textShadow = 'none';
         }
     }
 
@@ -747,12 +757,10 @@
             return;
         }
 
-        // --- התחלת חיווי ויזואלי לשליחה ---
         const submitBtn = document.getElementById('finishAndSendBtn');
-        submitBtn.innerText = "...מסנכרן נתונים לאקסל⏳"; 
+        submitBtn.innerText = "⏳ מסנכרן נתונים לאקסל..."; 
         submitBtn.style.opacity = "0.5"; 
         submitBtn.style.pointerEvents = "none"; 
-        // ----------------------------------
 
         const gameData = {
             startTime: startTimeStr,
@@ -760,14 +768,7 @@
             totalPot: totalPot,
             players: players.map((p, idx) => {
                 const outVal = +document.querySelector(`.end-game-out-input[data-idx="${idx}"]`).value || 0;
-                return {
-                    name: p.name,
-                    buyin: p.in,
-                    cashout: outVal,
-                    profit: outVal - p.in,
-                    joinTime: p.joinTime,
-                    leaveTime: p.leaveTime
-                };
+                return { name: p.name, buyin: p.in, cashout: outVal, profit: outVal - p.in, joinTime: p.joinTime, leaveTime: p.leaveTime };
             })
         };
         
@@ -782,13 +783,13 @@
             body: stringified
         })
         .then(() => {
-            alert('המשחק הסתיים בהצלחה והנתונים נשמרו בדוח האקסל!');
+            showToast('המשחק הסתיים והנתונים נשמרו!');
             safeRemoveLocal();
-            location.reload();
+            setTimeout(() => location.reload(), 3000); // ממתין כדי שההודעה תספיק להופיע
         })
         .catch(err => {
-            alert('בעיית רשת: הנתונים נשמרו מקומית במכשיר ויסונכרנו אוטומטית בהפעלה הבאה.');
-            location.reload();
+            showToast('בעיית רשת: הנתונים נשמרו מקומית במכשיר.', true);
+            setTimeout(() => location.reload(), 3000);
         });
     }
 </script>
