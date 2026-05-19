@@ -18,26 +18,21 @@
 
         /* --- פס התקדמות זמן עליון --- */
         #progressBar {
-            position: absolute;
-            top: 0; left: 0; height: 4px; background: var(--gold);
-            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear;
-            z-index: 1000;
+            position: absolute; top: 0; left: 0; height: 4px; background: var(--gold);
+            box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000;
         }
 
         /* --- מסך פתיחה דינמי ומעודכן --- */
         #splashScreen {
-            position: fixed;
-            inset: 0; background: black; z-index: 100000;
+            position: fixed; inset: 0; background: black; z-index: 100000;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;
         }
         
         #splashLogo {
             width: 280px; height: 280px;
             background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center;
-            opacity: 0; transform: scale(0.85);
-            animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0; transform: scale(0.85); animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes splashEntrance {
@@ -46,11 +41,9 @@
         }
         
         #setupScreen { 
-            position: fixed;
-            inset: 0; background: black; z-index: 9999; 
+            position: fixed; inset: 0; background: black; z-index: 9999; 
             display: flex; justify-content: center; align-items: center; 
-            overflow-y: auto; padding: 20px 0;
-            transition: opacity 0.5s ease;
+            overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease;
         }
         .setup-card { background: #1a1a1a; padding: 30px; border-radius: 30px; border: 2px solid var(--gold); text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; }
         .setup-card input { background: #333; border: none; color: white; padding: 12px; border-radius: 10px; width: 80%; text-align: center; font-size: 1.2em; margin: 8px 0; }
@@ -126,7 +119,8 @@
 
         .player-seat { 
             position: absolute; width: 90px; height: 90px; background: #151515; border: 2px solid #333; border-radius: 50%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 15px; transform: translate(-50%, -50%); 
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-size: 15px; transform: translate(-50%, -50%); 
             box-shadow: 0 6px 15px rgba(0,0,0,0.6), 0 0 10px rgba(255,204,0,0.15); z-index: 50; transition: all 0.3s ease;
         }
         .player-seat.in-game { border-color: var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.35), inset 0 0 8px rgba(255,254,0,0.1); }
@@ -341,7 +335,7 @@
     
     const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
     const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
-
+    
     window.addEventListener('load', () => {
         runLocalStorageSyncCheck();
     });
@@ -435,6 +429,7 @@
             players.push({ id: i+1, name: name, in: b, joinTime: startTimeStr, leaveTime: 'עדין במשחק', removed: false }); 
             totalPot += b; 
         });
+
         const setupScreen = document.getElementById('setupScreen');
         document.getElementById('slider').style.display = 'flex';
         setupScreen.style.opacity = '0';
@@ -555,6 +550,7 @@
             if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
             if (timeLeft === 0) el.classList.add('zero-blink');
         });
+
         const percent = (timeLeft / defaultRoundTime) * 100;
         const progressEl = document.getElementById('progressBar');
         if (progressEl) {
@@ -666,7 +662,6 @@
             leaveTime: 'עדין במשחק',
             removed: false
         });
-        
         totalPot += currentBuyin; // עדכון סך הקופה
         render();
         updateUI();
@@ -676,7 +671,6 @@
     /* פונקציית איפוס וחזרה למסך הראשי */
     function resetGameToSetup() {
         if (!confirm("האם אתה בטוח שברצונך לאפס את כל המשחק הנוכחי ולחזור למסך הגדרת השחקנים?")) return;
-        
         // עצירת כל הטיימרים
         clearInterval(timerId);
         clearInterval(gameClockId);
@@ -691,14 +685,12 @@
         currentLevelIdx = 0;
         currentPage = 0;
         selectedFriends = [];
-        
+
         // איפוס ממשק השעון
         document.getElementById('gameClock').innerText = "00:00:00";
-        
         // ניקוי בחירת השחקנים מהתצוגה
         document.getElementById('activeCountDisplay').innerText = "0";
         buildFriendsGrid();
-        
         // עדכון מצב הסליידר
         updatePageSlider();
         
@@ -729,6 +721,7 @@
         calculateDistribution();
         document.getElementById('endGameModal').style.display = 'block';
     }
+    
     function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
 
     function calculateDistribution() {
@@ -736,6 +729,7 @@
         let totalOut = 0;
         inputs.forEach(input => { totalOut += +input.value || 0; });
         document.getElementById('endGameDistributed').innerText = totalOut;
+
         if(totalOut === totalPot) {
             document.getElementById('endGameDistributed').style.color = 'var(--success)';
             document.getElementById('validationMessage').style.display = 'none';
@@ -753,6 +747,13 @@
             return;
         }
 
+        // --- התחלת חיווי ויזואלי לשליחה ---
+        const submitBtn = document.getElementById('finishAndSendBtn');
+        submitBtn.innerText = "⏳ מסנכרן נתונים לאקסל..."; 
+        submitBtn.style.opacity = "0.5"; 
+        submitBtn.style.pointerEvents = "none"; 
+        // ----------------------------------
+
         const gameData = {
             startTime: startTimeStr,
             endTime: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}),
@@ -769,6 +770,7 @@
                 };
             })
         };
+        
         const stringified = JSON.stringify(gameData);
         safeSetLocal(stringified);
 
@@ -780,12 +782,12 @@
             body: stringified
         })
         .then(() => {
-            alert('המשחק הסתיים בהצלחה והדוח נשלח לגוגל שיטס!');
+            alert('המשחק הסתיים בהצלחה והנתונים נשמרו בדוח האקסל!');
             safeRemoveLocal();
             location.reload();
         })
         .catch(err => {
-            alert('הנתונים נשמרו מקומית במכשיר עקב בעיית רשת. נסנכרן אוטומטית בהפעלה הבאה.');
+            alert('בעיית רשת: הנתונים נשמרו מקומית במכשיר ויסונכרנו אוטומטית בהפעלה הבאה.');
             location.reload();
         });
     }
