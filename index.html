@@ -333,7 +333,6 @@
     }
     setTimeout(deactivateSplash, 3000);
 
-    // הקישור המעודכן שלך לגוגל סקריפט:
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
     
     const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
@@ -606,6 +605,7 @@
 
     document.getElementById('removeBtn').onclick = () => { 
         const now = new Date();
+        // רישום שעת יציאה מדויקת לשחקן שהוסר באמצע המשחק
         players[selIdx].leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         players[selIdx].removed = true;
         render(); closeRebuy(); updateUI(); 
@@ -724,7 +724,6 @@
         inputs.forEach(input => { totalOut += +input.value || 0; });
         document.getElementById('endGameDistributed').innerText = totalOut;
 
-        // וידוא שהחלוקה תואמת לחלוטין לקופה
         if(totalOut === totalPot) {
             document.getElementById('endGameDistributed').style.color = 'var(--success)';
             document.getElementById('endGameDistributed').style.textShadow = '0 0 10px rgba(52,199,89,0.5)';
@@ -740,7 +739,6 @@
         let totalOut = 0;
         inputs.forEach(input => { totalOut += +input.value || 0; });
         
-        // עצירה אם החלוקה לא תואמת במדויק לקופה הכללית (למניעת טעויות באקסל)
         if (totalOut !== totalPot) {
             document.getElementById('validationMessage').style.display = 'block';
             return;
@@ -751,20 +749,32 @@
         submitBtn.style.opacity = "0.5"; 
         submitBtn.style.pointerEvents = "none"; 
 
+        // קביעת שעת סיום כללית למשחק כרגע
+        const endOfGameTime = new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+
         const gameData = {
             startTime: startTimeStr,
-            endTime: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}),
-            totalPot: totalPot,
+            endTime: endOfGameTime,
             players: players.map((p, idx) => {
                 const outVal = +document.querySelector(`.end-game-out-input[data-idx="${idx}"]`).value || 0;
-                return { name: p.name, buyin: p.in, cashout: outVal, profit: outVal - p.in, joinTime: p.joinTime, leaveTime: p.leaveTime };
+                
+                // בדיקה חכמה: אם השחקן לא הוסר באמצע המשחק, תן לו את שעת הסיום הכללית
+                const finalLeaveTime = p.removed ? p.leaveTime : endOfGameTime;
+                
+                return { 
+                    name: p.name, 
+                    buyin: p.in, 
+                    cashout: outVal, 
+                    profit: outVal - p.in, 
+                    joinTime: p.joinTime, 
+                    leaveTime: finalLeaveTime 
+                };
             })
         };
         
         const stringified = JSON.stringify(gameData);
         safeSetLocal(stringified);
 
-        // שליחה עם text/plain שמונעת מגוגל לחסום את הנתונים
         fetch(WEB_APP_URL, {
             method: 'POST',
             mode: 'no-cors',
