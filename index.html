@@ -29,7 +29,7 @@
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease; }
         
-        .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal { 
+        .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal, #aboutModal { 
             background: rgba(26, 26, 26, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
             border: 1px solid rgba(255, 204, 0, 0.4); box-shadow: 0 15px 50px rgba(0,0,0,0.8);
             padding: 30px; border-radius: 35px; text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; 
@@ -120,7 +120,10 @@
         .btn:hover { background: rgba(30,30,30,0.8); }
         .btn:active { transform: scale(0.96); }
 
-        #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; }
+        .btn-info { position: absolute; top: 30px; left: 30px; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4); color: var(--gold); font-size: 1.3em; font-weight: bold; font-family: sans-serif; z-index: 50; }
+        .btn-info:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.15); }
+
+        #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal, #aboutModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; }
         
         .settings-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 15px; direction: rtl; border: 1px solid rgba(255,255,255,0.05); }
         .settings-row span { font-weight: bold; font-size: 1em; color: white; }
@@ -132,7 +135,6 @@
         .settings-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; border-radius: 50%; background: white; top: 2px; left: 2px; transition: transform 0.3s; }
         .settings-toggle.active::after { transform: translateX(24px); }
 
-        /* תוקן: הוספת direction: rtl כדי שהשם יהיה מימין ותבנית המילוי משמאל */
         .end-game-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(0,0,0,0.4); padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); direction: rtl; }
         .end-game-row span { font-weight: bold; font-size: 1.1em; color: var(--gold); }
         .end-game-row input { width: 100px; background: rgba(0,0,0,0.6); border: 1px solid transparent; color: white; padding: 8px; text-align: center; border-radius: 10px; font-size: 1.1em; transition: 0.3s; }
@@ -149,7 +151,7 @@
 
         @media (max-width: 768px) {
             #splashLogo { width: 220px; height: 220px; } 
-            .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal { width: 90%; padding: 25px 20px; }
+            .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal, #aboutModal { width: 90%; padding: 25px 20px; }
             .setup-card input, .modal-input { width: 95%; }
             .poker-table { width: 92vw; aspect-ratio: 1.8 / 1; border-width: 10px; }
             .poker-table::after { font-size: 7vw; }
@@ -167,6 +169,7 @@
             .bottom-controls-container { bottom: 35px; }
             .btn-timebank { padding: 10px 22px; font-size: 13px; }
             .btn-settings { width: 46px; height: 46px; }
+            .btn-info { top: 20px; left: 20px; width: 36px; height: 36px; font-size: 1.1em; }
         }
     </style>
 </head>
@@ -224,6 +227,7 @@
     </div>
 
     <div class="page" id="tablePage">
+        <button class="btn-info" onclick="openAbout(event)" title="אודות">?</button>
         <div class="poker-table" id="seatsContainer">
             <div class="table-inner-line"></div>
         </div>
@@ -300,6 +304,22 @@
     <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none; text-shadow:0 0 5px rgba(255,59,48,0.5);">הסכום שחולק אינו תואם לקופה! המשחק לא יישמר באקסל עד לתיקון.</div>
     <button class="btn" id="finishAndSendBtn" style="width:100%; color:var(--success); border-color:var(--success); margin-bottom: 12px; background:rgba(52,199,89,0.1);" onclick="submitGameHistory()">הפק דוח וסיים משחק</button>
     <button class="btn" id="cancelEndGameBtn" style="width:100%;" onclick="closeEndGame()">חזור למשחק</button>
+</div>
+
+<div id="aboutModal">
+    <h2 style="color:var(--gold); margin-bottom: 15px; text-shadow: 0 0 10px rgba(255,204,0,0.4);">Poker OS Premium</h2>
+    <div style="color:#eee; font-size:1.1em; line-height:1.5; text-align:right; direction:rtl; margin-bottom:20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+        <p style="margin-top:0;">ברוכים הבאים למערכת הניהול הרשמית של <strong>העיגול</strong>.</p>
+        <p>מערכת זו פותחה במיוחד כדי להעניק חוויית פוקר מקצועית, שקופה וחלקה. המערכת מנהלת בזמן אמת את קופת המשחק, עוקבת אחר כניסות (Buy-ins/Rebuys), ומנהלת את זמני הבליינדים באופן אוטומטי.</p>
+        <p>בסיום הערב, אלגוריתם הקיזוזים מבטיח חלוקה מדויקת ואפס טעויות בחישוב הקופה, כולל סנכרון נתונים מאובטח ישירות לענן.</p>
+        <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+        <p style="color:var(--gold); font-weight:bold; margin-bottom:5px;">איך משתמשים?</p>
+        <ul style="padding-right: 20px; margin-bottom: 0;">
+            <li><strong>ניהול זמנים:</strong> לחיצה על שעון הטיימר מפעילה או עוצרת את הזמן.</li>
+            <li><strong>ניהול שחקנים:</strong> לחיצה על מושב של שחקן מאפשרת עדכון כניסה מחדש או הסרה מהמשחק.</li>
+        </ul>
+    </div>
+    <button class="btn" style="width:100%;" onclick="closeAbout()">סגור ומעבר למשחק</button>
 </div>
 
 <script>
@@ -455,7 +475,7 @@
 
     document.addEventListener('touchend', e => {
         const splashScreenObj = document.getElementById('splashScreen');
-        if(e.target.closest('.btn') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
+        if(e.target.closest('.btn') || e.target.closest('.btn-info') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('#aboutModal') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 60) {
             currentPage = diff > 0 ? 1 : 0;
@@ -475,7 +495,7 @@
     document.body.addEventListener('pointerdown', e => {
         const splashScreenObj = document.getElementById('splashScreen');
         if(currentPage === 1 || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
-        if(e.target.closest('.btn') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('.page-dots') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank')) return;
+        if(e.target.closest('.btn') || e.target.closest('.btn-info') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('#aboutModal') || e.target.closest('.page-dots') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank')) return;
         
         if(!gameClockId) startClock();
         const now = Date.now();
@@ -618,6 +638,9 @@
     
     function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
     function toggleMute() { isMuted = !isMuted; document.getElementById('muteToggle').classList.toggle('active', isMuted); }
+
+    function openAbout(e) { e.stopPropagation(); document.getElementById('aboutModal').style.display = 'block'; }
+    function closeAbout() { document.getElementById('aboutModal').style.display = 'none'; }
     
     function updateLiveRoundTime(val) {
         const parsed = parseInt(val);
