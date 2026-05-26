@@ -16,6 +16,19 @@
             height: 100vh; width: 100vw; overflow: hidden; user-select: none;
         }
 
+        /* מניעת השהיית לחיצה וזום בלתי רצוי על אלמנטים אינטראקטיביים בניידים */
+        button, 
+        .btn,
+        .btn-settings,
+        .btn-timebank,
+        .blind-arrow-btn,
+        .friend-circle,
+        .player-seat, 
+        .timer,
+        .settings-toggle {
+            touch-action: manipulation;
+        }
+
         #toastContainer { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 999999; pointer-events: none; }
         .toast { background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--gold); color: white; padding: 14px 28px; border-radius: 40px; font-weight: bold; font-size: 1.1em; box-shadow: 0 10px 30px rgba(0,0,0,0.6); animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; direction: rtl; text-align: center; }
         @keyframes toastEnter { from { opacity: 0; transform: translateY(-30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -31,13 +44,11 @@
         
         .setup-card, #rebuyModal, #endGameModal, #settingsModal, #addPlayerModal, #aboutModal { 
             background: rgba(26, 26, 26, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 204, 0, 0.4); box-shadow: 0 15px 50px rgba(0,0,0,0.8);
-            padding: 30px; border-radius: 35px; text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; 
+            border: 1px solid rgba(255, 204, 0, 0.4); box-shadow: 0 15px 50px rgba(0,0,0,0.8); padding: 30px; border-radius: 35px; text-align: center; width: 400px; max-height: 95vh; overflow-y: auto; 
         }
         
         .setup-card input, .modal-input { 
-            background: rgba(0, 0, 0, 0.5); border: 1px solid transparent; color: white; padding: 14px; 
-            border-radius: 15px; width: 80%; text-align: center; font-size: 1.3em; margin: 8px 0; transition: all 0.3s ease; 
+            background: rgba(0, 0, 0, 0.5); border: 1px solid transparent; color: white; padding: 14px; border-radius: 15px; width: 80%; text-align: center; font-size: 1.3em; margin: 8px 0; transition: all 0.3s ease; 
         }
         .setup-card input:focus, .modal-input:focus { border: 1px solid var(--gold); box-shadow: 0 0 15px rgba(255, 204, 0, 0.3); outline: none; }
         .setup-card .num-input { width: 85px; font-size: 1.8em; }
@@ -54,10 +65,7 @@
         .admin-header { position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; }
         
         .game-clock { 
-            font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; 
-            text-shadow: 0 0 10px rgba(255,204,0,0.5);
-            background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; text-shadow: 0 0 10px rgba(255,204,0,0.5); background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
         .blind-info { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 6px 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4); min-width: 140px; }
@@ -83,21 +91,14 @@
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
         .poker-table { 
-            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
-            width: 80vw; max-width: 900px; aspect-ratio: 21 / 9; 
-            border: 15px solid #222; border-radius: 999px;
-            background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); 
-            box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 80vw; max-width: 900px; aspect-ratio: 21 / 9; border: 15px solid #222; border-radius: 999px; background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center;
         }
         
         .poker-table::after { content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif; font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none; }
         .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 999px; pointer-events: none; }
 
         .player-seat { 
-            position: absolute; width: 95px; height: 95px; background: #151515; border-radius: 50%; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transform: translate(-50%, -50%); z-index: 50; transition: all 0.3s ease;
-            box-shadow: inset 0 -4px 10px rgba(0,0,0,0.9), 0 8px 15px rgba(0,0,0,0.7); border: 2px solid #333;
+            position: absolute; width: 95px; height: 95px; background: #151515; border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; transform: translate(-50%, -50%); z-index: 50; transition: all 0.3s ease; box-shadow: inset 0 -4px 10px rgba(0,0,0,0.9), 0 8px 15px rgba(0,0,0,0.7); border: 2px solid #333;
         }
         .player-seat.in-game { border-color: var(--gold); box-shadow: inset 0 -4px 10px rgba(0,0,0,0.9), 0 0 20px rgba(255, 204, 0, 0.3); }
         .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed; }
@@ -263,33 +264,27 @@
 
 <div id="settingsModal">
     <h2 style="color:var(--gold); margin-bottom: 20px; text-shadow: 0 0 10px rgba(255,204,0,0.4);">הגדרות משחק</h2>
-
     <div class="settings-row">
         <span>⏳זמן סבב (שניות)</span>
         <input type="number" id="liveRoundTimeInput" oninput="updateLiveRoundTime(this.value)">
     </div>
-    
     <div class="settings-row">
         <span>🔇 השתקת צלילים</span>
         <div id="muteToggle" class="settings-toggle" onclick="toggleMute()"></div>
     </div>
-
     <div class="settings-row">
         <span>📱 מסך דולק קבוע</span>
         <div id="wakeLockToggle" class="settings-toggle active" onclick="toggleWakeLockLive()"></div>
     </div>
-
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
         <span style="text-align: center;">📱ניהול משחק</span>
         <button class="btn" style="font-size: 0.9em; padding: 12px; border-color: var(--success); color: var(--success); background:rgba(52,199,89,0.1);" onclick="openAddPlayerModal()">➕ הוסף שחקן</button>
         <button class="btn" style="font-size: 0.9em; padding: 12px; border-color: var(--danger); color: var(--danger); background:rgba(255,59,48,0.1);" onclick="resetGameToSetup()">🔄 איפוס והתחלה מחדש</button>
     </div>
-    
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
         <span style="text-align: center;">☁️ סנכרון נתונים מקומי</span>
         <button class="btn" style="font-size: 0.9em; padding: 10px;" onclick="forceSyncData()">סנכרן כעת לגוגל שיטס</button>
     </div>
-    
     <button class="btn" style="width:100%; margin-top: 10px;" onclick="closeSettings()">סגור</button>
 </div>
 
@@ -310,465 +305,630 @@
     <h2 style="color:var(--gold); margin-bottom: 15px; text-shadow: 0 0 10px rgba(255,204,0,0.4);">Poker OS Premium</h2>
     <div style="color:#eee; font-size:1.1em; line-height:1.5; text-align:right; direction:rtl; margin-bottom:20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
         <p style="margin-top:0; font-weight:bold; color:var(--gold); text-align:center;">חוקי הבית של "העיגול" – גרסת המקצוענים (והאיטיים)</p>
-        <p>האפליקציה הזו נבנתה מתוך ייאוש טהור. נמאס לנו לחכות שעה לכל אחד שחושב שהוא בטלוויזיה ומחשב הסתברויות כאילו הוא מינימום פרופסור למתמטיקה.</p>
-        <p><strong>חלאס למרוח את הזמן!</strong> המערכת הזו פה כדי להזיז את העניינים, לספור לכם שניות בלי רחמים, לנהל את ה-Rebuy ההזויים שלכם ולסגור את הקיזוזים בסוף הערב כדי שלא תריבו על שקל וחצי.</p>
-        <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-        <p style="color:var(--gold); font-weight:bold; margin-bottom:5px;">איך לא לעכב את המשחק?</p>
-        <ul style="padding-right: 20px; margin-bottom: 0;">
-            <li><strong>הטיימר רץ:</strong> נגיעה במסך מפעילה או עוצרת את השעון. הגיע תורך? תתחיל להזיז את העיניים.</li>
-            <li><strong>עדכונים מהירים:</strong> לחיצה על הכיסא של השחקן פותחת תפריט להוספת כסף או להעפת שחקן שבכה ונרדם.</li>
-        </ul>
+        <p>האפליקציה הזו נבנתה מתוך ייאוש טהור. נמאס לנו לחכות שעה לכל אחד שחושב שהוא בטלוויזיה ומחשב הסתברויות בזמן שהצ'יפס מתקרר.</p>
     </div>
-    <button class="btn" style="width:100%;" onclick="closeAbout()">סגור ומעבר למשחק</button>
+    <button class="btn" style="width:100%;" onclick="document.getElementById('aboutModal').style.display='none'">סגור</button>
 </div>
 
 <script>
-    function showToast(msg, isError = false) {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        if(isError) {
-            toast.style.borderColor = 'var(--danger)';
-            toast.style.boxShadow = '0 10px 30px rgba(255,59,48,0.3)';
-        }
-        toast.innerText = msg;
-        container.appendChild(toast);
-        
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_UId0391Y8xL7uX7DAnwUInC-Y2zVunH-L47Bve2E90X2oInq_X06g0eor8f-mS0H/exec";
+    const LOCAL_STORAGE_KEY = "poker_os_premium_state_2025";
+
+    const ALL_FRIENDS = ["מתן", "עידן", "אורן", "עומרי", "אור", "שחף", "ברור", "דולב", "גלעד", "ניב", "אלון", "גיא", "אייל"];
+    let players = [];
+    let initialRoundTime = 30; 
+    let defaultBuyin = 50;
+    
+    let activeTimers = [ {val:30, paused:true}, {val:30, paused:true}, {val:30, paused:true}, {val:30, paused:true} ];
+    let currentTimerIndex = 3; 
+    let globalInterval = null;
+    
+    let gameStartTime = null;
+    let startTimeStr = "";
+    let clockInterval = null;
+    let soundMuted = false;
+    let wakeLockObj = null;
+
+    const BLIND_STRUCTURE = [
+        {sb:1, bb:2, time:20}, {sb:2, bb:4, time:20}, {sb:3, bb:6, time:20},
+        {sb:5, bb:10, time:20}, {sb:10, bb:20, time:20}, {sb:15, bb:30, time:20},
+        {sb:20, bb:40, time:20}, {sb:30, bb:60, time:20}, {sb:50, bb:100, time:20}
+    ];
+    let currentBlindIndex = 0;
+    let blindTimeRemaining = 1200; 
+
+    const SEAT_POSITIONS = {
+        1: [{t:50, l:50}],
+        2: [{t:50, l:25}, {t:50, l:75}],
+        3: [{t:25, l:50}, {t:75, l:25}, {t:75, l:75}],
+        4: [{t:20, l:50}, {t:50, l:82}, {t:80, l:50}, {t:50, l:18}],
+        5: [{t:20, l:50}, {t:42, l:82}, {t:80, l:68}, {t:80, l:32}, {t:42, l:18}],
+        6: [{t:20, l:35}, {t:20, l:65}, {t:50, l:82}, {t:80, l:65}, {t:80, l:35}, {t:50, l:18}],
+        7: [{t:20, l:35}, {t:20, l:65}, {t:45, l:82}, {t:80, l:70}, {t:80, l:30}, {t:45, l:18}, {t:50, l:50}],
+        8: [{t:20, l:32}, {t:20, l:68}, {t:45, l:82}, {t:72, l:82}, {t:82, l:50}, {t:72, l:18}, {t:45, l:18}, {t:20, l:50}],
+        9: [{t:20, l:28}, {t:20, l:50}, {t:20, l:72}, {t:48, l:83}, {t:75, l:75}, {t:82, l:50}, {t:75, l:25}, {t:48, l:17}, {t:50, l:50}],
+        10:[{t:19, l:28}, {t:19, l:50}, {t:19, l:72}, {t:44, l:83}, {t:70, l:83}, {t:82, l:60}, {t:82, l:40}, {t:70, l:17}, {t:44, l:17}, {t:50, l:50}],
+        11:[{t:19, l:25}, {t:19, l:42}, {t:19, l:58}, {t:19, l:75}, {t:44, l:83}, {t:70, l:83}, {t:82, l:50}, {t:70, l:17}, {t:44, l:17}, {t:50, l:35}, {t:50, l:65}],
+        12:[{t:19, l:25}, {t:19, l:42}, {t:19, l:58}, {t:19, l:75}, {t:44, l:83}, {t:70, l:83}, {t:82, l:62}, {t:82, l:38}, {t:70, l:17}, {t:44, l:17}, {t:50, l:35}, {t:50, l:65}],
+        13:[{t:19, l:22}, {t:19, l:36}, {t:19, l:50}, {t:19, l:64}, {t:19, l:78}, {t:44, l:83}, {t:70, l:83}, {t:82, l:50}, {t:70, l:17}, {t:44, l:17}, {t:48, l:32}, {t:48, l:50}, {t:48, l:68}]
+    };
+
+    let selectedSetupFriends = [];
+
+    window.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
-            toast.style.animation = 'toastExit 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-            setTimeout(() => toast.remove(), 400);
-        }, 3000);
-    }
-
-    function safeGetLocal() { try { return localStorage.getItem('pokerPendingSync'); } catch(e) { return null; } }
-    function safeSetLocal(val) { try { localStorage.setItem('pokerPendingSync', val); } catch(e) {} }
-    function safeRemoveLocal() { try { localStorage.removeItem('pokerPendingSync'); } catch(e) {} }
-
-    const splash = document.getElementById('splashScreen');
-    function deactivateSplash() {
-        if (splash && splash.style.display !== 'none') {
+            const splash = document.getElementById('splashScreen');
             splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; }, 800);
-        }
-        try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
-    }
-    setTimeout(deactivateSplash, 3000);
+            setTimeout(() => splash.remove(), 800);
+        }, 1500);
 
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkx46PqRDcXpXRcKgpViKCH6bxHfVq52a2cUReFqjXh3QBdlVFwCA9yoEKtctqsPAIsA/exec';
-    const fixedFriends = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
-    let selectedFriends = [];
-    let players = [], totalPot = 0, currentLevelIdx = 0, currentPage = 0;
-    let timeLeft = 30, defaultRoundTime = 30, isActionRunning = false, timerId = null, gameClockId = null;
-    let startX = 0, lastTap = 0, audioCtx = null, selIdx = -1, startTimeStr = '';
-    let wakeLock = null;
-    let isMuted = false; 
-    let gameSecondsElapsed = 0;
-    
-    const levels = [{s:1,b:2},{s:2,b:4},{s:5,b:10},{s:10,b:20},{s:20,b:40},{s:50,b:100}];
-    const chipColors = { 1: '#999', 2: '#1e88e5', 5: '#e53935', 10: '#43a047', 20: '#8e24aa', 50: '#fb8c00', 100: '#111' };
-    
-    window.addEventListener('load', () => {
-        runLocalStorageSyncCheck();
-    });
+        buildFriendsGrid();
+        initSliderAndDots();
+        initModalCloses();
 
-    function runLocalStorageSyncCheck(isManual = false) {
-        const pendingData = safeGetLocal();
-        if (pendingData) {
-            if (isManual || confirm('זוהו נתוני משחק קודם שלא נשלחו. לנסות לשלוח אותם עכשיו?')) {
-                fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: pendingData
-                })
-                .then(() => { showToast('הנתונים נשלחו בהצלחה לגוגל שיטס!'); safeRemoveLocal(); })
-                .catch(err => { showToast('בעיית רשת: עדיין לא ניתן לסנכרן.', true); });
+        const recovered = safeGetLocal();
+        if (recovered) {
+            try {
+                const parsed = JSON.parse(recovered);
+                if (confirm(`נמצא משחק פעיל ברקע מ- ${parsed.startTimeStr || ''}. האם לשחזר?`)) {
+                    restoreGameState(parsed);
+                } else {
+                    safeRemoveLocal();
+                }
+            } catch(e) {
+                safeRemoveLocal();
             }
-        } else if (isManual) {
-            showToast('כל הנתונים מסונכרנים! אין מידע ממתין.');
-        }
-    }
-
-    async function requestWakeLock() {
-        try { 
-            if ('wakeLock' in navigator) { 
-                wakeLock = await navigator.wakeLock.request('screen');
-                wakeLock.addEventListener('release', () => {});
-            } 
-        } catch (err) {}
-    }
-
-    document.addEventListener('visibilitychange', async () => {
-        const wlToggle = document.getElementById('wakeLockToggle');
-        if (wakeLock !== null && document.visibilityState === 'visible' && wlToggle && wlToggle.classList.contains('active')) { 
-            await requestWakeLock(); 
         }
     });
 
     function buildFriendsGrid() {
         const grid = document.getElementById('friendsGrid');
-        if(!grid) return;
-        grid.innerHTML = '';
-        fixedFriends.forEach(name => {
+        grid.innerHTML = "";
+        ALL_FRIENDS.sort().forEach(name => {
             const el = document.createElement('div');
-            el.className = 'friend-circle';
-            el.innerHTML = `<span>${name}</span><div class="v-badge">&#10003;</div>`;
-            el.onclick = () => toggleFriend(name, el);
+            el.className = "friend-circle";
+            el.innerHTML = `${name}<div class="v-badge">✓</div>`;
+            el.onclick = () => {
+                if (el.classList.contains('selected')) {
+                    el.classList.remove('selected');
+                    selectedSetupFriends = selectedSetupFriends.filter(x => x !== name);
+                } else {
+                    el.classList.add('selected');
+                    selectedSetupFriends.push(name);
+                }
+                document.getElementById('activeCountDisplay').innerText = selectedSetupFriends.length;
+            };
             grid.appendChild(el);
         });
     }
 
-    function toggleFriend(name, el) {
-        if(selectedFriends.includes(name)) {
-            selectedFriends = selectedFriends.filter(f => f !== name);
-            el.classList.remove('selected');
-        } else {
-            selectedFriends.push(name);
-            el.classList.add('selected');
-        }
-        document.getElementById('activeCountDisplay').innerText = selectedFriends.length;
-    }
-    buildFriendsGrid();
+    function initSliderAndDots() {
+        const slider = document.getElementById('slider');
+        const dots = [document.getElementById('dot0'), document.getElementById('dot1')];
+        let currentIdx = 0;
+        let startX = 0;
+        let isDragging = false;
 
-    function playSound(f, d, type = 'sine') {
-        if (isMuted) return;
-        try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-            o.type = type; o.connect(g); g.connect(audioCtx.destination);
-            o.frequency.value = f;
-            g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            o.start(); o.stop(audioCtx.currentTime + d);
-        } catch(e) {}
+        dots.forEach((d, i) => {
+            d.onclick = () => {
+                currentIdx = i;
+                updateSlider();
+            };
+        });
+
+        window.addEventListener('touchstart', (e) => {
+            if (document.getElementById('setupScreen').style.display !== 'none') return;
+            if (e.target.closest('button') || e.target.closest('.player-seat') || e.target.closest('.settings-toggle') || e.target.closest('.friend-circle') || e.target.closest('input')) return;
+            startX = e.touches[0].clientX;
+            isDragging = true;
+        }, {passive:true});
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            let diff = startX - e.touches[0].clientX;
+            if (Math.abs(diff) > 60) {
+                if (diff > 0 && currentIdx === 0) { currentIdx = 1; updateSlider(); }
+                else if (diff < 0 && currentIdx === 1) { currentIdx = 0; updateSlider(); }
+                isDragging = false;
+            }
+        }, {passive:true});
+
+        window.addEventListener('touchend', () => isDragging = false);
+
+        function updateSlider() {
+            slider.style.transform = `translateX(-${currentIdx * 100}vw)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === currentIdx));
+        }
+    }
+
+    function initModalCloses() {
+        window.addEventListener('click', (e) => {
+            const modals = ['rebuyModal', 'endGameModal', 'settingsModal', 'addPlayerModal', 'aboutModal'];
+            modals.forEach(id => {
+                const m = document.getElementById(id);
+                if (e.target === m) {
+                    if (id === 'endGameModal') return; 
+                    m.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    function safeSetLocal(str) { try{ localStorage.setItem(LOCAL_STORAGE_KEY, str); }catch(e){} }
+    function safeGetLocal() { try{ return localStorage.getItem(LOCAL_STORAGE_KEY); }catch(e){return null;} }
+    function safeRemoveLocal() { try{ localStorage.removeItem(LOCAL_STORAGE_KEY); }catch(e){} }
+
+    function saveCurrentStateToLocalStorage() {
+        if (document.getElementById('setupScreen').style.display !== 'none') return;
+        const state = {
+            startTimeStr,
+            players,
+            initialRoundTime,
+            defaultBuyin,
+            currentBlindIndex,
+            blindTimeRemaining,
+            soundMuted
+        };
+        safeSetLocal(JSON.stringify(state));
+    }
+
+    function restoreGameState(state) {
+        startTimeStr = state.startTimeStr || new Date().toLocaleTimeString('he-IL', {hour:'2-digit', minute:'2-digit'});
+        players = state.players || [];
+        initialRoundTime = state.initialRoundTime || 30;
+        defaultBuyin = state.defaultBuyin || 50;
+        currentBlindIndex = state.currentBlindIndex || 0;
+        blindTimeRemaining = state.blindTimeRemaining !== undefined ? state.blindTimeRemaining : 1200;
+        soundMuted = !!state.soundMuted;
+
+        document.getElementById('roundTimeInput').value = initialRoundTime;
+        document.getElementById('initialBuyin').value = defaultBuyin;
+        document.getElementById('liveRoundTimeInput').value = initialRoundTime;
+        document.getElementById('muteToggle').classList.toggle('active', soundMuted);
+
+        activeTimers = [ {val:initialRoundTime, paused:true}, {val:initialRoundTime, paused:true}, {val:initialRoundTime, paused:true}, {val:initialRoundTime, paused:true} ];
+
+        document.getElementById('setupScreen').style.display = 'none';
+        document.getElementById('slider').style.display = 'flex';
+        
+        requestWakeLock();
+        startClockAndBlinds();
+        renderTable();
+        startGlobalInterval();
+        updateTimerUI();
+        showToast("המשחק שוחזר בהצלחה מהזיכרון המקומי!");
     }
 
     function startGame() {
-        if(selectedFriends.length === 0) { showToast("חובה לבחור שחקן אחד לפחות!", true); return; }
+        if (selectedSetupFriends.length === 0) {
+            showToast("נא לבחור לפחות שחקן אחד!");
+            return;
+        }
+        initialRoundTime = parseInt(document.getElementById('roundTimeInput').value) || 30;
+        defaultBuyin = parseInt(document.getElementById('initialBuyin').value) || 50;
+        
+        document.getElementById('liveRoundTimeInput').value = initialRoundTime;
+
+        players = selectedSetupFriends.map(name => ({
+            name: name,
+            in: defaultBuyin,
+            removed: false,
+            joinTime: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}),
+            leaveTime: ""
+        }));
+
+        activeTimers = [
+            {val: initialRoundTime, paused: true},
+            {val: initialRoundTime, paused: true},
+            {val: initialRoundTime, paused: true},
+            {val: initialRoundTime, paused: true}
+        ];
+        currentTimerIndex = 3; 
+
+        currentBlindIndex = 0;
+        blindTimeRemaining = BLIND_STRUCTURE[0].time * 60;
+
+        gameStartTime = new Date();
+        startTimeStr = gameStartTime.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+
+        document.getElementById('setupScreen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('setupScreen').style.display = 'none';
+            document.getElementById('slider').style.display = 'flex';
+        }, 500);
+
         requestWakeLock();
-        try { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
-        const b = +document.getElementById('initialBuyin').value;
-        defaultRoundTime = +document.getElementById('roundTimeInput').value || 30;
-        timeLeft = defaultRoundTime;
+        startClockAndBlinds();
+        renderTable();
+        startGlobalInterval();
+        updateTimerUI();
+        saveCurrentStateToLocalStorage();
         
-        const now = new Date();
-        startTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-        
-        players = []; totalPot = 0; gameSecondsElapsed = 0;
-        selectedFriends.forEach((name, i) => { 
-            players.push({ id: i+1, name: name, in: b, joinTime: startTimeStr, leaveTime: 'עדין במשחק', removed: false }); 
-            totalPot += b; 
-        });
-
-        const setupScreen = document.getElementById('setupScreen');
-        document.getElementById('slider').style.display = 'flex';
-        setupScreen.style.opacity = '0';
-        setTimeout(() => { setupScreen.style.display = 'none'; }, 500);
-
-        render(); updateUI();
+        showToast("המשחק התחיל! בהצלחה לכולם.");
     }
 
-    document.addEventListener('touchstart', e => {
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-        startX = e.touches[0].clientX;
-    }, {passive: true});
-
-    document.addEventListener('touchend', e => {
-        const splashScreenObj = document.getElementById('splashScreen');
-        if(e.target.closest('.btn') || e.target.closest('.btn-info') || e.target.closest('.player-seat') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('#aboutModal') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
-        const diff = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 60) {
-            currentPage = diff > 0 ? 1 : 0;
-            updatePageSlider();
+    function requestWakeLock() {
+        if ('wakeLock' in navigator) {
+            navigator.wakeLock.request('screen')
+            .then(lock => {
+                wakeLockObj = lock;
+                document.getElementById('wakeLockToggle').classList.add('active');
+            })
+            .catch(() => {
+                document.getElementById('wakeLockToggle').classList.remove('active');
+            });
         }
-    });
-
-    function updatePageSlider() {
-        document.getElementById('slider').style.transform = `translateX(-${currentPage * 100}vw)`;
-        document.getElementById('dot0').classList.toggle('active', currentPage === 0);
-        document.getElementById('dot1').classList.toggle('active', currentPage === 1);
     }
 
-    document.getElementById('dot0').onclick = () => { currentPage = 0; updatePageSlider(); };
-    document.getElementById('dot1').onclick = () => { currentPage = 1; updatePageSlider(); };
-
-    document.body.addEventListener('pointerdown', e => {
-        const splashScreenObj = document.getElementById('splashScreen');
-        if(currentPage === 1 || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
-        if(e.target.closest('.btn') || e.target.closest('.btn-info') || e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#setupScreen') || e.target.closest('#endGameModal') || e.target.closest('#settingsModal') || e.target.closest('#aboutModal') || e.target.closest('.page-dots') || e.target.closest('.blind-arrow-btn') || e.target.closest('.btn-settings') || e.target.closest('.btn-timebank')) return;
-        
-        if(!gameClockId) startClock();
-        const now = Date.now();
-        
-        if(now - lastTap < 300) { 
-            clearInterval(timerId); isActionRunning = false; timeLeft = defaultRoundTime; 
+    function toggleWakeLockLive() {
+        const toggle = document.getElementById('wakeLockToggle');
+        if (toggle.classList.contains('active')) {
+            if (wakeLockObj) { wakeLockObj.release(); wakeLockObj = null; }
+            toggle.classList.remove('active');
+            showToast("הגנת כיבוי מסך מבוטלת");
         } else {
-            if(isActionRunning) { 
-                clearInterval(timerId); isActionRunning = false; 
-            } else {
-                if(timeLeft === 0) timeLeft = defaultRoundTime;
-                isActionRunning = true;
-                timerId = setInterval(() => {
-                    if(timeLeft > 0) {
-                        timeLeft--;
-                        if(timeLeft === 10) playSound(523, 0.1, 'sine');
-                        if(timeLeft <= 5 && timeLeft > 0) playSound(659, 0.05, 'sine');
-                        if(timeLeft === 0) playSound(330, 0.7, 'triangle');
-                    } else {
-                        clearInterval(timerId);
-                        isActionRunning = false;
-                    }
-                    updateUI();
-                }, 1000);
-            }
+            requestWakeLock();
+            showToast("הגנת כיבוי מסך הופעלה");
         }
-        lastTap = now;
-        updateUI();
-    });
+    }
 
-    function startClock() {
-        if(gameClockId) clearInterval(gameClockId);
-        gameClockId = setInterval(() => {
-            gameSecondsElapsed++;
-            const h = Math.floor(gameSecondsElapsed/3600).toString().padStart(2,'0');
-            const m = Math.floor((gameSecondsElapsed%3600)/60).toString().padStart(2,'0');
-            const s = (gameSecondsElapsed%60).toString().padStart(2,'0');
-            document.getElementById('gameClock').innerText = `${h}:${m}:${s}`;
+    function startClockAndBlinds() {
+        if (clockInterval) clearInterval(clockInterval);
+        
+        let initialSeconds = 0;
+        if (gameStartTime) {
+            initialSeconds = Math.floor((new Date() - gameStartTime)/1000);
+        }
+
+        updateBlindDisplay();
+
+        clockInterval = setInterval(() => {
+            if (gameStartTime) {
+                let diff = Math.floor((new Date() - gameStartTime) / 1000);
+                let h = String(Math.floor(diff / 3600)).padStart(2, '0');
+                let m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+                let s = String(diff % 60).padStart(2, '0');
+                document.getElementById('gameClock').innerText = `${h}:${m}:${s}`;
+            }
+
+            let anyTimerRunning = activeTimers.some(t => !t.paused);
+            if (anyTimerRunning) {
+                if (blindTimeRemaining > 0) {
+                    blindTimeRemaining--;
+                    let pct = (blindTimeRemaining / (BLIND_STRUCTURE[currentBlindIndex].time * 60)) * 100;
+                    document.getElementById('progressBar').style.width = `${pct}%`;
+                    if (blindTimeRemaining === 0) {
+                        playAlarmSound(true); 
+                        if (currentBlindIndex < BLIND_STRUCTURE.length - 1) {
+                            currentBlindIndex++;
+                            blindTimeRemaining = BLIND_STRUCTURE[currentBlindIndex].time * 60;
+                            showToast(`הבליינדים עלו! ${BLIND_STRUCTURE[currentBlindIndex].sb}/${BLIND_STRUCTURE[currentBlindIndex].bb}`);
+                        } else {
+                            showToast("הגעתם לרמת הבליינדים המקסימלית!");
+                        }
+                        updateBlindDisplay();
+                        saveCurrentStateToLocalStorage();
+                    }
+                }
+            }
         }, 1000);
     }
 
-    function render() {
-        const container = document.getElementById('seatsContainer');
-        const line = container.querySelector('.table-inner-line');
-        container.innerHTML = '';
-        if(line) container.appendChild(line);
-        else {
-            const newLine = document.createElement('div');
-            newLine.className = 'table-inner-line';
-            container.appendChild(newLine);
-        }
-        
-        const activePlayers = players.filter(p => !p.removed);
-        activePlayers.forEach((p, i) => {
-            const angle = (i / activePlayers.length) * Math.PI * 2 + Math.PI/2;
-            const x = 50 + 46 * Math.cos(angle), y = 50 + 46 * Math.sin(angle);
-            const seat = document.createElement('div');
-            seat.className = p.removed ? 'player-seat seat-removed' : 'player-seat in-game';
-            seat.style.left = x+'%'; seat.style.top = y+'%';
-            
-            const displayName = p.name ? p.name : `#${p.id}`;
-            seat.innerHTML = `<span class="seat-name">${displayName}</span><div class="seat-divider"></div><span class="seat-buyin">${p.in}</span>`;
-            
-            const origIdx = players.indexOf(p);
-            seat.onclick = (e) => { e.stopPropagation(); openRebuy(origIdx); };
-            container.appendChild(seat);
-        });
-        
-        const lvl = levels[currentLevelIdx];
-        document.getElementById('blindDisplay').innerHTML = `<div class="chip-icon" style="background:${chipColors[lvl.s]||'#444'}">${lvl.s}</div><span style="color:#bbb; font-weight:bold; font-size:1.2em; text-shadow:0 0 5px rgba(255,255,255,0.4);">/</span><div class="chip-icon" style="background:${chipColors[lvl.b]||'#222'}">${lvl.b}</div>`;
-    }
-
-    function updateUI() {
-        document.getElementById('potDisplay').innerText = totalPot;
-        document.querySelectorAll('.timer').forEach(el => {
-            const valEl = el.querySelector('.time-val');
-            valEl.innerText = timeLeft;
-            el.classList.remove('ready-active', 'paused-dim', 'warning', 'zero-blink');
-            
-            if (isActionRunning || timeLeft === defaultRoundTime) el.classList.add('ready-active');
-            else el.classList.add('paused-dim');
-            
-            if (timeLeft <= 10 && timeLeft > 0) el.classList.add('warning');
-            if (timeLeft === 0) el.classList.add('zero-blink');
-        });
-
-        const percent = (timeLeft / defaultRoundTime) * 100;
-        const progressEl = document.getElementById('progressBar');
-        if (progressEl) {
-            progressEl.style.width = percent + '%';
-            if (timeLeft <= 5) {
-                progressEl.style.background = 'var(--danger)';
-                progressEl.style.boxShadow = '0 0 10px var(--danger)';
-            } else {
-                progressEl.style.background = 'var(--gold)';
-                progressEl.style.boxShadow = '0 0 10px var(--gold)';
-            }
+    function updateBlindDisplay() {
+        const curr = BLIND_STRUCTURE[currentBlindIndex];
+        const disp = document.getElementById('blindDisplay');
+        disp.innerHTML = `
+            <div style="font-size:1.3vw; font-weight:900; color:white; font-family:'Rajdhani'; line-height:1.1;">
+                ${curr.sb}/${curr.bb}
+            </div>
+        `;
+        if (window.innerWidth <= 768) {
+            disp.querySelector('div').style.fontSize = '4vw';
         }
     }
 
-    function addTime(e) { e.stopPropagation(); timeLeft += defaultRoundTime; updateUI(); }
-    
     function changeBlindLevel(e, direction) {
         e.stopPropagation();
-        let newIndex = currentLevelIdx + direction;
-        if(newIndex >= 0 && newIndex < levels.length) {
-            currentLevelIdx = newIndex;
-            render();
+        let target = currentBlindIndex + direction;
+        if (target >= 0 && target < BLIND_STRUCTURE.length) {
+            currentBlindIndex = target;
+            blindTimeRemaining = BLIND_STRUCTURE[currentBlindIndex].time * 60;
+            updateBlindDisplay();
+            document.getElementById('progressBar').style.width = "100%";
+            saveCurrentStateToLocalStorage();
+            showToast(`בליינד עודכן ידנית: ${BLIND_STRUCTURE[currentBlindIndex].sb}/${BLIND_STRUCTURE[currentBlindIndex].bb}`);
         }
     }
-    
-    function openRebuy(i) { 
-        selIdx = i;
-        document.getElementById('rebuyTitle').innerText = players[i].name; 
-        document.getElementById('playerNameInput').value = players[i].name; 
-        document.getElementById('rebuyAmount').value = 50; 
-        document.getElementById('rebuyModal').style.display = 'block';
+
+    function renderTable() {
+        const container = document.getElementById('seatsContainer');
+        container.querySelectorAll('.player-seat').forEach(el => el.remove());
+
+        const activePlayers = players.filter(p => !p.removed);
+        const count = activePlayers.length;
+        if (count === 0) {
+            document.getElementById('potDisplay').innerText = "0";
+            return;
+        }
+
+        const positions = SEAT_POSITIONS[count] || SEAT_POSITIONS[4];
+
+        let pot = 0;
+
+        activePlayers.forEach((p, idx) => {
+            pot += p.in;
+            const pos = positions[idx] || {t:50, l:50};
+
+            const seat = document.createElement('div');
+            seat.className = `player-seat in-game`;
+            seat.style.top = `${pos.t}%`;
+            seat.style.left = `${pos.l}%`;
+            
+            seat.innerHTML = `
+                <div class="seat-name">${p.name}</div>
+                <div class="seat-divider"></div>
+                <div class="seat-buyin">₪${p.in}</div>
+            `;
+
+            let originalIndex = players.findIndex(x => x.name === p.name);
+            seat.onclick = (e) => openRebuy(e, originalIndex);
+
+            container.appendChild(seat);
+        });
+
+        document.getElementById('potDisplay').innerText = `₪${pot}`;
     }
-    function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
-    
-    document.getElementById('confirmBtn').onclick = () => { 
-        players[selIdx].name = document.getElementById('playerNameInput').value;
-        const addAmount = +document.getElementById('rebuyAmount').value; 
-        if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; } 
-        render(); closeRebuy(); updateUI(); 
-    };
 
-    document.getElementById('removeBtn').onclick = () => { 
-        const now = new Date();
-        players[selIdx].leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-        players[selIdx].removed = true;
-        render(); closeRebuy(); updateUI(); 
-    };
-
-    function openSettings(e) {
-        e.stopPropagation();
-        document.getElementById('liveRoundTimeInput').value = defaultRoundTime;
-        document.getElementById('settingsModal').style.display = 'block';
-    }
-    
-    function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
-    function toggleMute() { isMuted = !isMuted; document.getElementById('muteToggle').classList.toggle('active', isMuted); }
-
-    function openAbout(e) { e.stopPropagation(); document.getElementById('aboutModal').style.display = 'block'; }
-    function closeAbout() { document.getElementById('aboutModal').style.display = 'none'; }
-    
-    function updateLiveRoundTime(val) {
-        const parsed = parseInt(val);
-        if(parsed > 0) {
-            defaultRoundTime = parsed;
-            if(!isActionRunning && timeLeft > defaultRoundTime) {
-                timeLeft = defaultRoundTime;
-                updateUI();
+    function startGlobalInterval() {
+        if (globalInterval) clearInterval(globalInterval);
+        globalInterval = setInterval(() => {
+            let curr = activeTimers[currentTimerIndex];
+            if (!curr.paused) {
+                if (curr.val > 0) {
+                    curr.val--;
+                    if (curr.val === 5) playWarningTick();
+                    if (curr.val === 0) {
+                        playAlarmSound(false);
+                        saveCurrentStateToLocalStorage();
+                    }
+                    updateTimerUI();
+                }
             }
-        }
+        }, 1000);
     }
-    
-    function forceSyncData() { runLocalStorageSyncCheck(true); }
-    
-    async function toggleWakeLockLive() {
-        const wlToggle = document.getElementById('wakeLockToggle');
-        const isActive = wlToggle.classList.contains('active');
-        
-        if(isActive) {
-            wlToggle.classList.remove('active');
-            if(wakeLock) { try { await wakeLock.release(); wakeLock = null; } catch(e){} }
+
+    function updateTimerUI() {
+        const timerContainers = [
+            document.querySelector('.timer.top'),
+            document.querySelector('.timer.left'),
+            document.querySelector('.timer.right'),
+            document.querySelector('.timer.bottom')
+        ];
+
+        timerContainers.forEach((container, idx) => {
+            let tState = activeTimers[idx];
+            let valSpan = container.querySelector('.time-val');
+            valSpan.innerText = tState.val;
+
+            container.className = "timer"; 
+            if (idx === 0) container.classList.add('top');
+            if (idx === 1) container.classList.add('left');
+            if (idx === 2) container.classList.add('right');
+            if (idx === 3) container.classList.add('bottom');
+
+            if (!tState.paused) {
+                container.classList.add('ready-active');
+                if (tState.val <= 5 && tState.val > 0) container.classList.add('warning');
+                if (tState.val === 0) container.classList.add('zero-blink');
+            } else {
+                container.classList.add('paused-dim');
+            }
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (document.getElementById('setupScreen').style.display !== 'none') return;
+        if (e.target.closest('button') || e.target.closest('.player-seat') || e.target.closest('.settings-toggle') || e.target.closest('input')) return;
+
+        let curr = activeTimers[currentTimerIndex];
+        if (curr.paused) {
+            if (curr.val === 0) {
+                resetAllTimersToConfig();
+            }
+            curr.paused = false;
         } else {
-            wlToggle.classList.add('active');
-            await requestWakeLock();
+            curr.paused = true;
+            rotateTimerToNextSide();
         }
+        updateTimerUI();
+    });
+
+    function rotateTimerToNextSide() {
+        activeTimers[currentTimerIndex].paused = true;
+        
+        if (currentTimerIndex === 3) currentTimerIndex = 2;      // bottom -> right
+        else if (currentTimerIndex === 2) currentTimerIndex = 0; // right -> top
+        else if (currentTimerIndex === 0) currentTimerIndex = 1; // top -> left
+        else if (currentTimerIndex === 1) currentTimerIndex = 3; // left -> bottom
+
+        activeTimers[currentTimerIndex].val = initialRoundTime;
+        activeTimers[currentTimerIndex].paused = false;
+    }
+
+    function resetAllTimersToConfig() {
+        activeTimers.forEach(t => {
+            t.val = initialRoundTime;
+            t.paused = true;
+        });
+    }
+
+    function addTime(e) {
+        if (e) e.stopPropagation();
+        activeTimers.forEach(t => {
+            if (!t.paused || t.val === 0) {
+                t.val += 15;
+            }
+        });
+        updateTimerUI();
+        showToast("➕ 15 שניות נוספו לשעון!");
+    }
+
+    let selectedPlayerIndexForModal = null;
+    function openRebuy(e, idx) {
+        e.stopPropagation();
+        selectedPlayerIndexForModal = idx;
+        const p = players[idx];
+        
+        document.getElementById('rebuyTitle').innerText = `עדכון עבור ${p.name}`;
+        document.getElementById('playerNameInput').value = p.name;
+        document.getElementById('rebuyAmount').value = defaultBuyin;
+        
+        document.getElementById('rebuyModal').style.display = 'block';
+
+        document.getElementById('confirmBtn').onclick = () => {
+            let amt = parseInt(document.getElementById('rebuyAmount').value) || 0;
+            let newName = document.getElementById('playerNameInput').value.trim();
+            if (newName) p.name = newName;
+            p.in += amt;
+            renderTable();
+            closeRebuy();
+            saveCurrentStateToLocalStorage();
+            if (amt > 0) showToast(`Re-buy עודכן ל${p.name} על סך ₪${amt}`);
+            else showToast(`שם השחקן עודכן בהצלחה!`);
+        };
+
+        document.getElementById('removeBtn').onclick = () => {
+            if (confirm(`האם אתה בטוח שברצונך להסיר את ${p.name} מהשולחן?`)) {
+                p.removed = true;
+                p.leaveTime = new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
+                renderTable();
+                closeRebuy();
+                saveCurrentStateToLocalStorage();
+                showToast(`${p.name} הוסר מהשולחן.`);
+            }
+        };
+    }
+
+    function closeRebuy() {
+        document.getElementById('rebuyModal').style.display = 'none';
+        selectedPlayerIndexForModal = null;
     }
 
     function openAddPlayerModal() {
-        closeSettings();
-        document.getElementById('newPlayerNameInput').value = '';
+        document.getElementById('settingsModal').style.display = 'none';
+        document.getElementById('newPlayerNameInput').value = "";
         document.getElementById('addPlayerModal').style.display = 'block';
     }
 
     function confirmAddLatePlayer() {
-        const name = document.getElementById('newPlayerNameInput').value;
-        if (!name || name.trim() === "") {
-            showToast("נא להזין שם שחקן", true);
-            return;
-        }
-        
-        const currentBuyin = +document.getElementById('initialBuyin').value || 50;
-        const now = new Date();
-        const joinTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
-        
-        const newId = players.length + 1;
+        let name = document.getElementById('newPlayerNameInput').value.trim();
+        if (!name) { showToast("נא להזין שם תקין!"); return; }
+        if (players.some(p => p.name === name && !p.removed)) { showToast("שם זה כבר קיים בשולחן!"); return; }
+
         players.push({
-            id: newId,
-            name: name.trim(),
-            in: currentBuyin,
-            joinTime: joinTimeStr,
-            leaveTime: 'עדין במשחק',
-            removed: false
+            name: name,
+            in: defaultBuyin,
+            removed: false,
+            joinTime: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}),
+            leaveTime: ""
         });
-        
-        totalPot += currentBuyin;
+
+        renderTable();
         document.getElementById('addPlayerModal').style.display = 'none';
-        render(); updateUI();
-        showToast(`השחקן ${name.trim()} הוסף עם ${currentBuyin}!`);
+        saveCurrentStateToLocalStorage();
+        showToast(`שחקן מאחר ${name} נוסף לשולחן עם ₪${defaultBuyin}`);
+    }
+
+    function openSettings(e) {
+        e.stopPropagation();
+        document.getElementById('settingsModal').style.display = 'block';
+    }
+    function closeSettings() { document.getElementById('settingsModal').style.display = 'none'; }
+
+    function updateLiveRoundTime(val) {
+        let parsed = parseInt(val) || 30;
+        initialRoundTime = parsed;
+        saveCurrentStateToLocalStorage();
+    }
+
+    function toggleMute() {
+        soundMuted = !soundMuted;
+        document.getElementById('muteToggle').classList.toggle('active', soundMuted);
+        saveCurrentStateToLocalStorage();
+        showToast(soundMuted ? "האפליקציה הושתקה" : "הקולות הופעלו");
     }
 
     function resetGameToSetup() {
-        if (!confirm("האם אתה בטוח שברצונך לאפס את כל המשחק הנוכחי ולחזור למסך ההגדרות?")) return;
-        clearInterval(timerId); clearInterval(gameClockId);
-        isActionRunning = false; timerId = null; gameClockId = null; gameSecondsElapsed = 0;
-        
-        players = []; totalPot = 0; currentLevelIdx = 0; currentPage = 0; selectedFriends = [];
+        if (confirm("האם אתה בטוח שברצונך לאפס את כל המשחק הנוכחי ולחזור למסך הבחירה? הנתונים הנוכחיים יימחקו!")) {
+            if (clockInterval) clearInterval(clockInterval);
+            if (globalInterval) clearInterval(globalInterval);
+            if (wakeLockObj) { wakeLockObj.release(); wakeLockObj = null; }
+            safeRemoveLocal();
+            location.reload();
+        }
+    }
 
-        document.getElementById('gameClock').innerText = "00:00:00";
-        document.getElementById('activeCountDisplay').innerText = "0";
-        buildFriendsGrid(); updatePageSlider();
-        
-        document.getElementById('slider').style.display = 'none';
-        const setupScreen = document.getElementById('setupScreen');
-        setupScreen.style.display = 'flex'; setupScreen.style.opacity = '1';
-        
-        closeSettings();
+    function openAbout(e) {
+        e.stopPropagation();
+        document.getElementById('aboutModal').style.display = 'block';
     }
 
     function openEndGame(e) {
         e.stopPropagation();
-        clearInterval(timerId); isActionRunning = false; updateUI();
-        document.getElementById('endGameTotalBank').innerText = totalPot;
         const container = document.getElementById('endGamePlayersContainer');
-        container.innerHTML = '';
-        players.forEach((p, i) => {
-            const div = document.createElement('div');
-            div.className = 'end-game-row';
-            div.innerHTML = `
-                <span>${p.name} (השקיע: ${p.in})</span>
-                <input type="number" class="end-game-out-input" data-idx="${i}" value="0" oninput="calculateDistribution()">
+        container.innerHTML = "";
+
+        let pot = 0;
+        players.forEach(p => { pot += p.in; });
+        document.getElementById('endGameTotalBank').innerText = `₪${pot}`;
+
+        players.forEach((p, idx) => {
+            const row = document.createElement('div');
+            row.className = "end-game-row";
+            row.innerHTML = `
+                <span>${p.name} (₪${p.in})</span>
+                <input type="number" class="end-game-out-input" data-idx="${idx}" value="0" oninput="validateEndGameAmounts()">
             `;
-             container.appendChild(div);
+            container.appendChild(row);
         });
-        calculateDistribution();
+
+        validateEndGameAmounts();
         document.getElementById('endGameModal').style.display = 'block';
     }
-    
+
     function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
 
-    function calculateDistribution() {
-        const inputs = document.querySelectorAll('.end-game-out-input');
-        let totalOut = 0;
-        inputs.forEach(input => { totalOut += +input.value || 0; });
-        document.getElementById('endGameDistributed').innerText = totalOut;
+    function validateEndGameAmounts() {
+        let pot = 0;
+        players.forEach(p => { pot += p.in; });
 
-        if(totalOut === totalPot) {
-            document.getElementById('endGameDistributed').style.color = 'var(--success)';
-            document.getElementById('endGameDistributed').style.textShadow = '0 0 10px rgba(52,199,89,0.5)';
-            document.getElementById('validationMessage').style.display = 'none';
+        let totalOut = 0;
+        document.querySelectorAll('.end-game-out-input').forEach(input => {
+            totalOut += parseInt(input.value) || 0;
+        });
+
+        document.getElementById('endGameDistributed').innerText = `₪${totalOut}`;
+
+        const msg = document.getElementById('validationMessage');
+        const btn = document.getElementById('finishAndSendBtn');
+
+        if (pot === totalOut) {
+            msg.style.display = 'none';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
         } else {
-            document.getElementById('endGameDistributed').style.color = 'var(--danger)';
-            document.getElementById('endGameDistributed').style.textShadow = 'none';
+            msg.style.display = 'block';
+            btn.disabled = true;
+            btn.style.opacity = '0.3';
+            btn.style.pointerEvents = 'none';
         }
     }
 
     function submitGameHistory() {
-        const inputs = document.querySelectorAll('.end-game-out-input');
-        let totalOut = 0;
-        inputs.forEach(input => { totalOut += +input.value || 0; });
-        if (totalOut !== totalPot) {
-            document.getElementById('validationMessage').style.display = 'block';
-            return;
-        }
-
-        const submitBtn = document.getElementById('finishAndSendBtn');
-        submitBtn.innerText = "⏳ מסנכרן נתונים לאקסל...";
-        submitBtn.style.opacity = "0.5"; 
-        submitBtn.style.pointerEvents = "none"; 
+        document.getElementById('finishAndSendBtn').innerText = "...שומר ומפיק דוח";
+        document.getElementById('finishAndSendBtn').style.pointerEvents = "none";
+        document.getElementById('cancelEndGameBtn').style.pointerEvents = "none"; 
 
         const endOfGameTime = new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         const gameData = {
@@ -803,10 +963,73 @@
             setTimeout(() => location.reload(), 2500); 
         })
         .catch(err => {
-            showToast('בעיית רשת: הנתונים נשמרו במכשיר, ויסונכרנו בהמשך.', true);
-            setTimeout(() => location.reload(), 3000);
+            showToast('תקלה בסנכרון לענן, אך הנתונים מגובים מקומית!');
+            document.getElementById('finishAndSendBtn').innerText = "נסה שוב לסנכרן ולסיים";
+            document.getElementById('finishAndSendBtn').style.pointerEvents = "auto";
+            document.getElementById('cancelEndGameBtn').style.pointerEvents = "auto";
         });
     }
+
+    function forceSyncData() {
+        const recovered = safeGetLocal();
+        if (!recovered) { showToast("אין משחק שמור מקומית לסנכרון."); return; }
+        showToast("מנסה לסנכרן נתונים באופן יזום...");
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: recovered
+        })
+        .then(() => { showToast("הסנכרון היזום עבר בהצלחה!"); })
+        .catch(() => { showToast("סנכרון נכשל, נסה שוב מאוחר יותר."); });
+    }
+
+    function showToast(text) {
+        const container = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = "toast";
+        t.innerText = text;
+        container.appendChild(t);
+        setTimeout(() => {
+            t.style.animation = "toastExit 0.4s ease forwards";
+            setTimeout(() => t.remove(), 400);
+        }, 3500);
+    }
+
+    function playWarningTick() {
+        if (soundMuted) return;
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, ctx.currentTime);
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.15);
+        } catch(e){}
+    }
+
+    function playAlarmSound(isBlindScale = false) {
+        if (soundMuted) return;
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = isBlindScale ? 'sawtooth' : 'square';
+            osc.frequency.setValueAtTime(isBlindScale ? 880 : 440, ctx.currentTime);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.7);
+        } catch(e){}
+    }
 </script>
+
 </body>
 </html>
