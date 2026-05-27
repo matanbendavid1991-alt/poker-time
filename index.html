@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Poker OS Premium - iPad Multi-Tap Fixed</title>
+    <title>העיגול - Poker OS</title>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght=400;600;800&family=Rajdhani:wght=600;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -367,7 +367,7 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_UId0391Y8xL7uX7DAnwUInC-Y2zVunH-L47Bve2E90X2oInq_X06g0eor8f-mS0H/exec";
     const LOCAL_STORAGE_KEY = "poker_os_premium_state_2025";
 
-    const ALL_FRIENDS = ["מתן", "עידן", "אורן", "עומרי", "אור", "שחף", "ברור", "דולב", "גלעד", "ניב", "אלון", "גיא", "אייל"];
+    const ALL_FRIENDS = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
     let players = [];
     let initialRoundTime = 30; 
     let defaultBuyin = 50;
@@ -679,6 +679,24 @@
         const positions = SEAT_POSITIONS[count] || SEAT_POSITIONS[4];
         let pot = 0;
 
+        // חישוב גדלים דינמי לפי כמות משתתפים פעילה لمنע עומס
+        let seatSize = 95;      
+        let nameFontSize = 15;  
+        let buyinFontSize = 19; 
+        let dividerMargin = 6;
+
+        if (count > 8) {
+            seatSize = 72;
+            nameFontSize = 12;
+            buyinFontSize = 14;
+            dividerMargin = 3;
+        } else if (count > 6) {
+            seatSize = 84;
+            nameFontSize = 13;
+            buyinFontSize = 16;
+            dividerMargin = 4;
+        }
+
         activePlayers.forEach((p, idx) => {
             pot += p.in;
             const pos = positions[idx] || {t:50, l:50};
@@ -688,10 +706,14 @@
             seat.style.top = `${pos.t}%`;
             seat.style.left = `${pos.l}%`;
             
+            // החלת גדלים דינמיים ישירות על הסטייל של הכיסא
+            seat.style.width = `${seatSize}px`;
+            seat.style.height = `${seatSize}px`;
+            
             seat.innerHTML = `
-                <div class="seat-name">${p.name}</div>
-                <div class="seat-divider"></div>
-                <div class="seat-buyin">₪${p.in}</div>
+                <div class="seat-name" style="font-size: ${nameFontSize}px; max-width: ${seatSize - 12}px;">${p.name}</div>
+                <div class="seat-divider" style="margin: ${dividerMargin}px 0;"></div>
+                <div class="seat-buyin" style="font-size: ${buyinFontSize}px;">₪${p.in}</div>
             `;
 
             let originalIndex = players.findIndex(x => x.name === p.name);
@@ -754,15 +776,12 @@
         });
     }
 
-    // --- מנגנון זיהוי נגיעות מאוחד (Single + Double Tap) מותאם מוחלט לאייפד ולטאבלטים ---
     let lastTapTime = 0;
     let singleTapTimeout = null;
 
     window.addEventListener('pointerup', (e) => {
-        // אם אנחנו במסך ההגדרות הראשוני, לא לעשות כלום
         if (document.getElementById('setupScreen').style.display !== 'none') return;
         
-        // הגנה: אם לחצו על כפתורים, שחקנים, תפריטים או אינפוטים - לא לגעת בשעון
         if (e.target.closest('button') || e.target.closest('.player-seat') || 
             e.target.closest('.settings-toggle') || e.target.closest('input') || 
             e.target.closest('.modal-content') || e.target.closest('.dot') || 
@@ -774,40 +793,31 @@
         const tapLength = currentTime - lastTapTime;
 
         if (tapLength < 300 && tapLength > 0) {
-            // ==========================================
-            // 🔄 אירוע לחיצה כפולה (Double Tap) זוהה!
-            // ==========================================
-            // מבטל מיד את פקודת הלחיצה הבודדת שאולי נשלחה במקביל
             if (singleTapTimeout) {
                 clearTimeout(singleTapTimeout);
                 singleTapTimeout = null;
             }
 
-            // מאפס את כל השעונים בכל זמן נתון בחזרה למספר השניות שהוגדר
             resetAllTimersToConfig();
             
-            // מפעיל מחדש את השעון ישירות לאחר האיפוס
             isGlobalTimerRunning = true;
             activeTimers.forEach(t => t.paused = false);
             
             updateTimerUI();
             saveCurrentStateToLocalStorage();
-            showToast("🔄 השעון אופס והתחיל מחדש!");
             
-            lastTapTime = 0; // מאפס את הטיימר הפנימי למניעת טריגר משולש
+            // הודעת ה-Toast הוסרה מפה כדי לא להפריע לזרימה של המשחק
+            
+            lastTapTime = 0; 
         } else {
-            // ==========================================
-            // ⏱️ פוטנציאל ללחיצה בודדת (Single Tap)
-            // ==========================================
             if (singleTapTimeout) clearTimeout(singleTapTimeout);
             
-            // ממתינים 200 מילישניות כדי לוודא שהמשתמש לא מבצע דאבל קליק
             singleTapTimeout = setTimeout(() => {
                 if (isGlobalTimerRunning) {
                     isGlobalTimerRunning = false;
                     activeTimers.forEach(t => t.paused = true);
                 } else {
-                    if (activeTimers[0].val === 0) return; // שעון שהגיע ל-0 מצריך דאבל-קליק לאיפוס
+                    if (activeTimers[0].val === 0) return; 
                     isGlobalTimerRunning = true;
                     activeTimers.forEach(t => t.paused = false);
                 }
