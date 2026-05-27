@@ -306,20 +306,30 @@
     <button class="btn" id="cancelEndGameBtn" style="width:100%;" onclick="closeEndGame()">חזור למשחק</button>
 </div>
 
-<div id="aboutModal">
-    <h2 style="color:var(--gold); margin-bottom: 15px; text-shadow: 0 0 10px rgba(255,204,0,0.4);">Poker OS Premium</h2>
-    <div style="color:#eee; font-size:1.1em; line-height:1.5; text-align:right; direction:rtl; margin-bottom:20px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-        <p style="margin-top:0; font-weight:bold; color:var(--gold); text-align:center;">חוקי הבית של "העיגול" – גרסת המקצוענים (והאיטיים)</p>
-        <p>האפליקציה הזו נבנתה מתוך ייאוש טהור. נמאס לנו לחכות שעה לכל אחד שחושב שהוא בטלוויזיה ומחשב הסתברויות כאילו הוא מינימום פרופסור למתמטיקה.</p>
-        <p><strong>חלאס למרוח את הזמן!</strong> המערכת הזו פה כדי להזיז את העניינים, לספור לכם שניות בלי רחמים, לנהל את ה-Rebuy ההזויים שלכם ולסגור את הקיזוזים בסוף הערב כדי שלא תריבו על שקל וחצי.</p>
-        <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-        <p style="color:var(--gold); font-weight:bold; margin-bottom:5px;">איך לא לעכב את המשחק?</p>
-        <ul style="padding-right: 20px; margin-bottom: 0;">
-            <li><strong>הטיימר רץ:</strong> נגיעה במסך מפעילה או עוצרת את השעון. הגיע תורך? תתחיל להזיז את העיניים.</li>
-            <li><strong>עדכונים מהירים:</strong> לחיצה על הכיסא של השחקן פותחת תפריט להוספת כסף או להעפת שחקן שבכה ונרדם.</li>
-        </ul>
+<div id="aboutModal" class="modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center; border: 1px solid rgba(255, 204, 0, 0.2); background: rgba(10, 15, 25, 0.95);">
+        
+        <div style="font-size: 50px; margin-bottom: 10px;">🃏</div>
+        
+        <h2 style="color:var(--gold); margin: 0; font-family: 'Rajdhani', sans-serif; font-size: 2em; letter-spacing: 2px;">POKER OS</h2>
+        <p style="color: rgba(255,255,255,0.5); font-size: 0.9em; margin-bottom: 20px; font-family: 'Heebo';">Version 2.0.25 | Professional Suite</p>
+        
+        <div style="color:#ddd; font-size:1em; line-height:1.6; text-align:center; direction:rtl; margin-bottom:25px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 16px;">
+            <p style="margin-top:0; font-weight:700; color:var(--gold); font-size: 1.1em;">ניהול משחק ברמה אחרת</p>
+            <p style="margin-bottom: 15px;">
+                מערכת Poker OS תוכננה לספק את חוויית המשחק האופטימלית, תוך הקפדה על ניהול זמן מדויק, שקיפות פיננסית וזרימה מקצועית ללא פשרות.
+            </p>
+            
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); margin: 15px 0; padding-top: 15px;">
+                <p style="color: var(--gold); font-weight: 800; font-size: 0.9em; margin-bottom: 5px;">מוקדש למסורת</p>
+                <p style="font-style: italic; color: #bbb; font-size: 0.95em;">
+                    "המערכת פותחה כהוקרה לחברות, למשחק האסטרטגי ולמורשת המפוארת של חברי <strong>'העיגול'</strong> לדורותיהם."
+                </p>
+            </div>
+        </div>
+
+        <button class="btn" style="width:100%; font-weight:bold; background: var(--gold); color: black; border: none; height: 50px; border-radius: 12px;" onclick="closeAbout()">סגור וחזור למשחק</button>
     </div>
-    <button class="btn" style="width:100%;" onclick="closeAbout()">סגור ומעבר למשחק</button>
 </div>
 
 <script>
