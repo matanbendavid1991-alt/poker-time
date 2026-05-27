@@ -17,7 +17,6 @@
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        /* נעילת מסך מוחלטת ומניעת זום באייפד */
         html, body {
             margin: 0; padding: 0;
             background-color: #050505; 
@@ -28,12 +27,11 @@
             position: fixed; 
             overscroll-behavior: none; 
             -webkit-user-select: none; user-select: none;
-            touch-action: manipulation; /* חוסם דאבל-טאפ זום של אייפד באופן טבעי בלי לשבור לחיצות */
+            touch-action: manipulation; 
         }
 
-        /* תיקון קריטי לבלאגן - העמודים זזים ב-Flex ולא קורסים אחד על השני */
         .slider-wrapper { 
-            display: none; /* הופך ל-flex ב-JS לאחר הלחיצה על התחלה */
+            display: none; 
             width: 200vw; 
             height: 100vh; 
             transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); 
@@ -42,7 +40,7 @@
         .page { 
             width: 100vw; 
             height: 100vh; 
-            position: relative; /* מאפשר לילדים שלו להיות אבסולוטיים, אבל שומר על סדר הדפים */
+            position: relative; 
             flex-shrink: 0;
             overflow: hidden;
         }
@@ -271,7 +269,7 @@
         <div class="bottom-controls-container">
             <button class="btn-settings" onclick="openSettings(event)">
                 <svg viewBox="0 0 24 24" style="fill: var(--gold); width: 28px; height: 28px;">
-                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.81,11.69,4.81,12c0,0.31,0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
                 </svg>
             </button>
             <button class="btn-timebank" onclick="addTime(event)">TICKET TIME</button>
@@ -360,7 +358,7 @@
         <div style="color:#ddd; font-size:1.1em; text-align:right; direction:rtl; margin-bottom:25px; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 16px;">
             <p style="text-align:center; font-weight:800; color:var(--gold);">חוקי הבית של "העיגול"</p>
             <p>המערכת סופרת שניות לכל שחקן כדי למנוע מריחת זמן מיותרת.</p>
-            <p><strong>טיפ הפעלה:</strong> נגיעה קלה בכל מקום ריק במסך תפעיל או תעצור את השעון מיד. אם השעון הגיע ל-0, נגיעה במסך תאפס אותו חזרה ל-30 שניות ותתחיל ספירה חדשה.</p>
+            <p><strong>טיפ הפעלה:</strong> נגיעה בודדת קלה בכל מקום ריק במסך תפעיל או תעצור את השעון מיד. לחיצה כפולה מהירה (Double Tap) תאפס את השעון מכל מצב חזרה ל-30 שניות.</p>
         </div>
         <button class="btn" style="width:100%; font-weight:bold;" onclick="closeAbout(event)">חזור למשחק</button>
     </div>
@@ -384,7 +382,6 @@
     let clockInterval = null;
     let soundMuted = false;
     let wakeLockObj = null;
-    let pokerTapCooldown = false; // משתנה הגנה גלובלי מפני דאבל-קליק מהיר באייפד
 
     const BLIND_STRUCTURE = [
         {sb:1, bb:2, time:20}, {sb:2, bb:4, time:20}, {sb:3, bb:6, time:20},
@@ -412,17 +409,11 @@
 
     let selectedSetupFriends = [];
 
-    // מניעת גלגול קפיצי (Rubber-banding) ברקע הכללי
     document.addEventListener('touchmove', function(e) {
         if (e.target.closest('.setup-card') || e.target.closest('.modal-content') || e.target.closest('.friends-grid')) {
             return; 
         }
         if(e.cancelable) { e.preventDefault(); }
-    }, { passive: false });
-
-    // חסימה מוחלטת של תגובת הזום המובנית של האייפד לדאבל-טאפ גלובלי בשטחים ריקים
-    document.addEventListener('dblclick', function(e) {
-        e.preventDefault();
     }, { passive: false });
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -764,44 +755,53 @@
         });
     }
 
-    // --- אירוע הלחיצה הגלובלי החכם והמתוקן למניעת כפילויות דאבל-טאפ ---
+    // --- נגיעה בודדת (Pointerup): משמש רק להפעלה ועצירה של השעון (Play / Pause) ---
+    let blockSingleTapTimer = null;
     window.addEventListener('pointerup', (e) => {
         if (document.getElementById('setupScreen').style.display !== 'none') return;
         
-        // רשימת אלמנטים אינטראקטיביים שלא יעצרו את השעון בלחיצה עליהם
         if (e.target.closest('button') || e.target.closest('.player-seat') || e.target.closest('.settings-toggle') || e.target.closest('input') || e.target.closest('.modal-content') || e.target.closest('.dot') || e.target.closest('svg')) {
             return;
         }
 
-        // הגנה: אם יש כרגע חסימה פעילה (לחיצה שנייה של דאבל טאפ), פשוט נתעלם ממנה לחלוטין
-        if (pokerTapCooldown) return;
+        // הגנה זמנית קטנה כדי שלחיצה כפולה לא תטריגר בטעות גם לחיצה בודדת
+        if (blockSingleTapTimer) return;
+        blockSingleTapTimer = setTimeout(() => { blockSingleTapTimer = null; }, 250);
 
-        // מקרה קצה: השעון עומד על 0 והמשתמש לוחץ כדי לאפס ולהפעיל מחדש
-        if (!isGlobalTimerRunning && activeTimers[0].val === 0) {
-            resetAllTimersToConfig();
-            isGlobalTimerRunning = true;
-            activeTimers.forEach(t => t.paused = false);
-            
-            // מפעילים חסימה זמנית של 400 מילישניות כדי שהלחיצה השנייה של הדאבל-טאפ לא תעצור אותו מיד!
-            pokerTapCooldown = true;
-            setTimeout(() => { pokerTapCooldown = false; }, 400);
-            
-            updateTimerUI();
-            saveCurrentStateToLocalStorage();
-            return;
-        }
-
-        // התנהגות רגילה של פליי/פאוז בלחיצה בודדת
         if (isGlobalTimerRunning) {
             isGlobalTimerRunning = false;
             activeTimers.forEach(t => t.paused = true);
         } else {
+            // אם השעון עומד כרגע על 0, לחיצה בודדת לא תעשה כלום (מצריך דאבל קליק לאיפוס)
+            if (activeTimers[0].val === 0) return;
+            
             isGlobalTimerRunning = true;
             activeTimers.forEach(t => t.paused = false);
         }
         updateTimerUI();
         saveCurrentStateToLocalStorage();
     });
+
+    // --- לחיצה כפולה (Dblclick): מיועדת ספציפית לאיפוס השעון ל-30 שניות והתחלה מחדש ---
+    window.addEventListener('dblclick', (e) => {
+        e.preventDefault(); // חוסם את זום האייפד המעצבן
+        
+        if (document.getElementById('setupScreen').style.display !== 'none') return;
+        if (e.target.closest('button') || e.target.closest('.player-seat') || e.target.closest('.settings-toggle') || e.target.closest('input') || e.target.closest('.modal-content') || e.target.closest('.dot') || e.target.closest('svg')) {
+            return;
+        }
+
+        // איפוס מוחלט של כל השעונים לזמן שהוגדר מראש
+        resetAllTimersToConfig();
+        
+        // התחלה ישירה של השעון מיד לאחר האיפוס
+        isGlobalTimerRunning = true;
+        activeTimers.forEach(t => t.paused = false);
+        
+        updateTimerUI();
+        saveCurrentStateToLocalStorage();
+        showToast("🔄 השעון אופס והתחיל מחדש!");
+    }, { passive: false });
 
     function resetAllTimersToConfig() {
         activeTimers.forEach(t => {
