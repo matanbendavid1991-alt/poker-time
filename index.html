@@ -254,7 +254,7 @@
 
 <div id="addPlayerModal">
     <h2 style="color:var(--success); margin-bottom: 20px; text-shadow: 0 0 10px rgba(52,199,89,0.4);">הוספת שחקן מאחר</h2>
-    <input type="text" id="newPlayerNameInput" class="modal-input" placeholder="שם השחקן...">
+    <input type="text" id="newPlayerNameInput" class="modal-input" placeholder="...שם השחקן">
     <div style="display:flex; gap:12px; margin-top: 10px;">
         <button class="btn" style="flex:1; color:var(--success); border-color:var(--success); background:rgba(52,199,89,0.1);" onclick="confirmAddLatePlayer()">הוסף</button>
         <button class="btn" style="flex:1;" onclick="document.getElementById('addPlayerModal').style.display='none'">ביטול</button>
@@ -272,11 +272,6 @@
     <div class="settings-row">
         <span>🔇 השתקת צלילים</span>
         <div id="muteToggle" class="settings-toggle" onclick="toggleMute()"></div>
-    </div>
-
-    <div class="settings-row">
-        <span>📱 מסך דולק קבוע</span>
-        <div id="wakeLockToggle" class="settings-toggle active" onclick="toggleWakeLockLive()"></div>
     </div>
 
     <div class="settings-row" style="flex-direction: column; gap: 10px; align-items: stretch;">
