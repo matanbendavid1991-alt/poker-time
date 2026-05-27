@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>העיגול - Poker OS</title>
+    <title>Poker OS Premium - iPad Multi-Tap Fixed</title>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght=400;600;800&family=Rajdhani:wght=600;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -56,6 +56,20 @@
             font-weight: 600; font-size: 1.1em; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
             animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; direction: rtl; text-align: center; 
+        }
+        @media (max-width: 768px) {
+            #splashLogo { width: 220px; height: 220px; } 
+            .setup-card, .modal-content { width: 92%; padding: 25px 20px; }
+            .poker-table { width: 92vw; aspect-ratio: 1.8 / 1; border-width: 10px; }
+            .player-seat { width: 70px; height: 70px; }
+            .seat-name { font-size: 12px; max-width: 55px; }
+            .seat-buyin { font-size: 14px; }
+            .time-val { font-size: 25vw; }
+            .game-clock { font-size: 4.5vw; padding: 6px 14px; }
+            .blind-info { padding: 4px 12px; gap: 4px; }
+            .total-pot-container h2 { font-size: 15vw; }
+            .controls { width: 90%; justify-content: center; left: 50%; transform: translateX(-50%); bottom: 60px; }
+            .bottom-controls-container { bottom: 35px; }
         }
         @keyframes toastEnter { from { opacity: 0; transform: translateY(-30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes toastExit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-30px) scale(0.9); } }
@@ -206,21 +220,6 @@
         .btn-settings { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%; width: 56px; height: 56px; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
 
         .btn-timebank { background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 900; font-size: 16px; letter-spacing: 1.5px; border: 1px solid rgba(255, 61, 0, 0.5); padding: 14px 28px; border-radius: 30px; box-shadow: 0 8px 25px rgba(255, 59, 48, 0.4); }
-
-        @media (max-width: 768px) {
-            #splashLogo { width: 220px; height: 220px; } 
-            .setup-card, .modal-content { width: 92%; padding: 25px 20px; }
-            .poker-table { width: 92vw; aspect-ratio: 1.8 / 1; border-width: 10px; }
-            .player-seat { width: 70px; height: 70px; }
-            .seat-name { font-size: 12px; max-width: 55px; }
-            .seat-buyin { font-size: 14px; }
-            .time-val { font-size: 25vw; }
-            .game-clock { font-size: 4.5vw; padding: 6px 14px; }
-            .blind-info { padding: 4px 12px; gap: 4px; }
-            .total-pot-container h2 { font-size: 15vw; }
-            .controls { width: 90%; justify-content: center; left: 50%; transform: translateX(-50%); bottom: 60px; }
-            .bottom-controls-container { bottom: 35px; }
-        }
     </style>
 </head>
 <body>
@@ -368,7 +367,7 @@
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_UId0391Y8xL7uX7DAnwUInC-Y2zVunH-L47Bve2E90X2oInq_X06g0eor8f-mS0H/exec";
     const LOCAL_STORAGE_KEY = "poker_os_premium_state_2025";
 
-    const ALL_FRIENDS = ["מתן", "רועי", "שחר", "דור", "רדיון", "טום", "בן", "תום", "טל"];
+    const ALL_FRIENDS = ["מתן", "עידן", "אורן", "עומרי", "אור", "שחף", "ברור", "דולב", "גלעד", "ניב", "אלון", "גיא", "אייל"];
     let players = [];
     let initialRoundTime = 30; 
     let defaultBuyin = 50;
@@ -755,53 +754,71 @@
         });
     }
 
-    // --- נגיעה בודדת (Pointerup): משמש רק להפעלה ועצירה של השעון (Play / Pause) ---
-    let blockSingleTapTimer = null;
+    // --- מנגנון זיהוי נגיעות מאוחד (Single + Double Tap) מותאם מוחלט לאייפד ולטאבלטים ---
+    let lastTapTime = 0;
+    let singleTapTimeout = null;
+
     window.addEventListener('pointerup', (e) => {
+        // אם אנחנו במסך ההגדרות הראשוני, לא לעשות כלום
         if (document.getElementById('setupScreen').style.display !== 'none') return;
         
-        if (e.target.closest('button') || e.target.closest('.player-seat') || e.target.closest('.settings-toggle') || e.target.closest('input') || e.target.closest('.modal-content') || e.target.closest('.dot') || e.target.closest('svg')) {
+        // הגנה: אם לחצו על כפתורים, שחקנים, תפריטים או אינפוטים - לא לגעת בשעון
+        if (e.target.closest('button') || e.target.closest('.player-seat') || 
+            e.target.closest('.settings-toggle') || e.target.closest('input') || 
+            e.target.closest('.modal-content') || e.target.closest('.dot') || 
+            e.target.closest('svg') || e.target.closest('.blind-arrow-btn')) {
             return;
         }
 
-        // הגנה זמנית קטנה כדי שלחיצה כפולה לא תטריגר בטעות גם לחיצה בודדת
-        if (blockSingleTapTimer) return;
-        blockSingleTapTimer = setTimeout(() => { blockSingleTapTimer = null; }, 250);
+        const currentTime = Date.now();
+        const tapLength = currentTime - lastTapTime;
 
-        if (isGlobalTimerRunning) {
-            isGlobalTimerRunning = false;
-            activeTimers.forEach(t => t.paused = true);
-        } else {
-            // אם השעון עומד כרגע על 0, לחיצה בודדת לא תעשה כלום (מצריך דאבל קליק לאיפוס)
-            if (activeTimers[0].val === 0) return;
+        if (tapLength < 300 && tapLength > 0) {
+            // ==========================================
+            // 🔄 אירוע לחיצה כפולה (Double Tap) זוהה!
+            // ==========================================
+            // מבטל מיד את פקודת הלחיצה הבודדת שאולי נשלחה במקביל
+            if (singleTapTimeout) {
+                clearTimeout(singleTapTimeout);
+                singleTapTimeout = null;
+            }
+
+            // מאפס את כל השעונים בכל זמן נתון בחזרה למספר השניות שהוגדר
+            resetAllTimersToConfig();
             
+            // מפעיל מחדש את השעון ישירות לאחר האיפוס
             isGlobalTimerRunning = true;
             activeTimers.forEach(t => t.paused = false);
+            
+            updateTimerUI();
+            saveCurrentStateToLocalStorage();
+            showToast("🔄 השעון אופס והתחיל מחדש!");
+            
+            lastTapTime = 0; // מאפס את הטיימר הפנימי למניעת טריגר משולש
+        } else {
+            // ==========================================
+            // ⏱️ פוטנציאל ללחיצה בודדת (Single Tap)
+            // ==========================================
+            if (singleTapTimeout) clearTimeout(singleTapTimeout);
+            
+            // ממתינים 200 מילישניות כדי לוודא שהמשתמש לא מבצע דאבל קליק
+            singleTapTimeout = setTimeout(() => {
+                if (isGlobalTimerRunning) {
+                    isGlobalTimerRunning = false;
+                    activeTimers.forEach(t => t.paused = true);
+                } else {
+                    if (activeTimers[0].val === 0) return; // שעון שהגיע ל-0 מצריך דאבל-קליק לאיפוס
+                    isGlobalTimerRunning = true;
+                    activeTimers.forEach(t => t.paused = false);
+                }
+                updateTimerUI();
+                saveCurrentStateToLocalStorage();
+                singleTapTimeout = null;
+            }, 200); 
+
+            lastTapTime = currentTime;
         }
-        updateTimerUI();
-        saveCurrentStateToLocalStorage();
     });
-
-    // --- לחיצה כפולה (Dblclick): מיועדת ספציפית לאיפוס השעון ל-30 שניות והתחלה מחדש ---
-    window.addEventListener('dblclick', (e) => {
-        e.preventDefault(); // חוסם את זום האייפד המעצבן
-        
-        if (document.getElementById('setupScreen').style.display !== 'none') return;
-        if (e.target.closest('button') || e.target.closest('.player-seat') || e.target.closest('.settings-toggle') || e.target.closest('input') || e.target.closest('.modal-content') || e.target.closest('.dot') || e.target.closest('svg')) {
-            return;
-        }
-
-        // איפוס מוחלט של כל השעונים לזמן שהוגדר מראש
-        resetAllTimersToConfig();
-        
-        // התחלה ישירה של השעון מיד לאחר האיפוס
-        isGlobalTimerRunning = true;
-        activeTimers.forEach(t => t.paused = false);
-        
-        updateTimerUI();
-        saveCurrentStateToLocalStorage();
-        showToast("🔄 השעון אופס והתחיל מחדש!");
-    }, { passive: false });
 
     function resetAllTimersToConfig() {
         activeTimers.forEach(t => {
