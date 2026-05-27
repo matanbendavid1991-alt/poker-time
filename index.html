@@ -668,61 +668,44 @@
         }
     }
 
-    function renderTable() {
-        const container = document.getElementById('seatsContainer');
-        container.querySelectorAll('.player-seat').forEach(el => el.remove());
+function renderTable() {
+    const container = document.getElementById('seatsContainer');
+    container.querySelectorAll('.player-seat').forEach(el => el.remove());
 
-        const activePlayers = players.filter(p => !p.removed);
-        const count = activePlayers.length;
-        if (count === 0) return;
+    const activePlayers = players.filter(p => !p.removed);
+    const count = activePlayers.length;
+    if (count === 0) return;
 
-        const positions = SEAT_POSITIONS[count] || SEAT_POSITIONS[4];
-        let pot = 0;
+    const positions = SEAT_POSITIONS[count] || SEAT_POSITIONS[4];
+    let pot = 0;
 
-        // חישוב גדלים דינמי לפי כמות משתתפים פעילה لمنע עומס
-        let seatSize = 95;      
-        let nameFontSize = 15;  
-        let buyinFontSize = 19; 
-        let dividerMargin = 6;
+    // מנגנון הקטנה דינמית
+    let seatSize = count > 8 ? 70 : (count > 6 ? 82 : 95);
+    let nameFontSize = count > 8 ? 12 : 15;
+    let buyinFontSize = count > 8 ? 13 : 18;
 
-        if (count > 8) {
-            seatSize = 72;
-            nameFontSize = 12;
-            buyinFontSize = 14;
-            dividerMargin = 3;
-        } else if (count > 6) {
-            seatSize = 84;
-            nameFontSize = 13;
-            buyinFontSize = 16;
-            dividerMargin = 4;
-        }
+    activePlayers.forEach((p, idx) => {
+        pot += p.in;
+        const pos = positions[idx] || {t:50, l:50};
+        const seat = document.createElement('div');
+        seat.className = `player-seat in-game`;
+        seat.style.cssText = `position:absolute; top:${pos.t}%; left:${pos.l}%; width:${seatSize}px; height:${seatSize}px; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:50%; border:2px solid var(--gold); z-index:100; pointer-events:auto;`;
+        
+        seat.innerHTML = `
+            <div style="font-size:${nameFontSize}px; font-weight:800; color:white;">${p.name}</div>
+            <div style="width:50%; height:2px; background:var(--gold); margin:4px 0;"></div>
+            <div style="color:var(--gold); font-size:${buyinFontSize}px; font-weight:900;">₪${p.in}</div>
+        `;
 
-        activePlayers.forEach((p, idx) => {
-            pot += p.in;
-            const pos = positions[idx] || {t:50, l:50};
-
-            const seat = document.createElement('div');
-            seat.className = `player-seat in-game`;
-            seat.style.top = `${pos.t}%`;
-            seat.style.left = `${pos.l}%`;
-            
-            // החלת גדלים דינמיים ישירות על הסטייל של הכיסא
-            seat.style.width = `${seatSize}px`;
-            seat.style.height = `${seatSize}px`;
-            
-            seat.innerHTML = `
-                <div class="seat-name" style="font-size: ${nameFontSize}px; max-width: ${seatSize - 12}px;">${p.name}</div>
-                <div class="seat-divider" style="margin: ${dividerMargin}px 0;"></div>
-                <div class="seat-buyin" style="font-size: ${buyinFontSize}px;">₪${p.in}</div>
-            `;
-
-            let originalIndex = players.findIndex(x => x.name === p.name);
-            seat.onclick = (e) => openRebuy(e, originalIndex);
-            container.appendChild(seat);
-        });
-
-        document.getElementById('potDisplay').innerText = `₪${pot}`;
-    }
+        let originalIndex = players.findIndex(x => x.name === p.name);
+        seat.onclick = (e) => {
+            e.stopPropagation(); // מונע חסימת לחיצה
+            openRebuy(e, originalIndex);
+        };
+        container.appendChild(seat);
+    });
+    document.getElementById('potDisplay').innerText = `₪${pot}`;
+}
 
     function startGlobalInterval() {
         if (globalInterval) clearInterval(globalInterval);
