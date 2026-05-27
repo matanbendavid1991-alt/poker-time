@@ -349,7 +349,7 @@
             <span style="color:#aaa;">סכום שחולק: </span><span id="endGameDistributed" style="color:white; font-weight:900;">0</span>
         </div>
         <div id="validationMessage" style="color:var(--danger); margin-bottom:15px; font-weight:bold; display:none;">הסכום שחולק אינו תואם לקופה!</div>
-        <button class="btn" id="finishAndSendBtn" style="width:100%; color:black; font-weight:800; border:none; margin-bottom: 12px; background: linear-gradient(135deg, var(--success), #28a745);" onclick="submitGameHistory()">הפק דוח וסיים משחק</button>
+        <button class="btn" id="finishAndSendBtn" style="width:100%; color:black; font-weight:800; border:none; margin-bottom: 12px; background: linear-gradient(135deg, var(--success), #28a745);" onclick="submitGameHistory()">הפק דוח וסימי משחק</button>
         <button class="btn" id="cancelEndGameBtn" style="width:100%;" onclick="closeEndGame(event)">חזור למשחק</button>
     </div>
 </div>
@@ -384,6 +384,7 @@
     let clockInterval = null;
     let soundMuted = false;
     let wakeLockObj = null;
+    let pokerTapCooldown = false; // משתנה הגנה גלובלי מפני דאבל-קליק מהיר באייפד
 
     const BLIND_STRUCTURE = [
         {sb:1, bb:2, time:20}, {sb:2, bb:4, time:20}, {sb:3, bb:6, time:20},
@@ -417,6 +418,11 @@
             return; 
         }
         if(e.cancelable) { e.preventDefault(); }
+    }, { passive: false });
+
+    // חסימה מוחלטת של תגובת הזום המובנית של האייפד לדאבל-טאפ גלובלי בשטחים ריקים
+    document.addEventListener('dblclick', function(e) {
+        e.preventDefault();
     }, { passive: false });
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -758,7 +764,7 @@
         });
     }
 
-    // --- אירוע הלחיצה הגלובלי המתוקן לאייפד (ללא דיליי וללא חסימות) ---
+    // --- אירוע הלחיצה הגלובלי החכם והמתוקן למניעת כפילויות דאבל-טאפ ---
     window.addEventListener('pointerup', (e) => {
         if (document.getElementById('setupScreen').style.display !== 'none') return;
         
@@ -767,14 +773,29 @@
             return;
         }
 
-        // לוגיקת שעון חכמה
+        // הגנה: אם יש כרגע חסימה פעילה (לחיצה שנייה של דאבל טאפ), פשוט נתעלם ממנה לחלוטין
+        if (pokerTapCooldown) return;
+
+        // מקרה קצה: השעון עומד על 0 והמשתמש לוחץ כדי לאפס ולהפעיל מחדש
+        if (!isGlobalTimerRunning && activeTimers[0].val === 0) {
+            resetAllTimersToConfig();
+            isGlobalTimerRunning = true;
+            activeTimers.forEach(t => t.paused = false);
+            
+            // מפעילים חסימה זמנית של 400 מילישניות כדי שהלחיצה השנייה של הדאבל-טאפ לא תעצור אותו מיד!
+            pokerTapCooldown = true;
+            setTimeout(() => { pokerTapCooldown = false; }, 400);
+            
+            updateTimerUI();
+            saveCurrentStateToLocalStorage();
+            return;
+        }
+
+        // התנהגות רגילה של פליי/פאוז בלחיצה בודדת
         if (isGlobalTimerRunning) {
             isGlobalTimerRunning = false;
             activeTimers.forEach(t => t.paused = true);
         } else {
-            if (activeTimers[0].val === 0) {
-                resetAllTimersToConfig();
-            }
             isGlobalTimerRunning = true;
             activeTimers.forEach(t => t.paused = false);
         }
@@ -851,7 +872,6 @@
     }
 
     function openSettings(e) { if(e) e.stopPropagation(); document.getElementById('settingsModal').style.display = 'flex'; }
-    // שינוי של פונקציית סגירת הגדרות לקבלת ה-Event כראוי
     function closeSettings(e) { if(e) e.stopPropagation(); document.getElementById('settingsModal').style.display = 'none'; }
 
     function updateLiveRoundTime(val) {
