@@ -59,12 +59,8 @@
         .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
         .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
 
-    .time-val { 
-    font-family: 'Rajdhani', sans-serif; 
-    font-size: 18vw; 
-    line-height: 1; 
-    transition: transform 0.2s ease; 
-}
+        .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
+        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
 
         .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
         .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
