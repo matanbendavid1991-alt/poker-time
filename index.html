@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700;900&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --gold: #ffcc00; 
+            --gold: #ffcc00;
             --danger: #ff3b30; 
             --success: #34c759; 
             --royal-blue: #1a3a6c; 
@@ -17,7 +17,8 @@
         * { box-sizing: border-box; }
         
         body { 
-            margin: 0; background-color: black; color: white;
+            margin: 0;
+            background-color: black; color: white;
             font-family: -apple-system, system-ui, sans-serif;
             height: 100vh; height: 100dvh; width: 100vw; overflow: hidden; user-select: none;
         }
@@ -30,7 +31,20 @@
         #progressBar { position: absolute; top: 0; left: 0; height: 4px; background: var(--gold); box-shadow: 0 0 10px var(--gold); width: 100%; transition: width 1s linear; z-index: 1000; }
         
         #splashScreen { position: fixed; inset: 0; background: black; z-index: 100000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
-        #splashLogo { width: 280px; height: 280px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0; transform: scale(0.85); animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        /* שינוי דינמי ללוגו במסך הטעינה */
+        #splashLogo { 
+            width: 45vw; 
+            height: 45vw; 
+            max-width: 280px; 
+            max-height: 280px; 
+            min-width: 180px; 
+            min-height: 180px; 
+            background-image: url('logo.png'); 
+            background-size: contain; background-repeat: no-repeat; background-position: center; 
+            opacity: 0; transform: scale(0.85); animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
+        
         @keyframes splashEntrance { 0% { opacity: 0; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1); } }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease; }
@@ -56,8 +70,20 @@
         .blind-arrow-btn { background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .blind-arrow-btn:active { transform: scale(1.3); }
         
-        .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
-        .app-logo { width: 240px; height: 240px; background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; }
+        /* התאמות למיכל הלוגו כדי לשמור עליו מרוכז וחכם */
+        .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; display: flex; justify-content: center; align-items: center; width: 100%; }
+        
+        /* שינוי דינמי ללוגו שמופיע ברקע מאחורי השעון */
+        .app-logo { 
+            width: 40vw; 
+            height: 40vw; 
+            max-width: 320px; 
+            max-height: 320px; 
+            min-width: 160px; 
+            min-height: 160px; 
+            background-image: url('logo.png'); 
+            background-size: contain; background-repeat: no-repeat; background-position: center; 
+        }
 
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
         .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
@@ -149,7 +175,6 @@
         .sheet-input-row input:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 10px rgba(255,204,0,0.3); }
 
         @media (max-width: 768px) {
-            #splashLogo { width: 220px; height: 220px; } 
             .setup-card, #rebuyModal, #endGameModal, #addPlayerModal, #aboutModal { width: 90%; padding: 25px 20px; }
             .setup-card input, .modal-input { width: 95%; }
             .poker-table { width: 92vw; aspect-ratio: 1.8 / 1; border-width: 10px; }
@@ -493,7 +518,8 @@
         if(e.target.closest('.btn') || e.target.closest('.btn-info') || e.target.closest('.player-seat') || 
            e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#endGameModal') || 
            e.target.closest('#bottomSheet') || e.target.closest('#aboutModal') || e.target.closest('.blind-arrow-btn') || 
-           e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) return;
+           e.target.closest('.btn-settings') || e.target.closest('.btn-timebank') || (splashScreenObj && splashScreenObj.style.display !== 'none')) 
+           return;
         
         const diff = startX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 60) {
@@ -524,7 +550,8 @@
             document.getElementById('pauseToggleBtn').innerHTML = "<span>▶️ הפעל שעון</span>";
         } else {
             if(isActionRunning) { 
-                clearInterval(timerId); isActionRunning = false;
+                clearInterval(timerId);
+                isActionRunning = false;
                 document.getElementById('pauseToggleBtn').innerHTML = "<span>▶️ הפעל שעון</span>";
             } else {
                 if(timeLeft === 0) timeLeft = defaultRoundTime;
@@ -645,7 +672,8 @@
         }
     }
 
-    function addTime(e) { e.stopPropagation(); timeLeft += defaultRoundTime; updateUI(); }
+    function addTime(e) { e.stopPropagation();
+        timeLeft += defaultRoundTime; updateUI(); }
     
     function changeBlindLevel(e, direction) {
         e.stopPropagation();
@@ -663,22 +691,22 @@
         document.getElementById('rebuyAmount').value = 50; 
         document.getElementById('rebuyModal').style.display = 'block';
     }
-    function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none'; }
+    function closeRebuy() { document.getElementById('rebuyModal').style.display = 'none';
+    }
     
     document.getElementById('confirmBtn').onclick = () => { 
         players[selIdx].name = document.getElementById('playerNameInput').value;
         const addAmount = +document.getElementById('rebuyAmount').value; 
-        if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount; } 
+        if(addAmount > 0) { players[selIdx].in += addAmount; totalPot += addAmount;
+        } 
         render(); closeRebuy(); updateUI(); 
     };
-    
     document.getElementById('removeBtn').onclick = () => { 
         const now = new Date();
         players[selIdx].leaveTime = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         players[selIdx].removed = true;
         render(); closeRebuy(); updateUI(); 
     };
-    
     // --- פונקציות תפריט מחליק חדשות ---
     function openSettings(e) {
         e.stopPropagation();
@@ -693,13 +721,14 @@
         document.getElementById('sheetOverlay').classList.remove('open');
     }
 
-    function toggleMute() { isMuted = !isMuted; document.getElementById('muteToggle').classList.toggle('active', isMuted); }
+    function toggleMute() { isMuted = !isMuted; document.getElementById('muteToggle').classList.toggle('active', isMuted);
+    }
 
     function toggleTheme() {
         isRedTheme = !isRedTheme;
         const btn = document.getElementById('themeToggleBtn');
         if(isRedTheme) {
-            document.documentElement.style.setProperty('--gold', '#ff3b30'); 
+            document.documentElement.style.setProperty('--gold', '#ff3b30');
             document.documentElement.style.setProperty('--royal-blue', '#2a0808');
             document.documentElement.style.setProperty('--dark-blue', '#120000');
             btn.innerText = "🔴 וגאס (אדום)";
@@ -715,8 +744,10 @@
         }
     }
 
-    function openAbout(e) { e.stopPropagation(); document.getElementById('aboutModal').style.display = 'block'; }
-    function closeAbout() { document.getElementById('aboutModal').style.display = 'none'; }
+    function openAbout(e) { e.stopPropagation(); document.getElementById('aboutModal').style.display = 'block';
+    }
+    function closeAbout() { document.getElementById('aboutModal').style.display = 'none';
+    }
     
     function updateLiveRoundTime(val) {
         const parsed = parseInt(val);
@@ -742,9 +773,11 @@
 
     function confirmAddLatePlayer() {
         const name = document.getElementById('newPlayerNameInput').value;
-        if (!name || name.trim() === "") { showToast("נא להזין שם שחקן", true); return; }
+        if (!name || name.trim() === "") { showToast("נא להזין שם שחקן", true); return;
+        }
         
-        const currentBuyin = +document.getElementById('initialBuyin').value || 50;
+        const currentBuyin = +document.getElementById('initialBuyin').value ||
+        50;
         const now = new Date();
         const joinTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         
@@ -795,13 +828,15 @@
                 <span>${p.name} (השקיע: ${p.in})</span>
                 <input type="number" class="end-game-out-input" data-idx="${i}" value="0" oninput="calculateDistribution()">
             `;
-            container.appendChild(div);
+   
+         container.appendChild(div);
         });
         calculateDistribution();
         document.getElementById('endGameModal').style.display = 'block';
     }
     
-    function closeEndGame() { document.getElementById('endGameModal').style.display = 'none'; }
+    function closeEndGame() { document.getElementById('endGameModal').style.display = 'none';
+    }
 
     function calculateDistribution() {
         const inputs = document.querySelectorAll('.end-game-out-input');
@@ -839,12 +874,14 @@
             players: players.map((p, idx) => {
                 const outVal = +document.querySelector(`.end-game-out-input[data-idx="${idx}"]`).value || 0;
                 const finalLeaveTime = p.removed ? p.leaveTime : endOfGameTime;
-                return { 
+           
+     return { 
                     name: p.name, 
                     buyin: p.in, 
                     cashout: outVal, 
                     profit: outVal - p.in, 
-                    joinTime: p.joinTime, 
+   
+                 joinTime: p.joinTime, 
                     leaveTime: finalLeaveTime 
                 };
             })
@@ -860,14 +897,15 @@
         })
         .then(() => {
             showToast('המשחק הסתיים והנתונים נשמרו בהצלחה!');
-            safeRemoveLocal();
+     
+       safeRemoveLocal();
             setTimeout(() => location.reload(), 2500); 
         })
         .catch(err => {
             showToast('בעיית רשת: הנתונים נשמרו במכשיר, ויסונכרנו בהמשך.', true);
             setTimeout(() => location.reload(), 3000);
         });
-    }
+}
 </script>
 </body>
 </html>
