@@ -20,7 +20,11 @@
             margin: 0;
             background-color: black; color: white;
             font-family: -apple-system, system-ui, sans-serif;
-            height: 100vh; height: 100dvh; width: 100vw; overflow: hidden; user-select: none;
+            /* נעילת הגובה למניעת קפיצות מקלדת */
+            height: 100vh; /* גיבוי */
+            height: var(--app-height, 100vh); 
+            width: 100vw; overflow: hidden; user-select: none;
+            padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
         }
 
         #toastContainer { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 999999; pointer-events: none; }
@@ -32,19 +36,12 @@
         
         #splashScreen { position: fixed; inset: 0; background: black; z-index: 100000; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
         
-        /* שינוי דינמי ללוגו במסך הטעינה */
+        /* לוגו דינמי למסך הפתיחה */
         #splashLogo { 
-            width: 45vw; 
-            height: 45vw; 
-            max-width: 280px; 
-            max-height: 280px; 
-            min-width: 180px; 
-            min-height: 180px; 
-            background-image: url('logo.png'); 
-            background-size: contain; background-repeat: no-repeat; background-position: center; 
+            width: 45vw; height: 45vw; max-width: 280px; max-height: 280px; min-width: 150px; min-height: 150px;
+            background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; 
             opacity: 0; transform: scale(0.85); animation: splashEntrance 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
-        
         @keyframes splashEntrance { 0% { opacity: 0; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1); } }
         
         #setupScreen { position: fixed; inset: 0; background: black; z-index: 9999; display: flex; justify-content: center; align-items: center; overflow-y: auto; padding: 20px 0; transition: opacity 0.5s ease; }
@@ -60,8 +57,9 @@
         .friend-circle .v-badge { position: absolute; top: -2px; right: -2px; background: var(--gold); color: black; width: 22px; height: 22px; border-radius: 50%; font-size: 0.8em; display: flex; justify-content: center; align-items: center; display: none; }
         .friend-circle.selected .v-badge { display: flex; }
 
-        .slider-wrapper { display: flex; width: 200vw; height: 100vh; height: 100dvh; transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); display: none; }
-        .page { width: 100vw; height: 100vh; height: 100dvh; position: relative; overflow: hidden; flex-shrink: 0; }
+        /* עדכון משתנה הגובה במעטפת ובעמודים */
+        .slider-wrapper { display: flex; width: 200vw; height: var(--app-height, 100vh); transition: transform 0.5s cubic-bezier(0.15, 0.3, 0.25, 1); display: none; }
+        .page { width: 100vw; height: var(--app-height, 100vh); position: relative; overflow: hidden; flex-shrink: 0; }
 
         .admin-header { position: absolute; top: 15px; width: 100%; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 30; }
         .game-clock { font-size: 2.2vw; font-family: 'Rajdhani', monospace; color: var(--gold); font-weight: bold; text-shadow: 0 0 10px rgba(255,204,0,0.5); background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 8px 22px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
@@ -70,26 +68,23 @@
         .blind-arrow-btn { background: none; border: none; color: var(--gold); cursor: pointer; padding: 4px; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .blind-arrow-btn:active { transform: scale(1.3); }
         
-        /* התאמות למיכל הלוגו כדי לשמור עליו מרוכז וחכם */
-        .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; display: flex; justify-content: center; align-items: center; width: 100%; }
+        .logo-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; text-align: center; }
         
-        /* שינוי דינמי ללוגו שמופיע ברקע מאחורי השעון */
+        /* לוגו דינמי במרכז הטיימר - כולל אופסיטי עמום */
         .app-logo { 
-            width: 40vw; 
-            height: 40vw; 
-            max-width: 320px; 
-            max-height: 320px; 
-            min-width: 160px; 
-            min-height: 160px; 
-            background-image: url('logo.png'); 
-            opacity: 0.3; background-size: contain; background-repeat: no-repeat; background-position: center; 
+            width: 40vw; height: 40vw; max-width: 320px; max-height: 320px; min-width: 160px; min-height: 160px;
+            background-image: url('logo.png'); background-size: contain; background-repeat: no-repeat; background-position: center; 
+            opacity: 0.25; /* עוצמת שקיפות הלוגו */
         }
 
         .timer { position: absolute; display: flex; justify-content: center; align-items: center; font-weight: 900; transition: opacity 0.3s ease; pointer-events: none; z-index: 10; }
-        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; }
+        
+        /* ביטול ההילה סביב מספרי הטיימר */
+        .time-val { font-family: 'Rajdhani', sans-serif; font-size: 18vw; line-height: 1; transition: transform 0.2s ease; text-shadow: none; }
 
-        .top { top: 5vh; left: 50%; transform: translateX(-50%) rotate(180deg); }
-        .bottom { bottom: 6vh; left: 50%; transform: translateX(-50%); }
+        /* שינוי מ-vh ל-% כדי שהאלמנטים לא יימעכו כשהגובה משתנה (באנדרואיד למשל) */
+        .top { top: 6%; left: 50%; transform: translateX(-50%) rotate(180deg); }
+        .bottom { bottom: 7%; left: 50%; transform: translateX(-50%); }
         .left { left: 8vw; top: 50%; transform: translate(-50%, -50%) rotate(90deg); }
         .right { right: 8vw; top: 50%; transform: translate(50%, -50%) rotate(-90deg); }
 
@@ -100,7 +95,11 @@
         @keyframes pulse-warning { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
         .zero-blink .time-val { animation: pulseZero 0.5s infinite; color: var(--danger); }
 
-        .poker-table { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 80vw; max-width: 900px; aspect-ratio: 21 / 9; border: 15px solid #222; border-radius: 999px; background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; transition: background 0.5s ease; }
+        /* תיקון השולחן לפריסה גמישה כדי שלא יעלה על שאר המסך */
+        #tablePage { display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100%; width: 100%; padding: 20px; padding-top: 80px; box-sizing: border-box; }
+        .table-body-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; width: 100%; gap: 15px; }
+
+        .poker-table { position: relative; width: 80vw; max-width: 900px; aspect-ratio: 21 / 9; border: 15px solid #222; border-radius: 999px; background: radial-gradient(circle, var(--royal-blue) 0%, var(--dark-blue) 100%); box-shadow: inset 0 0 70px #000, 0 15px 40px rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; transition: background 0.5s ease; }
         .poker-table::after { content: "פווקר 2025"; position: absolute; font-family: 'Rajdhani', sans-serif; font-size: 4.5vw; font-weight: 700; color: rgba(255,255,255,0.03); letter-spacing: 12px; pointer-events: none; }
         .table-inner-line { position: absolute; inset: 15px; border: 2px solid rgba(255, 204, 0, 0.12); border-radius: 999px; pointer-events: none; }
 
@@ -109,22 +108,26 @@
         .player-seat.seat-removed { opacity: 0.35; filter: grayscale(0.8); border-style: dashed; }
         .seat-name { opacity:0.95; font-weight:bold; color:white; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:75px; font-size: 15px; }
         .seat-divider { width: 65%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 4px 0; opacity: 0.6; }
-        .seat-buyin { color:var(--gold); font-weight:900; font-size:18px; transition: color 0.5s ease; }
+        
+        /* ביטול הילה סביב סכום השחקן */
+        .seat-buyin { color:var(--gold); font-weight:900; font-size:18px; transition: color 0.5s ease; text-shadow: none; }
 
         .chip-icon { display: inline-flex; justify-content: center; align-items: center; width: 3.5vw; height: 3.5vw; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); font-weight: bold; font-size: 1.6vw; color: white; }
-        .total-pot-container { text-align: center; margin-top: 78vh; }
-        .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0; font-weight: 700; text-shadow: 0 0 20px rgba(255,204,0,0.5), 0 0 40px rgba(255,204,0,0.2); transition: color 0.5s ease; }
+        
+        .total-pot-container { text-align: center; margin: 0; }
+        /* ביטול ההילה בטוטאל בנק ומראה נקי יותר */
+        .total-pot-container h2 { font-family: 'Rajdhani', sans-serif; font-size: 7vw; color: var(--gold); margin: 0; font-weight: 700; transition: color 0.5s ease; text-shadow: 0 0 5px rgba(0,0,0,0.8); }
 
         .page-dots { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 100; }
         .dot { width: 10px; height: 10px; background: #444; border-radius: 50%; transition: 0.3s; cursor: pointer; }
         .dot.active { background: var(--gold); width: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(255,204,0,0.5); }
 
-        .controls { position: absolute; bottom: 30px; left: 30px; display: flex; gap: 15px; z-index: 40; }
+        .controls { position: relative; margin-bottom: 20px; display: flex; gap: 15px; z-index: 40; }
         .btn { background: rgba(0,0,0,0.6); border: 1px solid #555; color: white; padding: 14px 24px; border-radius: 14px; font-weight: bold; font-size: 1.1em; cursor: pointer; transition: all 0.2s ease; }
         .btn:hover { background: rgba(30,30,30,0.8); }
         .btn:active { transform: scale(0.96); }
 
-        .btn-info { position: absolute; top: 30px; left: 30px; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4); color: var(--gold); font-size: 1.3em; font-weight: bold; font-family: sans-serif; z-index: 50; }
+        .btn-info { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4); color: var(--gold); font-size: 1.3em; font-weight: bold; font-family: sans-serif; z-index: 50; }
         .btn-info:active { transform: scale(0.92); background: rgba(255, 255, 255, 0.15); }
 
         #rebuyModal, #endGameModal, #addPlayerModal, #aboutModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; }
@@ -140,7 +143,6 @@
         .btn-timebank { background: linear-gradient(135deg, #ff3b30, #bc1e1e); color: white; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 1px; border: 1px solid rgba(255, 61, 0, 0.4); padding: 12px 26px; border-radius: 30px; cursor: pointer; transition: all 0.2s ease; }
         .btn-timebank:active { transform: scale(0.95); }
 
-        /* --- עיצוב תפריט הגדרות מחליק (Bottom Sheet) --- */
         #sheetOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 10000; }
         #sheetOverlay.open { opacity: 1; pointer-events: all; }
         
@@ -177,19 +179,19 @@
         @media (max-width: 768px) {
             .setup-card, #rebuyModal, #endGameModal, #addPlayerModal, #aboutModal { width: 90%; padding: 25px 20px; }
             .setup-card input, .modal-input { width: 95%; }
-            .poker-table { width: 92vw; aspect-ratio: 1.8 / 1; border-width: 10px; }
+            .poker-table { width: 92vw; aspect-ratio: 1.8 / 1; border-width: 10px; max-height: 40vh; top: unset; left: unset; transform: unset; }
             .poker-table::after { font-size: 7vw; }
             .player-seat { width: 70px; height: 70px; }
             .seat-name { font-size: 12px; max-width: 55px; }
             .seat-buyin { font-size: 14px; }
-            .time-val { font-size: 25vw; }
+            .time-val { font-size: 24vw; }
             .game-clock { font-size: 4.5vw; padding: 6px 14px; }
             .blind-info { padding: 4px 12px; gap: 4px; }
             .chip-icon { width: 6.5vw; height: 6.5vw; font-size: 3.2vw; }
-            .total-pot-container { margin-top: 68vh; }
-            .total-pot-container h2 { font-size: 15vw; }
-            .controls { width: 90%; justify-content: center; left: 50%; transform: translateX(-50%); bottom: 60px; }
-            .btn { padding: 10px 16px; font-size: 1em; }
+            .total-pot-container { margin-top: 0; }
+            .total-pot-container h2 { font-size: 13vw; }
+            .controls { position: static; width: 100%; display: flex; justify-content: center; margin-bottom: 25px; }
+            .controls .btn { width: 90%; max-width: 350px; }
             .bottom-controls-container { bottom: 35px; }
             .btn-timebank { padding: 10px 22px; font-size: 13px; }
             .btn-settings { width: 46px; height: 46px; }
@@ -252,13 +254,18 @@
 
     <div class="page" id="tablePage">
         <button class="btn-info" onclick="openAbout(event)" title="אודות">?</button>
-        <div class="poker-table" id="seatsContainer">
-            <div class="table-inner-line"></div>
+        
+        <div class="table-body-wrapper">
+            <div class="poker-table" id="seatsContainer">
+                <div class="table-inner-line"></div>
+            </div>
+            
+            <div class="total-pot-container">
+                <p style="color:#aaa; margin:0; font-weight: bold; letter-spacing: 2px;">TOTAL BANK</p>
+                <h2 id="potDisplay">0</h2>
+            </div>
         </div>
-        <div class="total-pot-container">
-            <p style="color:#aaa; margin:0; font-weight: bold; letter-spacing: 2px;">TOTAL BANK</p>
-            <h2 id="potDisplay">0</h2>
-        </div>
+        
         <div class="controls">
             <button class="btn" onclick="openEndGame(event)" style="border-color: var(--danger); color: var(--danger); background: rgba(255,59,48,0.1);">FINISH GAME</button>
         </div>
@@ -366,6 +373,32 @@
 </div>
 
 <script>
+    // --- נעילת גובה מסך למניעת קפיצות פתיחת מקלדת באייפד/אייפון ---
+    function lockAppHeight() {
+        document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+    }
+    
+    let lastWidth = window.innerWidth;
+    window.addEventListener('resize', () => {
+        // מעדכן את הגובה רק אם סובבו את המסך (הרוחב השתנה). אם רק מקלדת נפתחה - מתעלם ושומר על הגובה!
+        if(window.innerWidth !== lastWidth) {
+            lastWidth = window.innerWidth;
+            lockAppHeight();
+        }
+    });
+    lockAppHeight(); // הפעלה ראשונית
+
+    // תיקון "החור השחור" - החזרת המסך למקום אחרי סגירת מקלדת
+    document.addEventListener('focusout', (e) => {
+        if (e.target.tagName === 'INPUT') {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                document.body.scrollTop = 0;
+            }, 50);
+        }
+    });
+    // -------------------------------------------------------------
+
     function showToast(msg, isError = false) {
         const container = document.getElementById('toastContainer');
         const toast = document.createElement('div');
@@ -440,10 +473,6 @@
         } catch (err) {}
     }
 
-    document.addEventListener('visibilitychange', async () => {
-        // ... (קוד WakeLock מקורי שמור) ...
-    });
-
     function buildFriendsGrid() {
         const grid = document.getElementById('friendsGrid');
         if(!grid) return;
@@ -514,7 +543,6 @@
 
     document.addEventListener('touchend', e => {
         const splashScreenObj = document.getElementById('splashScreen');
-        // נמנע מגלילת מסך אם לחצנו על אלמנטים חשובים או תפריטים
         if(e.target.closest('.btn') || e.target.closest('.btn-info') || e.target.closest('.player-seat') || 
            e.target.closest('#rebuyModal') || e.target.closest('#addPlayerModal') || e.target.closest('#endGameModal') || 
            e.target.closest('#bottomSheet') || e.target.closest('#aboutModal') || e.target.closest('.blind-arrow-btn') || 
@@ -776,8 +804,7 @@
         if (!name || name.trim() === "") { showToast("נא להזין שם שחקן", true); return;
         }
         
-        const currentBuyin = +document.getElementById('initialBuyin').value ||
-        50;
+        const currentBuyin = +document.getElementById('initialBuyin').value || 50;
         const now = new Date();
         const joinTimeStr = now.toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'});
         
