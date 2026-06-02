@@ -567,8 +567,9 @@
         }
     });
 
-    function updatePageSlider() {
-        document.getElementById('slider').style.transform = `translateX(-${currentPage * 100}vw)`;
+function updatePageSlider() {
+        // שינוי מ-vw לחוזים רגילים כדי למנוע את באג המקלדת
+        document.getElementById('slider').style.transform = `translateX(-${currentPage * 50}%)`;
         document.getElementById('dot0').classList.toggle('active', currentPage === 0);
         document.getElementById('dot1').classList.toggle('active', currentPage === 1);
     }
